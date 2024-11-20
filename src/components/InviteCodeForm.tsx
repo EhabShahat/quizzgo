@@ -20,10 +20,6 @@ const InviteCodeForm = () => {
     }
 
     if (inviteCode.trim() === "qwe123") {
-      toast({
-        title: "Success",
-        description: "Welcome to the quiz!",
-      });
       navigate("/questions");
     } else {
       toast({
