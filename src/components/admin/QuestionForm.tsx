@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Plus, Save } from "lucide-react";
+import { Plus, Save, RefreshCw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Question } from "@/data/questions";
 
@@ -80,9 +80,19 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
 
   return (
     <form onSubmit={handleSubmit} className="glass-card p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-white">
-        {editingQuestion ? "Edit Question" : "Add New Question"}
-      </h2>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold text-white">
+          {editingQuestion ? "Edit Question" : "Add New Question"}
+        </h2>
+        <button
+          type="button"
+          onClick={resetForm}
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Clear Form
+        </button>
+      </div>
       
       <Tabs defaultValue={questionType} onValueChange={(value) => setQuestionType(value as 'multiple-choice' | 'true-false')}>
         <TabsList className="bg-white/5 border-white/10">
