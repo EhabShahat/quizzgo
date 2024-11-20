@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { Shield, ArrowRight, Lock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const InviteCodeForm = () => {
   const [inviteCode, setInviteCode] = useState("");
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,11 +18,21 @@ const InviteCodeForm = () => {
       });
       return;
     }
-    // Handle invite code submission
-    toast({
-      title: "Success",
-      description: "Invite code accepted",
-    });
+
+    // Check if the invite code is valid (qwe123)
+    if (inviteCode.trim() === "qwe123") {
+      toast({
+        title: "Success",
+        description: "Welcome to the quiz!",
+      });
+      navigate("/questions");
+    } else {
+      toast({
+        title: "Error",
+        description: "Invalid invite code",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
