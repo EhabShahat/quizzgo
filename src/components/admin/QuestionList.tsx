@@ -1,12 +1,13 @@
-import { Trash2 } from "lucide-react";
+import { Trash2, Edit2 } from "lucide-react";
 import type { Question } from "@/data/questions";
 
 interface QuestionListProps {
   questions: Question[];
   onDelete: (id: number) => void;
+  onEdit: (question: Question) => void;
 }
 
-const QuestionList = ({ questions, onDelete }: QuestionListProps) => {
+const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
   return (
     <div className="glass-card p-6 mt-6">
       <h2 className="text-2xl font-bold text-white mb-4">Question List</h2>
@@ -33,12 +34,20 @@ const QuestionList = ({ questions, onDelete }: QuestionListProps) => {
                 ))}
               </div>
             </div>
-            <button
-              onClick={() => onDelete(question.id)}
-              className="p-2 text-white/50 hover:text-red-400 transition-colors"
-            >
-              <Trash2 className="w-5 h-5" />
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={() => onEdit(question)}
+                className="p-2 text-white/50 hover:text-blue-400 transition-colors"
+              >
+                <Edit2 className="w-5 h-5" />
+              </button>
+              <button
+                onClick={() => onDelete(question.id)}
+                className="p-2 text-white/50 hover:text-red-400 transition-colors"
+              >
+                <Trash2 className="w-5 h-5" />
+              </button>
+            </div>
           </div>
         ))}
       </div>

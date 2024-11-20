@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const AdminPanel = () => {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -21,20 +22,42 @@ const AdminPanel = () => {
   };
 
   const handleAddQuestion = (newQuestion: Omit<Question, "id">) => {
-    const id = Math.max(...questions.map((q) => q.id), 0) + 1;
-    setQuestions([...questions, { ...newQuestion, id }]);
-    toast({
-      title: "Success",
-      description: "Question added successfully",
-    });
+    if (editingQuestion) {
+      // Update existing question
+      setQuestions(questions.map(q => 
+        q.id === editingQuestion.id 
+          ? { ...newQuestion, id: editingQuestion.id }
+          : q
+      ));
+      setEditingQuestion(null);
+      toast({
+        title: "Success",
+        description: "Question updated successfully",
+      });
+    } else {
+      // Add new question
+      const id = Math.max(...questions.map((q) => q.id), 0) + 1;
+      setQuestions([...questions, { ...newQuestion, id }]);
+      toast({
+        title: "Success",
+        description: "Question added successfully",
+      });
+    }
   };
 
   const handleDeleteQuestion = (id: number) => {
     setQuestions(questions.filter((q) => q.id !== id));
+    if (editingQuestion?.id === id) {
+      setEditingQuestion(null);
+    }
     toast({
       title: "Success",
       description: "Question deleted successfully",
     });
+  };
+
+  const handleEditQuestion = (question: Question) => {
+    setEditingQuestion(question);
   };
 
   return (
@@ -77,8 +100,16 @@ const AdminPanel = () => {
           </TabsList>
 
           <TabsContent value="questions" className="space-y-6">
-            <QuestionForm onSubmit={handleAddQuestion} />
-            <QuestionList questions={questions} onDelete={handleDeleteQuestion} />
+            <QuestionForm 
+              onSubmit={handleAddQuestion} 
+              editingQuestion={editingQuestion}
+              onCancelEdit={() => setEditingQuestion(null)}
+            />
+            <QuestionList 
+              questions={questions} 
+              onDelete={handleDeleteQuestion}
+              onEdit={handleEditQuestion}
+            />
           </TabsContent>
 
           <TabsContent value="timer">

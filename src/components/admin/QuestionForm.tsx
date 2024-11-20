@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { Question } from "@/data/questions";
 
 interface QuestionFormProps {
   onSubmit: (question: {
@@ -13,19 +14,43 @@ interface QuestionFormProps {
     timeLimit: number;
     type: 'multiple-choice' | 'true-false';
   }) => void;
+  editingQuestion?: Question | null;
+  onCancelEdit?: () => void;
 }
 
-const QuestionForm = ({ onSubmit }: QuestionFormProps) => {
+const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormProps) => {
   const [questionText, setQuestionText] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("0");
   const [questionType, setQuestionType] = useState<'multiple-choice' | 'true-false'>('multiple-choice');
   const [trueFalseAnswer, setTrueFalseAnswer] = useState("True");
 
+  useEffect(() => {
+    if (editingQuestion) {
+      setQuestionText(editingQuestion.text);
+      setQuestionType(editingQuestion.type);
+      
+      if (editingQuestion.type === 'multiple-choice') {
+        setOptions(editingQuestion.options);
+        setCorrectAnswer(editingQuestion.options.indexOf(editingQuestion.correctAnswer).toString());
+      } else {
+        setTrueFalseAnswer(editingQuestion.correctAnswer);
+      }
+    }
+  }, [editingQuestion]);
+
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
     newOptions[index] = value;
     setOptions(newOptions);
+  };
+
+  const resetForm = () => {
+    setQuestionText("");
+    setOptions(["", "", "", ""]);
+    setCorrectAnswer("0");
+    setTrueFalseAnswer("True");
+    setQuestionType('multiple-choice');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -49,17 +74,17 @@ const QuestionForm = ({ onSubmit }: QuestionFormProps) => {
       });
     }
 
-    setQuestionText("");
-    setOptions(["", "", "", ""]);
-    setCorrectAnswer("0");
-    setTrueFalseAnswer("True");
+    resetForm();
+    if (onCancelEdit) onCancelEdit();
   };
 
   return (
     <form onSubmit={handleSubmit} className="glass-card p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-white">Add New Question</h2>
+      <h2 className="text-2xl font-bold text-white">
+        {editingQuestion ? "Edit Question" : "Add New Question"}
+      </h2>
       
-      <Tabs defaultValue="multiple-choice" onValueChange={(value) => setQuestionType(value as 'multiple-choice' | 'true-false')}>
+      <Tabs defaultValue={questionType} onValueChange={(value) => setQuestionType(value as 'multiple-choice' | 'true-false')}>
         <TabsList className="bg-white/5 border-white/10">
           <TabsTrigger value="multiple-choice" className="data-[state=active]:bg-white/10">
             Multiple Choice
@@ -122,13 +147,33 @@ const QuestionForm = ({ onSubmit }: QuestionFormProps) => {
         </TabsContent>
       </Tabs>
 
-      <button
-        type="submit"
-        className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-lg py-3 flex items-center justify-center gap-2 transition-colors"
-      >
-        <Plus className="w-5 h-5" />
-        Add Question
-      </button>
+      <div className="flex gap-4">
+        <button
+          type="submit"
+          className="flex-1 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-lg py-3 flex items-center justify-center gap-2 transition-colors"
+        >
+          {editingQuestion ? (
+            <>
+              <Save className="w-5 h-5" />
+              Save Changes
+            </>
+          ) : (
+            <>
+              <Plus className="w-5 h-5" />
+              Add Question
+            </>
+          )}
+        </button>
+        {editingQuestion && onCancelEdit && (
+          <button
+            type="button"
+            onClick={onCancelEdit}
+            className="flex-1 bg-white/10 hover:bg-white/20 text-white rounded-lg py-3"
+          >
+            Cancel
+          </button>
+        )}
+      </div>
     </form>
   );
 };
