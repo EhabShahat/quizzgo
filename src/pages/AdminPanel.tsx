@@ -96,7 +96,7 @@ const AdminPanel = () => {
               className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
             >
               <Key className="w-5 h-5 mr-2" />
-              Invite Codes
+              Invites
             </TabsTrigger>
           </TabsList>
 
