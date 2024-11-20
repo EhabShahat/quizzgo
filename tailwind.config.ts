@@ -52,6 +52,12 @@ export default {
           DEFAULT: "#000000e6",
           foreground: "#FFFFFF",
         },
+        silver: {
+          400: "#A5A9B4",
+        },
+        bronze: {
+          400: "#CD7F32",
+        },
       },
       keyframes: {
         "accordion-down": {
