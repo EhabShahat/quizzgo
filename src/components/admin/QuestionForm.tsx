@@ -80,19 +80,9 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
 
   return (
     <form onSubmit={handleSubmit} className="glass-card p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-white">
-          {editingQuestion ? "Edit Question" : "Add New Question"}
-        </h2>
-        <button
-          type="button"
-          onClick={resetForm}
-          className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
-        >
-          <RefreshCw className="w-4 h-4" />
-          Clear Form
-        </button>
-      </div>
+      <h2 className="text-2xl font-bold text-white">
+        {editingQuestion ? "Edit Question" : "Add New Question"}
+      </h2>
       
       <Tabs defaultValue={questionType} onValueChange={(value) => setQuestionType(value as 'multiple-choice' | 'true-false')}>
         <TabsList className="bg-white/5 border-white/10">
@@ -157,32 +147,43 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
         </TabsContent>
       </Tabs>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 flex-col">
         <button
-          type="submit"
-          className="flex-1 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-lg py-3 flex items-center justify-center gap-2 transition-colors"
+          type="button"
+          onClick={resetForm}
+          className="flex items-center justify-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
         >
-          {editingQuestion ? (
-            <>
-              <Save className="w-5 h-5" />
-              Save Changes
-            </>
-          ) : (
-            <>
-              <Plus className="w-5 h-5" />
-              Add Question
-            </>
-          )}
+          <RefreshCw className="w-4 h-4" />
+          Clear Form
         </button>
-        {editingQuestion && onCancelEdit && (
+
+        <div className="flex gap-4">
           <button
-            type="button"
-            onClick={onCancelEdit}
-            className="flex-1 bg-white/10 hover:bg-white/20 text-white rounded-lg py-3"
+            type="submit"
+            className="flex-1 bg-[#8B5CF6] hover:bg-[#7C3AED] text-white rounded-lg py-3 flex items-center justify-center gap-2 transition-colors"
           >
-            Cancel
+            {editingQuestion ? (
+              <>
+                <Save className="w-5 h-5" />
+                Save Changes
+              </>
+            ) : (
+              <>
+                <Plus className="w-5 h-5" />
+                Add Question
+              </>
+            )}
           </button>
-        )}
+          {editingQuestion && onCancelEdit && (
+            <button
+              type="button"
+              onClick={onCancelEdit}
+              className="flex-1 bg-white/10 hover:bg-white/20 text-white rounded-lg py-3"
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </div>
     </form>
   );
