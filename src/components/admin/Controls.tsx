@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { useQuizStore } from "@/store/quizStore";
 import { format } from "date-fns";
@@ -7,18 +6,15 @@ import { toast } from "sonner";
 import { Timer, Save } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 
 export const Controls = () => {
-  const [date, setDate] = useState<Date | undefined>(undefined);
-  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [localStartTime, setLocalStartTime] = useState("00:00");
-  const [localEndTime, setLocalEndTime] = useState("23:59");
+  const [startDateTime, setStartDateTime] = useState<string>("");
+  const [endDateTime, setEndDateTime] = useState<string>("");
   
   const { isEnabled, startTime: quizStartTime, endTime: quizEndTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
 
   const handleSaveSettings = () => {
-    if (!date) {
+    if (!startDateTime) {
       setEnabled(false);
       setStartTime(null);
       setEndTime(null);
@@ -26,14 +22,8 @@ export const Controls = () => {
       return;
     }
 
-    const [startHour, startMinute] = localStartTime.split(":").map(Number);
-    const [endHour, endMinute] = localEndTime.split(":").map(Number);
-
-    const selectedStartTime = new Date(date);
-    selectedStartTime.setHours(startHour, startMinute);
-    
-    const selectedEndTime = endDate ? new Date(endDate) : new Date(date);
-    selectedEndTime.setHours(endHour, endMinute);
+    const selectedStartTime = new Date(startDateTime);
+    const selectedEndTime = endDateTime ? new Date(endDateTime) : new Date(startDateTime);
 
     if (selectedEndTime <= selectedStartTime) {
       toast.error("End time must be after start time");
@@ -56,37 +46,21 @@ export const Controls = () => {
       <div className="space-y-6">
         <div className="space-y-4">
           <Label className="text-lg text-white">Quiz Start</Label>
-          <div className="flex gap-4">
-            <Input
-              type="time"
-              value={localStartTime}
-              onChange={(e) => setLocalStartTime(e.target.value)}
-              className="w-32 bg-white/5 text-white"
-            />
-          </div>
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={setDate}
-            className="rounded-md border bg-white/5 text-white"
+          <input
+            type="datetime-local"
+            value={startDateTime}
+            onChange={(e) => setStartDateTime(e.target.value)}
+            className="w-full bg-white/5 text-white border border-white/10 rounded-md p-2"
           />
         </div>
 
         <div className="space-y-4">
           <Label className="text-lg text-white">Quiz End</Label>
-          <div className="flex gap-4">
-            <Input
-              type="time"
-              value={localEndTime}
-              onChange={(e) => setLocalEndTime(e.target.value)}
-              className="w-32 bg-white/5 text-white"
-            />
-          </div>
-          <Calendar
-            mode="single"
-            selected={endDate}
-            onSelect={setEndDate}
-            className="rounded-md border bg-white/5 text-white"
+          <input
+            type="datetime-local"
+            value={endDateTime}
+            onChange={(e) => setEndDateTime(e.target.value)}
+            className="w-full bg-white/5 text-white border border-white/10 rounded-md p-2"
           />
         </div>
 
