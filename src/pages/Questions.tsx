@@ -48,17 +48,6 @@ const Questions = () => {
       // Calculate points based on time remaining (max 1000 points per question)
       const timeBonus = Math.round((timeLeft / currentQuestion.timeLimit) * 1000);
       setScore(prev => prev + timeBonus);
-      
-      toast({
-        title: "Correct! 🎉",
-        description: `+${timeBonus} points!`,
-      });
-    } else {
-      toast({
-        title: "Incorrect ❌",
-        description: "No points awarded",
-        variant: "destructive",
-      });
     }
     
     // Move to next question regardless of answer
