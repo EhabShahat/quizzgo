@@ -3,6 +3,8 @@ import { Shield, ArrowRight, Lock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
+import { useQuizStore } from "@/store/quizStore";
+import { format } from "date-fns";
 
 const InviteCodeForm = () => {
   const [inviteCode, setInviteCode] = useState("");
@@ -10,6 +12,7 @@ const InviteCodeForm = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { isEnabled, startTime } = useQuizStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -69,13 +72,22 @@ const InviteCodeForm = () => {
             onChange={(e) => setInviteCode(e.target.value)}
             placeholder="Enter your invite code"
             className="input-styles transform transition-all duration-300 hover:scale-102 focus:scale-102"
+            disabled={!isEnabled}
           />
+          {!isEnabled && (
+            <p className="text-white/70 text-sm mt-2">
+              {startTime 
+                ? `Quiz will start at ${format(startTime, "PPP 'at' p")}`
+                : "We will open soon..."}
+            </p>
+          )}
         </div>
         
         <button 
           type="submit" 
           className="button-styles animate-fadeIn transform transition-all duration-300 hover:scale-105 active:scale-95"
           style={{ animationDelay: "0.3s" }}
+          disabled={!isEnabled}
         >
           Start Quiz
           <ArrowRight className="w-5 h-5" />

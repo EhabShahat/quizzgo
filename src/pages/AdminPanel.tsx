@@ -6,6 +6,7 @@ import { questions as initialQuestions, Question } from "@/data/questions";
 import QuestionForm from "@/components/admin/QuestionForm";
 import QuestionList from "@/components/admin/QuestionList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Controls } from "@/components/admin/Controls";
 
 const AdminPanel = () => {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
@@ -84,11 +85,11 @@ const AdminPanel = () => {
               Questions
             </TabsTrigger>
             <TabsTrigger
-              value="timer"
+              value="controls"
               className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
             >
               <Timer className="w-5 h-5 mr-2" />
-              Timer Settings
+              Controls
             </TabsTrigger>
             <TabsTrigger
               value="invites"
@@ -112,11 +113,8 @@ const AdminPanel = () => {
             />
           </TabsContent>
 
-          <TabsContent value="timer">
-            <div className="glass-card p-6">
-              <h2 className="text-2xl font-bold text-white">Timer Settings</h2>
-              <p className="text-white/70">Coming soon...</p>
-            </div>
+          <TabsContent value="controls">
+            <Controls />
           </TabsContent>
 
           <TabsContent value="invites">
