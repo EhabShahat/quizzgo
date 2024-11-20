@@ -42,7 +42,7 @@ const Questions = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary to-purple-800">
       {/* Timer and Question Section */}
-      <div className="p-8 flex-1">
+      <div className="p-8">
         <div className="mb-6 animate-fade-in">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-3xl font-bold text-white">Question {currentQuestionIndex + 1}</h2>
@@ -56,32 +56,34 @@ const Questions = () => {
         </div>
       </div>
 
-      {/* Answer Options Grid */}
-      <div className="grid grid-cols-2 gap-4 p-4 mt-auto">
-        {currentQuestion.options.map((option, index) => (
-          <button
-            key={index}
-            style={{ backgroundColor: colors[index] }}
-            className="p-6 rounded-xl text-white text-xl font-bold hover:opacity-90 transition-all transform hover:scale-105 animate-fade-in"
-            onClick={() => {
-              if (option === currentQuestion.correctAnswer) {
-                toast({
-                  title: "Correct! 🎉",
-                  description: "Moving to next question...",
-                });
-                setCurrentQuestionIndex(prev => prev + 1);
-              } else {
-                toast({
-                  title: "Incorrect ❌",
-                  description: "Try again!",
-                  variant: "destructive",
-                });
-              }
-            }}
-          >
-            {option}
-          </button>
-        ))}
+      {/* Answer Options Grid - Centered */}
+      <div className="flex-1 flex items-center justify-center">
+        <div className="grid grid-cols-2 gap-4 p-4 w-full max-w-4xl">
+          {currentQuestion.options.map((option, index) => (
+            <button
+              key={index}
+              style={{ backgroundColor: colors[index] }}
+              className="p-6 rounded-xl text-white text-xl font-bold hover:opacity-90 transition-all transform hover:scale-105 animate-fade-in"
+              onClick={() => {
+                if (option === currentQuestion.correctAnswer) {
+                  toast({
+                    title: "Correct! 🎉",
+                    description: "Moving to next question...",
+                  });
+                  setCurrentQuestionIndex(prev => prev + 1);
+                } else {
+                  toast({
+                    title: "Incorrect ❌",
+                    description: "Try again!",
+                    variant: "destructive",
+                  });
+                }
+              }}
+            >
+              {option}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
