@@ -9,6 +9,7 @@ describe('Questions Data', () => {
       expect(question).toHaveProperty('options');
       expect(question).toHaveProperty('correctAnswer');
       expect(question).toHaveProperty('timeLimit');
+      expect(question).toHaveProperty('type');
       
       // Check if id is a number
       expect(typeof question.id).toBe('number');
@@ -17,9 +18,14 @@ describe('Questions Data', () => {
       expect(typeof question.text).toBe('string');
       expect(question.text.length).toBeGreaterThan(0);
       
-      // Check if options is an array with exactly 4 options
+      // Check if options array length matches question type
       expect(Array.isArray(question.options)).toBe(true);
-      expect(question.options.length).toBe(4);
+      if (question.type === 'true-false') {
+        expect(question.options.length).toBe(2);
+        expect(question.options).toEqual(['True', 'False']);
+      } else {
+        expect(question.options.length).toBe(4);
+      }
       
       // Check if correctAnswer is one of the options
       expect(question.options).toContain(question.correctAnswer);
@@ -27,6 +33,9 @@ describe('Questions Data', () => {
       // Check if timeLimit is a positive number
       expect(typeof question.timeLimit).toBe('number');
       expect(question.timeLimit).toBeGreaterThan(0);
+      
+      // Check if type is valid
+      expect(['multiple-choice', 'true-false']).toContain(question.type);
     });
   });
 
@@ -42,9 +51,14 @@ describe('Questions Data', () => {
     });
   });
 
-  it('should have exactly 4 options for each question', () => {
+  it('should have correct number of options based on question type', () => {
     questions.forEach((question) => {
-      expect(question.options.length).toBe(4);
+      if (question.type === 'true-false') {
+        expect(question.options.length).toBe(2);
+        expect(question.options).toEqual(['True', 'False']);
+      } else {
+        expect(question.options.length).toBe(4);
+      }
     });
   });
 });

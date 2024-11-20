@@ -3,7 +3,8 @@ export interface Question {
   text: string;
   options: string[];
   correctAnswer: string;
-  timeLimit: number; // in seconds
+  timeLimit: number;
+  type: 'multiple-choice' | 'true-false';
 }
 
 export const questions: Question[] = [
@@ -13,6 +14,7 @@ export const questions: Question[] = [
     options: ["Seoul", "Tokyo", "Beijing", "Bangkok"],
     correctAnswer: "Tokyo",
     timeLimit: 10,
+    type: "multiple-choice"
   },
   {
     id: 2,
@@ -20,6 +22,7 @@ export const questions: Question[] = [
     options: ["Venus", "Mars", "Jupiter", "Saturn"],
     correctAnswer: "Mars",
     timeLimit: 10,
+    type: "multiple-choice"
   },
   {
     id: 3,
@@ -27,6 +30,7 @@ export const questions: Question[] = [
     options: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci", "Michelangelo"],
     correctAnswer: "Leonardo da Vinci",
     timeLimit: 10,
+    type: "multiple-choice"
   },
   {
     id: 4,
@@ -34,5 +38,14 @@ export const questions: Question[] = [
     options: ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"],
     correctAnswer: "Pacific Ocean",
     timeLimit: 10,
+    type: "multiple-choice"
+  },
+  {
+    id: 5,
+    text: "Is the Earth flat?",
+    options: ["True", "False"],
+    correctAnswer: "False",
+    timeLimit: 10,
+    type: "true-false"
   }
 ];

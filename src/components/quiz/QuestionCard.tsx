@@ -18,6 +18,13 @@ export const QuestionCard = ({
   handleAnswer,
   colors
 }: QuestionCardProps) => {
+  const getButtonColors = () => {
+    if (currentQuestion.type === 'true-false') {
+      return ["#E21B3C", "#1368CE"]; // Red for True, Blue for False
+    }
+    return colors;
+  };
+
   return (
     <div className="glass-card p-6 space-y-8">
       {/* Question Header */}
@@ -37,13 +44,13 @@ export const QuestionCard = ({
       </h2>
 
       {/* Answer Options */}
-      <div className="grid gap-4">
+      <div className={`grid gap-4 ${currentQuestion.type === 'true-false' ? 'grid-cols-2' : 'grid-cols-1'}`}>
         {currentQuestion.options.map((option: string, index: number) => (
           <button
             key={index}
             onClick={() => handleAnswer(option)}
             className="w-full p-6 rounded-xl text-white text-xl font-bold transition-transform hover:scale-105 text-center"
-            style={{ backgroundColor: colors[index] }}
+            style={{ backgroundColor: getButtonColors()[index] }}
           >
             {option}
           </button>
