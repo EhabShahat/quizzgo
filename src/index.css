@@ -29,7 +29,7 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border transition-all duration-300;
   }
   body {
     @apply bg-gradient-to-br from-[#9b87f5] to-[#517fa4] min-h-screen;

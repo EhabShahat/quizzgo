@@ -84,6 +84,14 @@ export default {
           "0%, 100%": { transform: "translateY(-5%)" },
           "50%": { transform: "translateY(0)" },
         },
+        slideIn: {
+          "0%": { transform: "translateX(-100%)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        scaleIn: {
+          "0%": { transform: "scale(0.9)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "1" },
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -92,6 +100,8 @@ export default {
         float: "float 3s ease-in-out infinite",
         pulse: "pulse 2s ease-in-out infinite",
         bounce: "bounce 2s ease-in-out infinite",
+        slideIn: "slideIn 0.5s ease-out",
+        scaleIn: "scaleIn 0.3s ease-out",
       },
     },
   },

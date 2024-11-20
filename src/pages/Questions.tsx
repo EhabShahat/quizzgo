@@ -44,7 +44,7 @@ const Questions = () => {
 
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
-        <div className="glass-card p-8 max-w-lg w-full relative animate-fade-in">
+        <div className="glass-card p-8 max-w-lg w-full relative animate-scaleIn">
           {/* Background animations */}
           {[...Array(20)].map((_, i) => (
             <div
@@ -72,7 +72,7 @@ const Questions = () => {
                 {emoji} {rank}
               </h1>
               
-              <div className="flex justify-center mb-6">
+              <div className="flex justify-center mb-6 animate-fadeIn" style={{ animationDelay: "0.2s" }}>
                 {percentage >= 60 && (
                   <Trophy className="w-20 h-20 text-yellow-400 animate-pulse" />
                 )}
@@ -84,7 +84,7 @@ const Questions = () => {
                 )}
               </div>
 
-              <div className="bg-black/30 p-6 rounded-xl backdrop-blur-sm">
+              <div className="bg-black/30 p-6 rounded-xl backdrop-blur-sm animate-fadeIn" style={{ animationDelay: "0.3s" }}>
                 <div className="text-6xl font-bold text-primary-foreground mb-2 animate-pulse">
                   {score}
                 </div>
@@ -94,7 +94,7 @@ const Questions = () => {
               </div>
 
               <div className="space-y-4 mt-8">
-                <div className="bg-black/20 p-4 rounded-lg">
+                <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.4s" }}>
                   <div className="text-lg text-white/90 mb-2">
                     Your Score
                   </div>
@@ -105,7 +105,7 @@ const Questions = () => {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 text-center">
-                  <div className="bg-black/20 p-4 rounded-lg">
+                  <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.5s" }}>
                     <div className="text-3xl font-bold text-white">
                       {questions.length}
                     </div>
@@ -113,7 +113,7 @@ const Questions = () => {
                       Questions
                     </div>
                   </div>
-                  <div className="bg-black/20 p-4 rounded-lg">
+                  <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.6s" }}>
                     <div className="text-3xl font-bold text-white">
                       {Math.round(percentage)}%
                     </div>
@@ -130,7 +130,6 @@ const Questions = () => {
     );
   }
 
-  // If we don't have a current question, don't render anything
   if (!currentQuestion) {
     return null;
   }
@@ -150,7 +149,7 @@ const Questions = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary to-purple-800">
       {/* Timer and Question Section */}
       <div className="p-8">
-        <div className="mb-6 animate-fade-in">
+        <div className="mb-6 animate-fadeIn">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-3xl font-bold text-white">Question {currentQuestionIndex + 1}</h2>
@@ -161,7 +160,7 @@ const Questions = () => {
           <Progress value={(timeLeft / currentQuestion.timeLimit) * 100} className="h-3" />
         </div>
         
-        <div className="glass-card p-8 mb-8 animate-fade-in">
+        <div className="glass-card p-8 mb-8 animate-slideIn">
           <h3 className="text-2xl text-white text-center mb-4">{currentQuestion.text}</h3>
         </div>
       </div>
@@ -173,7 +172,7 @@ const Questions = () => {
             <button
               key={index}
               style={{ backgroundColor: colors[index] }}
-              className="p-6 rounded-xl text-white text-xl font-bold hover:opacity-90 transition-all transform hover:scale-105 animate-fade-in"
+              className="p-6 rounded-xl text-white text-xl font-bold hover:opacity-90 transition-all transform hover:scale-105 animate-scaleIn"
               onClick={() => handleAnswer(option)}
             >
               {option}
@@ -183,7 +182,6 @@ const Questions = () => {
       </div>
     </div>
   );
-
 };
 
 export default Questions;
