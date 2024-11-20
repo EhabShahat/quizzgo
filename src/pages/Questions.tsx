@@ -12,12 +12,15 @@ const Questions = () => {
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   useEffect(() => {
-    if (!currentQuestion) {
+    // Check if we've reached the end of questions
+    if (currentQuestionIndex >= questions.length) {
       setShowScore(true);
       return;
     }
     
-    setTimeLeft(currentQuestion.timeLimit);
+    const questionTimeLimit = questions[currentQuestionIndex]?.timeLimit || 10;
+    setTimeLeft(questionTimeLimit);
+    
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev <= 0) {
@@ -30,7 +33,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestion]);
+  }, [currentQuestionIndex]);
 
   if (showScore) {
     return (
@@ -68,6 +71,11 @@ const Questions = () => {
         </div>
       </div>
     );
+  }
+
+  // If we don't have a current question, don't render anything
+  if (!currentQuestion) {
+    return null;
   }
 
   const handleAnswer = (selectedAnswer: string) => {
