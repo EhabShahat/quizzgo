@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { questions } from "@/data/questions";
 import { Progress } from "@/components/ui/progress";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Star } from "lucide-react";
 
 const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -37,37 +37,72 @@ const Questions = () => {
 
   if (showScore) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800">
-        <div className="glass-card p-8 animate-[scale-in_0.5s_ease-out] relative overflow-hidden">
-          {/* Sparkle animations */}
-          {[...Array(12)].map((_, i) => (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
+        <div className="glass-card p-8 max-w-lg w-full relative">
+          {/* Floating stars animation */}
+          {[...Array(20)].map((_, i) => (
             <div
               key={i}
-              className="absolute animate-[fade-in_1s_ease-out_infinite]"
+              className="absolute animate-float"
               style={{
                 top: `${Math.random() * 100}%`,
                 left: `${Math.random() * 100}%`,
+                animation: `float ${5 + Math.random() * 5}s ease-in-out infinite`,
                 animationDelay: `${Math.random() * 2}s`
               }}
             >
-              <Sparkles className="text-yellow-300 w-6 h-6" />
+              <Star
+                className="text-yellow-300 w-4 h-4 opacity-75"
+                fill="currentColor"
+                style={{ transform: `rotate(${Math.random() * 360}deg)` }}
+              />
             </div>
           ))}
           
-          <h2 className="text-4xl font-bold text-white mb-4 animate-[fade-in_0.5s_ease-out]">
-            Quiz Complete! 🎉
-          </h2>
-          <div className="relative animate-[scale-in_0.7s_ease-out]">
-            <p className="text-3xl font-bold text-white mb-4">
-              Final Score:
-            </p>
-            <p className="text-5xl font-bold text-primary-foreground animate-[bounce_1s_ease-in-out_infinite]">
-              {score} points
-            </p>
+          {/* Sparkle effects */}
+          {[...Array(15)].map((_, i) => (
+            <div
+              key={`sparkle-${i}`}
+              className="absolute animate-pulse"
+              style={{
+                top: `${Math.random() * 100}%`,
+                left: `${Math.random() * 100}%`,
+                animation: `pulse ${3 + Math.random() * 2}s ease-in-out infinite`,
+                animationDelay: `${Math.random() * 2}s`
+              }}
+            >
+              <Sparkles className="text-white/50 w-6 h-6" />
+            </div>
+          ))}
+
+          <div className="relative z-10 space-y-8">
+            <h2 className="text-4xl font-bold text-white mb-4 animate-bounce">
+              Quiz Complete! 🎉
+            </h2>
+            
+            <div className="space-y-4 animate-fade-in">
+              <div className="relative">
+                <div className="text-2xl font-bold text-white mb-2">
+                  Your Score:
+                </div>
+                <div className="text-6xl font-bold text-primary-foreground animate-pulse">
+                  {score}
+                </div>
+                <div className="text-xl text-white/80 mt-2">
+                  points
+                </div>
+              </div>
+              
+              <div className="mt-8 space-y-4 animate-fade-in">
+                <p className="text-lg text-white/90">
+                  Amazing performance! 🌟
+                </p>
+                <p className="text-white/70">
+                  Thanks for participating in the quiz!
+                </p>
+              </div>
+            </div>
           </div>
-          <p className="text-lg text-white/80 mt-6 animate-[fade-in_0.9s_ease-out]">
-            Thank you for participating!
-          </p>
         </div>
       </div>
     );
@@ -126,6 +161,7 @@ const Questions = () => {
       </div>
     </div>
   );
+
 };
 
 export default Questions;
