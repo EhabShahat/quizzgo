@@ -7,17 +7,15 @@ import { toast } from "sonner";
 import { Timer, Save } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 export const Controls = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [startHour, setStartHour] = useState("00");
-  const [startMinute, setStartMinute] = useState("00");
-  const [endHour, setEndHour] = useState("23");
-  const [endMinute, setEndMinute] = useState("59");
+  const [startTime, setStartTime] = useState("00:00");
+  const [endTime, setEndTime] = useState("23:59");
   
-  const { isEnabled, startTime, endTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
+  const { isEnabled, startTime: quizStartTime, endTime: quizEndTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
 
   const handleSaveSettings = () => {
     if (!date) {
@@ -28,11 +26,14 @@ export const Controls = () => {
       return;
     }
 
+    const [startHour, startMinute] = startTime.split(":").map(Number);
+    const [endHour, endMinute] = endTime.split(":").map(Number);
+
     const selectedStartTime = new Date(date);
-    selectedStartTime.setHours(parseInt(startHour), parseInt(startMinute));
+    selectedStartTime.setHours(startHour, startMinute);
     
     const selectedEndTime = endDate ? new Date(endDate) : new Date(date);
-    selectedEndTime.setHours(parseInt(endHour), parseInt(endMinute));
+    selectedEndTime.setHours(endHour, endMinute);
 
     if (selectedEndTime <= selectedStartTime) {
       toast.error("End time must be after start time");
@@ -45,9 +46,6 @@ export const Controls = () => {
     toast.success("Quiz settings saved successfully");
   };
 
-  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
-  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
-
   return (
     <div className="glass-card p-6 space-y-8">
       <div className="flex items-center gap-3 mb-6">
@@ -57,32 +55,14 @@ export const Controls = () => {
       
       <div className="space-y-6">
         <div className="space-y-4">
-          <Label className="text-lg text-white">Quiz Start Time</Label>
+          <Label className="text-lg text-white">Quiz Start</Label>
           <div className="flex gap-4">
-            <Select value={startHour} onValueChange={setStartHour}>
-              <SelectTrigger className="w-24">
-                <SelectValue placeholder="Hour" />
-              </SelectTrigger>
-              <SelectContent>
-                {hours.map((hour) => (
-                  <SelectItem key={hour} value={hour}>
-                    {hour}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={startMinute} onValueChange={setStartMinute}>
-              <SelectTrigger className="w-24">
-                <SelectValue placeholder="Minute" />
-              </SelectTrigger>
-              <SelectContent>
-                {minutes.map((minute) => (
-                  <SelectItem key={minute} value={minute}>
-                    {minute}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              type="time"
+              value={startTime}
+              onChange={(e) => setStartTime(e.target.value)}
+              className="w-32 bg-white/5 text-white"
+            />
           </div>
           <Calendar
             mode="single"
@@ -93,32 +73,14 @@ export const Controls = () => {
         </div>
 
         <div className="space-y-4">
-          <Label className="text-lg text-white">Quiz End Time</Label>
+          <Label className="text-lg text-white">Quiz End</Label>
           <div className="flex gap-4">
-            <Select value={endHour} onValueChange={setEndHour}>
-              <SelectTrigger className="w-24">
-                <SelectValue placeholder="Hour" />
-              </SelectTrigger>
-              <SelectContent>
-                {hours.map((hour) => (
-                  <SelectItem key={hour} value={hour}>
-                    {hour}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Select value={endMinute} onValueChange={setEndMinute}>
-              <SelectTrigger className="w-24">
-                <SelectValue placeholder="Minute" />
-              </SelectTrigger>
-              <SelectContent>
-                {minutes.map((minute) => (
-                  <SelectItem key={minute} value={minute}>
-                    {minute}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Input
+              type="time"
+              value={endTime}
+              onChange={(e) => setEndTime(e.target.value)}
+              className="w-32 bg-white/5 text-white"
+            />
           </div>
           <Calendar
             mode="single"
@@ -149,10 +111,10 @@ export const Controls = () => {
       <div className="bg-white/5 rounded-lg p-4 space-y-2">
         <h3 className="text-lg font-semibold text-white">Current Status</h3>
         <p className="text-white/70">
-          Start Time: {startTime ? format(startTime, "PPP 'at' p") : 'Not set'}
+          Start Time: {quizStartTime ? format(quizStartTime, "PPP 'at' p") : 'Not set'}
         </p>
         <p className="text-white/70">
-          End Time: {endTime ? format(endTime, "PPP 'at' p") : 'Not set'}
+          End Time: {quizEndTime ? format(quizEndTime, "PPP 'at' p") : 'Not set'}
         </p>
         <p className="text-white/70">
           Status: <span className={isEnabled ? "text-green-400" : "text-red-400"}>
