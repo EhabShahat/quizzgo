@@ -30,6 +30,20 @@ const InviteCodeForm = () => {
     }
   };
 
+  const handleAdminAccess = () => {
+    // For demo purposes, we'll use a simple password
+    const password = prompt("Please enter admin password:");
+    if (password === "admin123") {
+      navigate("/admin");
+    } else {
+      toast({
+        title: "Access Denied",
+        description: "Invalid admin credentials",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="glass-card p-8 w-full max-w-md mx-auto animate-scaleIn">
       <Shield className="w-12 h-12 mx-auto mb-6 text-white/80 animate-float" />
@@ -64,10 +78,7 @@ const InviteCodeForm = () => {
       <button 
         className="mt-8 text-white/50 text-sm flex items-center gap-2 mx-auto hover:text-white transition-colors animate-fadeIn"
         style={{ animationDelay: "0.4s" }}
-        onClick={() => toast({
-          title: "Admin Access",
-          description: "Please contact your administrator for access.",
-        })}
+        onClick={handleAdminAccess}
       >
         <Lock className="w-4 h-4" />
         Admin Access
