@@ -52,14 +52,14 @@ export const Controls = () => {
         </p>
       </div>
 
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex items-center justify-center mb-6">
         <div className="flex items-center space-x-2">
           <Switch
             checked={isEnabled}
             onCheckedChange={setEnabled}
             className="data-[state=checked]:bg-purple-500"
           />
-          <Label className="text-white">Quiz is currently active</Label>
+          <Label className="text-white">Active</Label>
         </div>
       </div>
       
