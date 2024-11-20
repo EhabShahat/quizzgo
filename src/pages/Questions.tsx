@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { questions } from "@/data/questions";
 import { Progress } from "@/components/ui/progress";
-import { Timer } from "lucide-react";
+import { Timer, Star, Sparkles, Trophy, Medal, Award } from "lucide-react";
 
 const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
