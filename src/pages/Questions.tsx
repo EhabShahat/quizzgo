@@ -56,8 +56,8 @@ const Questions = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#8B5CF6] to-[#6366F1] p-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#8B5CF6] to-[#6366F1] flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl">
         <QuestionCard
           currentQuestion={currentQuestion}
           currentQuestionIndex={currentQuestionIndex}
