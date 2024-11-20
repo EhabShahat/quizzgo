@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { useQuizStore } from "@/store/quizStore";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Timer, Save } from "lucide-react";
+import { Save } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 
@@ -53,10 +53,6 @@ export const Controls = () => {
       </div>
 
       <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Timer className="w-6 h-6 text-purple-400" />
-          <h2 className="text-2xl font-bold text-white">Timer Settings</h2>
-        </div>
         <div className="flex items-center space-x-2">
           <Switch
             checked={isEnabled}
