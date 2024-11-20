@@ -12,8 +12,8 @@ import { Input } from "@/components/ui/input";
 export const Controls = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [startTime, setStartTime] = useState("00:00");
-  const [endTime, setEndTime] = useState("23:59");
+  const [localStartTime, setLocalStartTime] = useState("00:00");
+  const [localEndTime, setLocalEndTime] = useState("23:59");
   
   const { isEnabled, startTime: quizStartTime, endTime: quizEndTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
 
@@ -26,8 +26,8 @@ export const Controls = () => {
       return;
     }
 
-    const [startHour, startMinute] = startTime.split(":").map(Number);
-    const [endHour, endMinute] = endTime.split(":").map(Number);
+    const [startHour, startMinute] = localStartTime.split(":").map(Number);
+    const [endHour, endMinute] = localEndTime.split(":").map(Number);
 
     const selectedStartTime = new Date(date);
     selectedStartTime.setHours(startHour, startMinute);
@@ -59,8 +59,8 @@ export const Controls = () => {
           <div className="flex gap-4">
             <Input
               type="time"
-              value={startTime}
-              onChange={(e) => setStartTime(e.target.value)}
+              value={localStartTime}
+              onChange={(e) => setLocalStartTime(e.target.value)}
               className="w-32 bg-white/5 text-white"
             />
           </div>
@@ -77,8 +77,8 @@ export const Controls = () => {
           <div className="flex gap-4">
             <Input
               type="time"
-              value={endTime}
-              onChange={(e) => setEndTime(e.target.value)}
+              value={localEndTime}
+              onChange={(e) => setLocalEndTime(e.target.value)}
               className="w-32 bg-white/5 text-white"
             />
           </div>
