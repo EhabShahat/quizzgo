@@ -2,9 +2,12 @@ import { useState } from "react";
 import { Shield, ArrowRight, Lock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { Input } from "@/components/ui/input";
 
 const InviteCodeForm = () => {
   const [inviteCode, setInviteCode] = useState("");
+  const [showAdminInput, setShowAdminInput] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -31,9 +34,12 @@ const InviteCodeForm = () => {
   };
 
   const handleAdminAccess = () => {
-    // For demo purposes, we'll use a simple password
-    const password = prompt("Please enter admin password:");
-    if (password === "admin123") {
+    if (!showAdminInput) {
+      setShowAdminInput(true);
+      return;
+    }
+
+    if (adminPassword === "admin123") {
       navigate("/admin");
     } else {
       toast({
@@ -42,6 +48,7 @@ const InviteCodeForm = () => {
         variant: "destructive",
       });
     }
+    setAdminPassword("");
   };
 
   return (
@@ -75,14 +82,26 @@ const InviteCodeForm = () => {
         </button>
       </form>
 
-      <button 
-        className="mt-8 text-white/50 text-sm flex items-center gap-2 mx-auto hover:text-white transition-colors animate-fadeIn"
-        style={{ animationDelay: "0.4s" }}
-        onClick={handleAdminAccess}
-      >
-        <Lock className="w-4 h-4" />
-        Admin Access
-      </button>
+      <div className="mt-8 flex flex-col items-center gap-4">
+        {showAdminInput && (
+          <Input
+            type="password"
+            value={adminPassword}
+            onChange={(e) => setAdminPassword(e.target.value)}
+            placeholder="Enter admin password"
+            className="max-w-[200px] bg-white/5 border-white/10 text-white placeholder:text-white/50"
+            autoFocus
+          />
+        )}
+        <button 
+          className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors animate-fadeIn"
+          style={{ animationDelay: "0.4s" }}
+          onClick={handleAdminAccess}
+        >
+          <Lock className="w-4 h-4" />
+          Admin Access
+        </button>
+      </div>
     </div>
   );
 };
