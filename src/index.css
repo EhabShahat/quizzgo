@@ -32,12 +32,12 @@
     @apply border-border transition-all duration-300;
   }
   body {
-    @apply bg-gradient-to-br from-[#9b87f5] to-[#517fa4] min-h-screen;
+    @apply bg-gradient-to-br from-[#8B5CF6] to-[#6366F1] min-h-screen;
   }
 }
 
 .glass-card {
-  @apply bg-card/90 backdrop-blur-sm rounded-3xl shadow-xl;
+  @apply bg-[#1E1E2A]/95 backdrop-blur-sm rounded-3xl shadow-xl border border-white/10;
 }
 
 .input-styles {

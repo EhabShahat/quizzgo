@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { questions } from "@/data/questions";
 import { Progress } from "@/components/ui/progress";
-import { Sparkles, Star, Trophy, Medal, Award } from "lucide-react";
+import { Timer } from "lucide-react";
 
 const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -146,38 +146,53 @@ const Questions = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-primary to-purple-800">
-      {/* Timer and Question Section */}
-      <div className="p-8">
-        <div className="mb-6 animate-fadeIn">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h2 className="text-3xl font-bold text-white">Question {currentQuestionIndex + 1}</h2>
-              <p className="text-white/80">Score: {score}</p>
-            </div>
-            <span className="text-2xl font-bold text-white">{timeLeft}s</span>
-          </div>
-          <Progress value={(timeLeft / currentQuestion.timeLimit) * 100} className="h-3" />
+    <div className="min-h-screen bg-gradient-to-br from-[#8B5CF6] to-[#6366F1] p-4">
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">QuizMaster</h1>
+          <p className="text-white/80">Test your knowledge!</p>
         </div>
-        
-        <div className="glass-card p-8 mb-8 animate-slideIn">
-          <h3 className="text-2xl text-white text-center mb-4">{currentQuestion.text}</h3>
-        </div>
-      </div>
 
-      {/* Answer Options Grid - Centered */}
-      <div className="flex-1 flex items-center justify-center">
-        <div className="grid grid-cols-2 gap-4 p-4 w-full max-w-4xl">
-          {currentQuestion.options.map((option, index) => (
-            <button
-              key={index}
-              style={{ backgroundColor: colors[index] }}
-              className="p-6 rounded-xl text-white text-xl font-bold hover:opacity-90 transition-all transform hover:scale-105 animate-scaleIn"
-              onClick={() => handleAnswer(option)}
-            >
-              {option}
-            </button>
-          ))}
+        {/* Question Card */}
+        <div className="glass-card p-6 space-y-8">
+          {/* Question Header */}
+          <div className="flex justify-between items-center">
+            <span className="text-white/90 text-lg">
+              Question {currentQuestionIndex + 1}/{questions.length}
+            </span>
+            <div className="flex items-center gap-2 bg-[#2D2D3A] px-4 py-2 rounded-full">
+              <Timer className="w-4 h-4 text-white" />
+              <span className="text-white font-bold">{timeLeft}s</span>
+            </div>
+          </div>
+
+          {/* Question Text */}
+          <h2 className="text-2xl font-bold text-white text-center">
+            {currentQuestion.text}
+          </h2>
+
+          {/* Answer Options */}
+          <div className="grid gap-4">
+            {currentQuestion.options.map((option, index) => (
+              <button
+                key={index}
+                onClick={() => handleAnswer(option)}
+                className="w-full p-6 rounded-xl text-white text-xl font-bold transition-transform hover:scale-105 text-center"
+                style={{ backgroundColor: colors[index] }}
+              >
+                {option}
+              </button>
+            ))}
+          </div>
+
+          {/* Progress Bar */}
+          <div className="mt-4">
+            <Progress 
+              value={(timeLeft / currentQuestion.timeLimit) * 100} 
+              className="h-2 bg-white/20"
+            />
+          </div>
         </div>
       </div>
     </div>
