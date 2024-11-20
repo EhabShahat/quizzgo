@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 export const Controls = () => {
   const [startDateTime, setStartDateTime] = useState<string>("");
   const [endDateTime, setEndDateTime] = useState<string>("");
-  
   const { isEnabled, startTime: quizStartTime, endTime: quizEndTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
 
   const handleSaveSettings = () => {
@@ -38,9 +37,19 @@ export const Controls = () => {
 
   return (
     <div className="glass-card p-6 space-y-8">
-      <div className="flex items-center gap-3 mb-6">
-        <Timer className="w-6 h-6 text-purple-400" />
-        <h2 className="text-2xl font-bold text-white">Timer Settings</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <Timer className="w-6 h-6 text-purple-400" />
+          <h2 className="text-2xl font-bold text-white">Timer Settings</h2>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={isEnabled}
+            onCheckedChange={setEnabled}
+            className="data-[state=checked]:bg-purple-500"
+          />
+          <Label className="text-white">Quiz is currently active</Label>
+        </div>
       </div>
       
       <div className="space-y-6">
@@ -62,15 +71,6 @@ export const Controls = () => {
             onChange={(e) => setEndDateTime(e.target.value)}
             className="w-full bg-white/5 text-white border border-white/10 rounded-md p-2"
           />
-        </div>
-
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={isEnabled}
-            onCheckedChange={setEnabled}
-            className="data-[state=checked]:bg-purple-500"
-          />
-          <Label className="text-white">Quiz is currently active</Label>
         </div>
 
         <Button
