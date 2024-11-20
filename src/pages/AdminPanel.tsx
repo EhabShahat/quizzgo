@@ -7,10 +7,13 @@ import QuestionList from "@/components/admin/QuestionList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Controls } from "@/components/admin/Controls";
 import InviteCodes from "@/components/admin/InviteCodes";
+import { useState } from "react";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
 
   const handleLogout = () => {
     navigate("/");
@@ -18,6 +21,44 @@ const AdminPanel = () => {
       title: "Logged out successfully",
       description: "You have been logged out of the admin panel",
     });
+  };
+
+  const handleAddQuestion = (question: Omit<Question, "id">) => {
+    const newQuestion = {
+      ...question,
+      id: questions.length + 1,
+    };
+    setQuestions([...questions, newQuestion]);
+    toast({
+      title: "Question added",
+      description: "The question has been added successfully",
+    });
+  };
+
+  const handleDeleteQuestion = (id: number) => {
+    setQuestions(questions.filter((q) => q.id !== id));
+    toast({
+      title: "Question deleted",
+      description: "The question has been deleted successfully",
+    });
+  };
+
+  const handleEditQuestion = (question: Question) => {
+    setEditingQuestion(question);
+  };
+
+  const handleUpdateQuestion = (updatedQuestion: Omit<Question, "id">) => {
+    if (editingQuestion) {
+      const updatedQuestions = questions.map((q) =>
+        q.id === editingQuestion.id ? { ...updatedQuestion, id: q.id } : q
+      );
+      setQuestions(updatedQuestions);
+      setEditingQuestion(null);
+      toast({
+        title: "Question updated",
+        description: "The question has been updated successfully",
+      });
+    }
   };
 
   return (
@@ -60,8 +101,16 @@ const AdminPanel = () => {
           </TabsList>
 
           <TabsContent value="questions" className="space-y-6">
-            <QuestionForm />
-            <QuestionList />
+            <QuestionForm
+              onSubmit={editingQuestion ? handleUpdateQuestion : handleAddQuestion}
+              editingQuestion={editingQuestion}
+              onCancelEdit={() => setEditingQuestion(null)}
+            />
+            <QuestionList
+              questions={questions}
+              onDelete={handleDeleteQuestion}
+              onEdit={handleEditQuestion}
+            />
           </TabsContent>
 
           <TabsContent value="controls">
