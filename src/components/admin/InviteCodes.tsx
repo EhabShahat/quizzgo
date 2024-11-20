@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Plus, Copy, FileSpreadsheet } from "lucide-react";
+import { Plus, Copy, FileSpreadsheet, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -49,6 +49,23 @@ const InviteCodes = () => {
     toast({
       title: "Copied to clipboard",
       description: "All codes have been copied to your clipboard",
+    });
+  };
+
+  const handleDeleteAll = () => {
+    if (codes.length === 0) {
+      toast({
+        title: "No codes to delete",
+        description: "Generate some codes first",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setCodes([]);
+    toast({
+      title: "Codes deleted",
+      description: "All codes have been deleted",
     });
   };
 
@@ -148,6 +165,14 @@ const InviteCodes = () => {
           >
             <FileSpreadsheet className="w-4 h-4 mr-2" />
             Export to Excel
+          </Button>
+
+          <Button
+            onClick={handleDeleteAll}
+            className="w-full bg-red-500 hover:bg-red-600"
+          >
+            <Trash2 className="w-4 h-4 mr-2" />
+            Delete All Codes
           </Button>
         </div>
 
