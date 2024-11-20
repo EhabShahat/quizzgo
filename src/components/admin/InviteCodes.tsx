@@ -147,6 +147,14 @@ const InviteCodes = () => {
               <Plus className="w-4 h-4 mr-2" />
               Generate {bulkAmount} Codes
             </Button>
+
+            <Button
+              onClick={handleDeleteAll}
+              className="w-full bg-red-500 hover:bg-red-600"
+            >
+              <Trash2 className="w-4 h-4 mr-2" />
+              Delete All Codes
+            </Button>
           </div>
         </div>
 
@@ -165,14 +173,6 @@ const InviteCodes = () => {
           >
             <FileSpreadsheet className="w-4 h-4 mr-2" />
             Export to Excel
-          </Button>
-
-          <Button
-            onClick={handleDeleteAll}
-            className="w-full bg-red-500 hover:bg-red-600"
-          >
-            <Trash2 className="w-4 h-4 mr-2" />
-            Delete All Codes
           </Button>
         </div>
 
