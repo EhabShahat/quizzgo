@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { useQuizStore } from "@/store/quizStore";
 import { format } from "date-fns";
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
+import { Timer, Save } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Controls = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -17,12 +19,12 @@ export const Controls = () => {
   
   const { isEnabled, startTime, endTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
 
-  const handleDisable = () => {
+  const handleSaveSettings = () => {
     if (!date) {
       setEnabled(false);
       setStartTime(null);
       setEndTime(null);
-      toast.success("Quiz disabled. No start time set.");
+      toast.success("Quiz settings saved. No start time set.");
       return;
     }
 
@@ -40,118 +42,123 @@ export const Controls = () => {
     setEnabled(false);
     setStartTime(selectedStartTime);
     setEndTime(selectedEndTime);
-    toast.success(`Quiz disabled. Will run from ${format(selectedStartTime, "PPP 'at' p")} to ${format(selectedEndTime, "PPP 'at' p")}`);
+    toast.success("Quiz settings saved successfully");
   };
 
-  const handleEnable = () => {
-    setEnabled(true);
-    setStartTime(null);
-    setEndTime(null);
-    toast.success("Quiz enabled");
-  };
-
-  const getCurrentStatus = () => {
-    if (isEnabled) return "Quiz is currently enabled";
-    if (!startTime) return "Quiz is currently disabled (no scheduled start)";
-    return `Quiz will run from ${format(startTime, "PPP 'at' p")} to ${endTime ? format(endTime, "PPP 'at' p") : 'unspecified time'}`;
-  };
+  const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
+  const minutes = Array.from({ length: 60 }, (_, i) => i.toString().padStart(2, '0'));
 
   return (
-    <div className="glass-card p-6 space-y-6">
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-white">Quiz Controls</h2>
-        <p className="text-white/70">{getCurrentStatus()}</p>
+    <div className="glass-card p-6 space-y-8">
+      <div className="flex items-center gap-3 mb-6">
+        <Timer className="w-6 h-6 text-purple-400" />
+        <h2 className="text-2xl font-bold text-white">Timer Settings</h2>
       </div>
       
-      <div className="space-y-4">
-        <div className="bg-white/5 rounded-lg p-4 space-y-4">
-          <h3 className="text-lg font-semibold text-white mb-2">Schedule Quiz Time</h3>
-          
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-white mb-2">Start Date & Time</h4>
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="bg-white rounded-md"
-              />
-              <div className="flex gap-4 mt-2">
-                <div className="space-y-2">
-                  <Label className="text-white">Hour</Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    max="23"
-                    value={startHour}
-                    onChange={(e) => setStartHour(e.target.value.padStart(2, '0'))}
-                    className="w-20"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-white">Minute</Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    max="59"
-                    value={startMinute}
-                    onChange={(e) => setStartMinute(e.target.value.padStart(2, '0'))}
-                    className="w-20"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-white mb-2">End Date & Time</h4>
-              <Calendar
-                mode="single"
-                selected={endDate}
-                onSelect={setEndDate}
-                className="bg-white rounded-md"
-              />
-              <div className="flex gap-4 mt-2">
-                <div className="space-y-2">
-                  <Label className="text-white">Hour</Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    max="23"
-                    value={endHour}
-                    onChange={(e) => setEndHour(e.target.value.padStart(2, '0'))}
-                    className="w-20"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-white">Minute</Label>
-                  <Input
-                    type="number"
-                    min="0"
-                    max="59"
-                    value={endMinute}
-                    onChange={(e) => setEndMinute(e.target.value.padStart(2, '0'))}
-                    className="w-20"
-                  />
-                </div>
-              </div>
-            </div>
+      <div className="space-y-6">
+        <div className="space-y-4">
+          <Label className="text-lg text-white">Quiz Start Time</Label>
+          <div className="flex gap-4">
+            <Select value={startHour} onValueChange={setStartHour}>
+              <SelectTrigger className="w-24">
+                <SelectValue placeholder="Hour" />
+              </SelectTrigger>
+              <SelectContent>
+                {hours.map((hour) => (
+                  <SelectItem key={hour} value={hour}>
+                    {hour}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={startMinute} onValueChange={setStartMinute}>
+              <SelectTrigger className="w-24">
+                <SelectValue placeholder="Minute" />
+              </SelectTrigger>
+              <SelectContent>
+                {minutes.map((minute) => (
+                  <SelectItem key={minute} value={minute}>
+                    {minute}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={setDate}
+            className="rounded-md border bg-white/5 text-white"
+          />
         </div>
 
-        <div className="flex gap-4">
-          <Button 
-            onClick={handleEnable}
-            className="flex-1 bg-green-600 hover:bg-green-700"
-          >
-            Enable Quiz
-          </Button>
-          <Button 
-            onClick={handleDisable}
-            className="flex-1 bg-red-600 hover:bg-red-700"
-          >
-            Disable Quiz
-          </Button>
+        <div className="space-y-4">
+          <Label className="text-lg text-white">Quiz End Time</Label>
+          <div className="flex gap-4">
+            <Select value={endHour} onValueChange={setEndHour}>
+              <SelectTrigger className="w-24">
+                <SelectValue placeholder="Hour" />
+              </SelectTrigger>
+              <SelectContent>
+                {hours.map((hour) => (
+                  <SelectItem key={hour} value={hour}>
+                    {hour}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={endMinute} onValueChange={setEndMinute}>
+              <SelectTrigger className="w-24">
+                <SelectValue placeholder="Minute" />
+              </SelectTrigger>
+              <SelectContent>
+                {minutes.map((minute) => (
+                  <SelectItem key={minute} value={minute}>
+                    {minute}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <Calendar
+            mode="single"
+            selected={endDate}
+            onSelect={setEndDate}
+            className="rounded-md border bg-white/5 text-white"
+          />
         </div>
+
+        <div className="flex items-center space-x-2">
+          <Switch
+            checked={isEnabled}
+            onCheckedChange={setEnabled}
+            className="data-[state=checked]:bg-purple-500"
+          />
+          <Label className="text-white">Quiz is currently active</Label>
+        </div>
+
+        <Button
+          onClick={handleSaveSettings}
+          className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg"
+        >
+          <Save className="w-5 h-5 mr-2" />
+          Save Settings
+        </Button>
+      </div>
+
+      <div className="bg-white/5 rounded-lg p-4 space-y-2">
+        <h3 className="text-lg font-semibold text-white">Current Status</h3>
+        <p className="text-white/70">
+          Start Time: {startTime ? format(startTime, "PPP 'at' p") : 'Not set'}
+        </p>
+        <p className="text-white/70">
+          End Time: {endTime ? format(endTime, "PPP 'at' p") : 'Not set'}
+        </p>
+        <p className="text-white/70">
+          Status: <span className={isEnabled ? "text-green-400" : "text-red-400"}>
+            {isEnabled ? 'Active' : 'Inactive'}
+          </span>
+        </p>
       </div>
     </div>
   );
