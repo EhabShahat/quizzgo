@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Book, Timer, Key, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -7,10 +6,9 @@ import QuestionForm from "@/components/admin/QuestionForm";
 import QuestionList from "@/components/admin/QuestionList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Controls } from "@/components/admin/Controls";
+import InviteCodes from "@/components/admin/InviteCodes";
 
 const AdminPanel = () => {
-  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
-  const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -20,45 +18,6 @@ const AdminPanel = () => {
       title: "Logged out successfully",
       description: "You have been logged out of the admin panel",
     });
-  };
-
-  const handleAddQuestion = (newQuestion: Omit<Question, "id">) => {
-    if (editingQuestion) {
-      // Update existing question
-      setQuestions(questions.map(q => 
-        q.id === editingQuestion.id 
-          ? { ...newQuestion, id: editingQuestion.id }
-          : q
-      ));
-      setEditingQuestion(null);
-      toast({
-        title: "Success",
-        description: "Question updated successfully",
-      });
-    } else {
-      // Add new question
-      const id = Math.max(...questions.map((q) => q.id), 0) + 1;
-      setQuestions([...questions, { ...newQuestion, id }]);
-      toast({
-        title: "Success",
-        description: "Question added successfully",
-      });
-    }
-  };
-
-  const handleDeleteQuestion = (id: number) => {
-    setQuestions(questions.filter((q) => q.id !== id));
-    if (editingQuestion?.id === id) {
-      setEditingQuestion(null);
-    }
-    toast({
-      title: "Success",
-      description: "Question deleted successfully",
-    });
-  };
-
-  const handleEditQuestion = (question: Question) => {
-    setEditingQuestion(question);
   };
 
   return (
@@ -101,16 +60,8 @@ const AdminPanel = () => {
           </TabsList>
 
           <TabsContent value="questions" className="space-y-6">
-            <QuestionForm 
-              onSubmit={handleAddQuestion} 
-              editingQuestion={editingQuestion}
-              onCancelEdit={() => setEditingQuestion(null)}
-            />
-            <QuestionList 
-              questions={questions} 
-              onDelete={handleDeleteQuestion}
-              onEdit={handleEditQuestion}
-            />
+            <QuestionForm />
+            <QuestionList />
           </TabsContent>
 
           <TabsContent value="controls">
@@ -118,10 +69,7 @@ const AdminPanel = () => {
           </TabsContent>
 
           <TabsContent value="invites">
-            <div className="glass-card p-6">
-              <h2 className="text-2xl font-bold text-white">Invite Codes</h2>
-              <p className="text-white/70">Coming soon...</p>
-            </div>
+            <InviteCodes />
           </TabsContent>
         </Tabs>
       </div>
