@@ -12,7 +12,7 @@ const InviteCodeForm = () => {
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { isEnabled, startTime } = useQuizStore();
+  const { isEnabled, startTime, endTime } = useQuizStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -74,11 +74,15 @@ const InviteCodeForm = () => {
             className="input-styles transform transition-all duration-300 hover:scale-102 focus:scale-102"
             disabled={!isEnabled}
           />
-          {!isEnabled && (
+          {!isEnabled && startTime && (
             <p className="text-white/70 text-sm mt-2">
-              {startTime 
-                ? `Quiz will start at ${format(startTime, "PPP 'at' p")}`
-                : "We will open soon..."}
+              Quiz will run from {format(startTime, "PPP 'at' p")} 
+              {endTime && ` to ${format(endTime, "PPP 'at' p")}`}
+            </p>
+          )}
+          {!isEnabled && !startTime && (
+            <p className="text-white/70 text-sm mt-2">
+              We will open soon...
             </p>
           )}
         </div>
