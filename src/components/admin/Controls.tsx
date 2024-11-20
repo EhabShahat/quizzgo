@@ -37,6 +37,21 @@ export const Controls = () => {
 
   return (
     <div className="glass-card p-6 space-y-8">
+      <div className="bg-white/5 rounded-lg p-4 space-y-2">
+        <h3 className="text-lg font-semibold text-white">Current Status</h3>
+        <p className="text-white/70">
+          Start Time: {quizStartTime ? format(quizStartTime, "PPP 'at' p") : 'Not set'}
+        </p>
+        <p className="text-white/70">
+          End Time: {quizEndTime ? format(quizEndTime, "PPP 'at' p") : 'Not set'}
+        </p>
+        <p className="text-white/70">
+          Status: <span className={isEnabled ? "text-green-400" : "text-red-400"}>
+            {isEnabled ? 'Active' : 'Inactive'}
+          </span>
+        </p>
+      </div>
+
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Timer className="w-6 h-6 text-purple-400" />
@@ -80,21 +95,6 @@ export const Controls = () => {
           <Save className="w-5 h-5 mr-2" />
           Save Settings
         </Button>
-      </div>
-
-      <div className="bg-white/5 rounded-lg p-4 space-y-2">
-        <h3 className="text-lg font-semibold text-white">Current Status</h3>
-        <p className="text-white/70">
-          Start Time: {quizStartTime ? format(quizStartTime, "PPP 'at' p") : 'Not set'}
-        </p>
-        <p className="text-white/70">
-          End Time: {quizEndTime ? format(quizEndTime, "PPP 'at' p") : 'Not set'}
-        </p>
-        <p className="text-white/70">
-          Status: <span className={isEnabled ? "text-green-400" : "text-red-400"}>
-            {isEnabled ? 'Active' : 'Inactive'}
-          </span>
-        </p>
       </div>
     </div>
   );
