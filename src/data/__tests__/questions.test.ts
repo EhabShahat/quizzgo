@@ -7,7 +7,7 @@ describe('Questions Data', () => {
       expect(question).toHaveProperty('id');
       expect(question).toHaveProperty('text');
       expect(question).toHaveProperty('options');
-      expect(question).toHaveProperty('correctAnswer');
+      expect(question).toHaveProperty('correct_answer');
       expect(question).toHaveProperty('timeLimit');
       expect(question).toHaveProperty('type');
       
@@ -28,7 +28,7 @@ describe('Questions Data', () => {
       }
       
       // Check if correctAnswer is one of the options
-      expect(question.options).toContain(question.correctAnswer);
+      expect(question.options).toContain(question.correct_answer);
       
       // Check if timeLimit is a positive number
       expect(typeof question.timeLimit).toBe('number');
