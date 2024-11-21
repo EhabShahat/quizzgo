@@ -76,7 +76,7 @@ const ScorePage = () => {
 
       <Card className="max-w-4xl mx-auto space-y-8 bg-transparent border-none shadow-none">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-12 animate-fadeIn">
-          Leaderboard
+          Winners
         </h1>
 
         {/* Podium Section */}
