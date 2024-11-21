@@ -18,10 +18,9 @@ export const Controls = () => {
 
   const handleSaveSettings = () => {
     if (!startDateTime) {
-      setEnabled(false);
       setStartTime(null);
       setEndTime(null);
-      toast.success("Quiz settings saved. No start time set.");
+      toast.success("Quiz settings saved. No time restrictions set.");
       return;
     }
 
@@ -33,7 +32,6 @@ export const Controls = () => {
       return;
     }
 
-    setEnabled(false);
     setStartTime(selectedStartTime);
     setEndTime(selectedEndTime);
     toast.success("Quiz settings saved successfully");
@@ -84,7 +82,14 @@ export const Controls = () => {
         <div className="flex items-center space-x-2">
           <Switch
             checked={isEnabled}
-            onCheckedChange={setEnabled}
+            onCheckedChange={(checked) => {
+              setEnabled(checked);
+              if (checked) {
+                toast.success("Quiz is now active");
+              } else {
+                toast.info("Quiz is now inactive");
+              }
+            }}
             className="data-[state=checked]:bg-purple-500"
           />
           <Label className="text-white">Active</Label>
@@ -93,7 +98,7 @@ export const Controls = () => {
       
       <div className="space-y-6">
         <div className="space-y-4">
-          <Label className="text-lg text-white">Quiz Start</Label>
+          <Label className="text-lg text-white">Quiz Start (Optional)</Label>
           <input
             type="datetime-local"
             value={startDateTime}
@@ -103,7 +108,7 @@ export const Controls = () => {
         </div>
 
         <div className="space-y-4">
-          <Label className="text-lg text-white">Quiz End</Label>
+          <Label className="text-lg text-white">Quiz End (Optional)</Label>
           <input
             type="datetime-local"
             value={endDateTime}
