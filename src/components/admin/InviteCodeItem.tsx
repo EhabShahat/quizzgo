@@ -1,12 +1,13 @@
 import { format } from "date-fns";
 import { Copy, Trash2 } from "lucide-react";
+import type { InviteCode } from "@/types/database";
 
 interface InviteCodeItemProps {
   code: string;
   used: boolean;
-  createdAt: Date;
-  usedAt?: Date;
-  participantName?: string;
+  created_at: string;
+  used_at?: string | null;
+  participant_name?: string | null;
   onCopy: (code: string) => void;
   onDelete: (code: string) => void;
 }
@@ -14,9 +15,9 @@ interface InviteCodeItemProps {
 export const InviteCodeItem = ({
   code,
   used,
-  createdAt,
-  usedAt,
-  participantName,
+  created_at,
+  used_at,
+  participant_name,
   onCopy,
   onDelete,
 }: InviteCodeItemProps) => {
@@ -31,9 +32,9 @@ export const InviteCodeItem = ({
         <div>
           <p className="font-mono text-white">{code}</p>
           <p className="text-sm text-white/60">
-            Created: {format(createdAt, "PPp")}
-            {usedAt && ` • Used: ${format(usedAt, "PPp")}`}
-            {participantName && ` • For: ${participantName}`}
+            Created: {format(new Date(created_at), "PPp")}
+            {used_at && ` • Used: ${format(new Date(used_at), "PPp")}`}
+            {participant_name && ` • For: ${participant_name}`}
           </p>
         </div>
       </div>

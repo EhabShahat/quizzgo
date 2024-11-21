@@ -172,9 +172,9 @@ const InviteCodes = () => {
                     key={code.code}
                     code={code.code}
                     used={code.used}
-                    createdAt={new Date(code.created_at)}
-                    usedAt={code.used_at ? new Date(code.used_at) : undefined}
-                    participantName={code.participant_name || undefined}
+                    created_at={code.created_at}
+                    used_at={code.used_at}
+                    participant_name={code.participant_name}
                     onCopy={handleCopyCode}
                     onDelete={handleDeleteCode}
                   />

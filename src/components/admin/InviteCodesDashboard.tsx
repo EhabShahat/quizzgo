@@ -1,11 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface InviteCode {
-  code: string;
-  used: boolean;
-  createdAt: Date;
-  participantName?: string;
-}
+import type { InviteCode } from "@/types/database";
 
 interface InviteCodesDashboardProps {
   codes: InviteCode[];
