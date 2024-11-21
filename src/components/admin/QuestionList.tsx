@@ -1,4 +1,4 @@
-import { Trash2, Edit2 } from "lucide-react";
+import { Trash2, Edit2, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Question } from "@/data/questions";
@@ -27,9 +27,35 @@ const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
     }
   };
 
+  const handleFetchData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*');
+
+      if (error) throw error;
+
+      toast.success("Questions fetched successfully");
+      // You might want to update the parent component's state here
+      // For now, we'll just show a success message
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      toast.error("Failed to fetch questions");
+    }
+  };
+
   return (
     <div className="glass-card p-6 mt-6">
-      <h2 className="text-2xl font-bold text-white mb-4">Question List</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-white">Question List</h2>
+        <button
+          onClick={handleFetchData}
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-white transition-colors"
+        >
+          <RefreshCw className="w-4 h-4" />
+          Fetch Data
+        </button>
+      </div>
       <div className="space-y-4">
         {questions.map((question) => (
           <div
