@@ -11,6 +11,7 @@ interface InviteCode {
 
 interface InviteCodeStore {
   codes: InviteCode[];
+  currentCode: InviteCode | null;
   addCode: (code: string, username: string) => void;
   addCodes: (codes: InviteCode[]) => void;
   removeCode: (code: string) => void;
@@ -23,6 +24,7 @@ interface InviteCodeStore {
 
 export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
   codes: [],
+  currentCode: null,
   addCode: (code, username) => 
     set(state => ({
       codes: [...state.codes, { 
@@ -56,7 +58,8 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
     set(state => ({
       codes: state.codes.map(c =>
         c.code === code ? { ...c, used: true, usedAt: new Date() } : c
-      )
+      ),
+      currentCode: state.codes.find(c => c.code === code) || null
     })),
   getInviteCodeDetails: (code) => {
     const state = get();
