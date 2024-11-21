@@ -62,28 +62,28 @@ const InviteCodeForm = () => {
   };
 
   return (
-    <div className="glass-card p-8 w-full max-w-md mx-auto animate-scaleIn">
-      <Shield className="w-12 h-12 mx-auto mb-6 text-white/80 animate-float" />
-      <h1 className="text-3xl font-bold text-white text-center mb-2 animate-fadeIn">
+    <div className="glass-card p-8 w-full max-w-md mx-auto">
+      <Shield className="w-12 h-12 mx-auto mb-6 text-white/80" />
+      <h1 className="text-3xl font-bold text-white text-center mb-2">
         Quiz Challenge
       </h1>
-      <p className="text-white/70 text-center mb-8 animate-fadeIn" style={{ animationDelay: "0.1s" }}>
+      <p className="text-white/70 text-center mb-8">
         Enter your invite code to begin
       </p>
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+        <div>
           <input
             type="text"
             value={inviteCode}
             onChange={(e) => setInviteCode(e.target.value)}
             placeholder="Enter your invite code"
-            className="input-styles transform transition-all duration-300 hover:scale-102 focus:scale-102"
+            className="input-styles"
             disabled={!isEnabled}
           />
           {!isEnabled && startTime && (
-            <div className="mt-4 p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10">
-              <p className="text-xl font-semibold text-white text-center animate-pulse">
+            <div className="mt-4 p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
+              <p className="text-xl font-semibold text-white text-center">
                 Quiz Schedule
               </p>
               <p className="text-lg text-white/90 text-center mt-2">
@@ -98,8 +98,8 @@ const InviteCodeForm = () => {
             </div>
           )}
           {!isEnabled && !startTime && (
-            <div className="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10">
-              <p className="text-3xl font-bold text-white text-center animate-pulse">
+            <div className="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
+              <p className="text-3xl font-bold text-white text-center">
                 We will open soon...
               </p>
             </div>
@@ -108,8 +108,7 @@ const InviteCodeForm = () => {
         
         <button 
           type="submit" 
-          className="button-styles animate-fadeIn transform transition-all duration-300 hover:scale-105 active:scale-95"
-          style={{ animationDelay: "0.3s" }}
+          className="button-styles"
           disabled={!isEnabled}
         >
           Start Quiz
@@ -129,8 +128,7 @@ const InviteCodeForm = () => {
           />
         )}
         <button 
-          className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors animate-fadeIn"
-          style={{ animationDelay: "0.4s" }}
+          className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors"
           onClick={handleAdminAccess}
         >
           <Lock className="w-4 h-4" />
