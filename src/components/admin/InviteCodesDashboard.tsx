@@ -23,10 +23,10 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
       <Card className="bg-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white">Total Codes</CardTitle>
+          <CardTitle className="text-sm font-medium text-white">Total</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-white">{totalCodes}</div>
@@ -34,7 +34,7 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
       </Card>
       <Card className="bg-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white">Used Codes</CardTitle>
+          <CardTitle className="text-sm font-medium text-white">Used</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-white">{usedCodes}</div>
@@ -42,7 +42,7 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
       </Card>
       <Card className="bg-white/5">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white">Available Codes</CardTitle>
+          <CardTitle className="text-sm font-medium text-white">Available</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-white">{availableCodes}</div>
@@ -52,7 +52,7 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
       {totalCodes > 0 && (
         <Card className="bg-white/5">
           <CardHeader>
-            <CardTitle className="text-white">Code Usage</CardTitle>
+            <CardTitle className="text-white">Usage</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[150px]">
