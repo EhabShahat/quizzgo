@@ -21,25 +21,24 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   fetchCodes: async () => {
     const { data, error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .select('*');
     
     if (error) throw error;
-    set({ codes: data });
+    set({ codes: data || [] });
   },
 
   addCode: async (code: string, username: string) => {
-    const newCode: InviteCode = {
+    const newCode: Omit<InviteCode, 'created_at'> = {
       code,
       username,
       used: false,
       participant_name: null,
-      created_at: new Date().toISOString(),
       used_at: null
     };
 
     const { error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .insert([newCode]);
 
     if (error) throw error;
@@ -48,7 +47,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   addCodes: async (newCodes: InviteCode[]) => {
     const { error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .insert(newCodes.map(code => ({
         ...code,
         created_at: new Date().toISOString()
@@ -60,7 +59,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   deleteCode: async (code: string) => {
     const { error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .delete()
       .eq('code', code);
 
@@ -70,7 +69,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   deleteAllCodes: async () => {
     const { error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .delete()
       .neq('code', '');
 
@@ -80,7 +79,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   isValidCode: async (code: string) => {
     const { data, error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .select('used')
       .eq('code', code)
       .single();
@@ -91,7 +90,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   markCodeAsUsed: async (code: string) => {
     const { error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .update({ used: true, used_at: new Date().toISOString() })
       .eq('code', code);
 
@@ -101,7 +100,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
 
   getInviteCodeDetails: async (code: string) => {
     const { data, error } = await supabase
-      .from('invite_codes')
+      .from('InviteCode')
       .select('*')
       .eq('code', code)
       .single();
