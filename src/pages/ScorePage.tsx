@@ -6,21 +6,14 @@ import { Lock } from "lucide-react";
 import { PodiumStand } from "@/components/leaderboard/PodiumStand";
 import { RunnerUp } from "@/components/leaderboard/RunnerUp";
 import { Card } from "@/components/ui/card";
+import { useScoresStore } from "@/store/scoresStore";
 
 const ScorePage = () => {
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
-
-  // Placeholder data - replace with your actual data
-  const scores = [
-    { name: "Johannes", score: 6895, correctAnswers: 7, totalQuestions: 8 },
-    { name: "Jennie", score: 5928, correctAnswers: 6, totalQuestions: 8 },
-    { name: "Victoria", score: 5848, correctAnswers: 6, totalQuestions: 8 },
-    { name: "Winner", score: 5500, correctAnswers: 6, totalQuestions: 8 },
-    { name: "iLNzeJ", score: 5200, correctAnswers: 6, totalQuestions: 8 }
-  ];
+  const { scores } = useScoresStore();
 
   const handleAdminAccess = () => {
     if (!showAdminInput) {
@@ -73,15 +66,39 @@ const ScorePage = () => {
         <div className="flex justify-center items-end gap-4 md:gap-8 mb-12">
           {/* 2nd Place */}
           <div className="animate-fadeIn" style={{ animationDelay: "0.2s" }}>
-            <PodiumStand {...scores[1]} rank={2} />
+            {scores[1] && (
+              <PodiumStand
+                rank={2}
+                name={scores[1].participantName || scores[1].username}
+                score={scores[1].score}
+                correctAnswers={scores[1].correctAnswers}
+                totalQuestions={scores[1].totalQuestions}
+              />
+            )}
           </div>
           {/* 1st Place */}
           <div className="animate-fadeIn" style={{ animationDelay: "0.1s" }}>
-            <PodiumStand {...scores[0]} rank={1} />
+            {scores[0] && (
+              <PodiumStand
+                rank={1}
+                name={scores[0].participantName || scores[0].username}
+                score={scores[0].score}
+                correctAnswers={scores[0].correctAnswers}
+                totalQuestions={scores[0].totalQuestions}
+              />
+            )}
           </div>
           {/* 3rd Place */}
           <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
-            <PodiumStand {...scores[2]} rank={3} />
+            {scores[2] && (
+              <PodiumStand
+                rank={3}
+                name={scores[2].participantName || scores[2].username}
+                score={scores[2].score}
+                correctAnswers={scores[2].correctAnswers}
+                totalQuestions={scores[2].totalQuestions}
+              />
+            )}
           </div>
         </div>
 
@@ -96,7 +113,13 @@ const ScorePage = () => {
                   className="animate-fadeIn"
                   style={{ animationDelay: `${0.4 + index * 0.1}s` }}
                 >
-                  <RunnerUp {...score} rank={index + 4} />
+                  <RunnerUp
+                    rank={index + 4}
+                    name={score.participantName || score.username}
+                    score={score.score}
+                    correctAnswers={score.correctAnswers}
+                    totalQuestions={score.totalQuestions}
+                  />
                 </div>
               ))}
             </div>

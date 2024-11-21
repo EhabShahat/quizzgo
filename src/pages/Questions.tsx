@@ -3,6 +3,8 @@ import { questions } from "@/data/questions";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { useNavigate } from "react-router-dom";
+import { useInviteCodeStore } from "@/store/inviteCodeStore";
+import { useScoresStore } from "@/store/scoresStore";
 
 const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -12,10 +14,22 @@ const Questions = () => {
   const navigate = useNavigate();
   const currentQuestion = questions[currentQuestionIndex];
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
+  const { currentCode } = useInviteCodeStore();
+  const { addScore } = useScoresStore();
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length) {
       setShowScore(true);
+      // Save score to store
+      if (currentCode) {
+        addScore({
+          username: currentCode.username,
+          participantName: currentCode.participantName,
+          score,
+          correctAnswers: Math.round((score / 1000)), // Approximate based on score
+          totalQuestions: questions.length
+        });
+      }
       // Redirect to scores page after showing the score for 5 seconds
       const timer = setTimeout(() => {
         navigate("/scores");
@@ -40,7 +54,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, navigate]);
+  }, [currentQuestionIndex, currentQuestion, navigate, score, currentCode, addScore]);
 
   if (showScore) {
     return <ScoreDisplay score={score} questions={questions} />;
