@@ -63,6 +63,45 @@ export type Database = {
         }
         Relationships: []
       }
+      quiz_settings: {
+        Row: {
+          admin_password: string
+          created_at: string | null
+          end_time: string | null
+          id: number
+          is_enabled: boolean | null
+          logo_url: string | null
+          main_title: string | null
+          shuffle_questions: boolean | null
+          start_time: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          admin_password?: string
+          created_at?: string | null
+          end_time?: string | null
+          id?: number
+          is_enabled?: boolean | null
+          logo_url?: string | null
+          main_title?: string | null
+          shuffle_questions?: boolean | null
+          start_time?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          admin_password?: string
+          created_at?: string | null
+          end_time?: string | null
+          id?: number
+          is_enabled?: boolean | null
+          logo_url?: string | null
+          main_title?: string | null
+          shuffle_questions?: boolean | null
+          start_time?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       scores: {
         Row: {
           correct_answers: number
