@@ -59,14 +59,14 @@ const ScoresList = () => {
                   <TableRow key={code.code} className="border-white/10">
                     <TableCell className="text-white font-medium">#{index + 1}</TableCell>
                     <TableCell className="text-white">
-                      {code.participantName || code.username}
+                      {code.participant_name || code.username}
                     </TableCell>
                     <TableCell className="text-white/70">{code.code}</TableCell>
                     <TableCell className="text-white text-right">
                       {scoreData?.score || 'N/A'}
                     </TableCell>
                     <TableCell className="text-white text-right">
-                      {scoreData ? `${scoreData.correctAnswers}/${scoreData.totalQuestions}` : 'N/A'}
+                      {scoreData ? `${scoreData.correct_answers}/${scoreData.total_questions}` : 'N/A'}
                     </TableCell>
                   </TableRow>
                 );

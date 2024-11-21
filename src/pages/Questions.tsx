@@ -45,10 +45,10 @@ const Questions = () => {
       if (currentCode) {
         addScore({
           username: currentCode.username,
-          participantName: currentCode.participantName,
+          participant_name: currentCode.participant_name,
           score,
-          correctAnswers: Math.round((score / 1000)),
-          totalQuestions: questions.length
+          correct_answers: Math.round((score / 1000)),
+          total_questions: questions.length
         });
       }
       const timer = setTimeout(() => {
@@ -59,7 +59,7 @@ const Questions = () => {
     
     if (!currentQuestion) return;
     
-    const questionTimeLimit = currentQuestion.timeLimit;
+    const questionTimeLimit = currentQuestion.time_limit;
     setTimeLeft(questionTimeLimit);
     
     const timer = setInterval(() => {
@@ -85,10 +85,10 @@ const Questions = () => {
   }
 
   const handleAnswer = (selectedAnswer: string) => {
-    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
+    const isCorrect = selectedAnswer === currentQuestion.correct_answer;
     
     if (isCorrect) {
-      const timeBonus = Math.round((timeLeft / currentQuestion.timeLimit) * 1000);
+      const timeBonus = Math.round((timeLeft / currentQuestion.time_limit) * 1000);
       setScore(prev => prev + timeBonus);
     }
     

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuestionForm from "@/components/admin/QuestionForm";
 import QuestionList from "@/components/admin/QuestionList";
