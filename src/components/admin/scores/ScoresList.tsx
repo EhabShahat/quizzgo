@@ -6,7 +6,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQuery } from "@tanstack/react-query";
@@ -14,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const ScoresList = () => {
   // Fetch scores directly from Supabase using React Query
-  const { data: scores = [], isLoading: isLoadingScores } = useQuery({
+  const { data: scores = [], isLoading: isLoadingScores, error } = useQuery({
     queryKey: ['scores'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,7 +26,7 @@ const ScoresList = () => {
     }
   });
 
-  // Fetch invite codes
+  // Fetch invite codes to match with scores
   const { data: inviteCodes = [], isLoading: isLoadingCodes } = useQuery({
     queryKey: ['invite-codes'],
     queryFn: async () => {
@@ -47,6 +46,17 @@ const ScoresList = () => {
         <AlertCircle className="h-4 w-4" />
         <AlertDescription>
           Loading scores...
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (error) {
+    return (
+      <Alert className="bg-white/5 border-white/10 text-white" variant="destructive">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Error loading scores. Please try again.
         </AlertDescription>
       </Alert>
     );

@@ -28,7 +28,11 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
   useEffect(() => {
     const saveScore = async () => {
       if (!currentCode?.participant_name) {
-        console.error('No participant name found');
+        toast({
+          title: "Error",
+          description: "No participant name found. Score cannot be saved.",
+          variant: "destructive",
+        });
         return;
       }
 
@@ -42,7 +46,9 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
             total_questions: totalQuestions
           }]);
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
 
         toast({
           title: "Score saved",
