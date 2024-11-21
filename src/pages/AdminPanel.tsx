@@ -1,4 +1,4 @@
-import { Book, Timer, Key, LogOut } from "lucide-react";
+import { Book, Timer, Key, LogOut, Trophy } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { questions as initialQuestions, Question } from "@/data/questions";
@@ -7,6 +7,7 @@ import QuestionList from "@/components/admin/QuestionList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Controls } from "@/components/admin/Controls";
 import InviteCodes from "@/components/admin/InviteCodes";
+import ScoresList from "@/components/admin/scores/ScoresList";
 import { useState } from "react";
 
 const AdminPanel = () => {
@@ -98,6 +99,13 @@ const AdminPanel = () => {
               <Key className="w-5 h-5 mr-2" />
               Invites
             </TabsTrigger>
+            <TabsTrigger
+              value="scores"
+              className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
+            >
+              <Trophy className="w-5 h-5 mr-2" />
+              Scores
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="questions" className="space-y-6">
@@ -119,6 +127,10 @@ const AdminPanel = () => {
 
           <TabsContent value="invites">
             <InviteCodes />
+          </TabsContent>
+
+          <TabsContent value="scores">
+            <ScoresList />
           </TabsContent>
         </Tabs>
       </div>
