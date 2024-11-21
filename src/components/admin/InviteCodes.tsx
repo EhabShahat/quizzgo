@@ -17,8 +17,9 @@ const InviteCodes = () => {
     return {
       code: prefix ? `${prefix}-${random}` : random,
       used: false,
+      username: participantName || "Guest",
       createdAt: new Date(),
-      participantName,
+      participantName
     };
   };
 
@@ -26,7 +27,7 @@ const InviteCodes = () => {
     const names = participantNames.split('\n').filter(name => name.trim());
     const participantName = names[0]?.trim() || undefined;
     const newCode = generateCode(prefix, participantName);
-    addCode(newCode);
+    addCode(newCode.code, newCode.username);
     toast({
       title: "Code Generated",
       description: `New code: ${newCode.code}${participantName ? ` for ${participantName}` : ''}`,
