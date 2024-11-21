@@ -77,31 +77,31 @@ const AdminPanel = () => {
         </div>
 
         <Tabs defaultValue="questions" className="space-y-6">
-          <TabsList className="bg-white/5 border-b border-white/10 w-full justify-start rounded-none p-0">
+          <TabsList className="bg-white/5 border-b border-white/10 w-full justify-between rounded-none p-0">
             <TabsTrigger
               value="questions"
-              className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
+              className="flex-1 data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
             >
               <Book className="w-5 h-5 mr-2" />
               Questions
             </TabsTrigger>
             <TabsTrigger
               value="controls"
-              className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
+              className="flex-1 data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
             >
               <Timer className="w-5 h-5 mr-2" />
               Controls
             </TabsTrigger>
             <TabsTrigger
               value="invites"
-              className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
+              className="flex-1 data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
             >
               <Key className="w-5 h-5 mr-2" />
               Invites
             </TabsTrigger>
             <TabsTrigger
               value="scores"
-              className="data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
+              className="flex-1 data-[state=active]:bg-white/10 data-[state=active]:text-white text-white/70 rounded-none border-b-2 border-transparent data-[state=active]:border-[#8B5CF6] px-6 py-3"
             >
               <Trophy className="w-5 h-5 mr-2" />
               Scores
