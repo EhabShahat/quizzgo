@@ -121,10 +121,10 @@ const ScorePage = () => {
 
         {/* Runners Up Section - Only show if there are 4 or more participants */}
         {scores.length > 3 && (
-          <div className="space-y-4 w-1/2 mx-auto">
+          <div className="space-y-4 max-w-2xl mx-auto">
             <div className="bg-[#3C1278]/50 rounded-xl p-6">
               <h2 className="text-xl font-semibold text-white/90 mb-4">Runners Up</h2>
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {scores.slice(3).map((score, index) => (
                   <div 
                     key={index} 
