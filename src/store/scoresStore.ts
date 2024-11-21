@@ -19,13 +19,18 @@ export const useScoresStore = create<ScoresStore>((set, get) => ({
       .order('score', { ascending: false });
     
     if (error) throw error;
-    set({ scores: data as Score[] });
+    set({ scores: data });
   },
 
   addScore: async (score) => {
+    const newScore = {
+      ...score,
+      created_at: new Date().toISOString()
+    };
+
     const { error } = await supabase
       .from('scores')
-      .insert([score]);
+      .insert([newScore]);
 
     if (error) throw error;
     await get().fetchScores();
@@ -34,7 +39,10 @@ export const useScoresStore = create<ScoresStore>((set, get) => ({
   updateScores: async (scores) => {
     const { error } = await supabase
       .from('scores')
-      .upsert(scores);
+      .upsert(scores.map(score => ({
+        ...score,
+        created_at: new Date().toISOString()
+      })));
 
     if (error) throw error;
     await get().fetchScores();

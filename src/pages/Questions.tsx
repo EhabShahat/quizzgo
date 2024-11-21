@@ -22,11 +22,20 @@ const Questions = () => {
 
   useEffect(() => {
     if (shuffleQuestions) {
-      const shuffledQuestions = [...initialQuestions]
-        .sort(() => Math.random() - 0.5);
+      const shuffledQuestions = [...initialQuestions].map(q => ({
+        ...q,
+        correct_answer: q.correctAnswer,
+        time_limit: q.timeLimit,
+        created_at: new Date().toISOString()
+      })).sort(() => Math.random() - 0.5);
       setQuestions(shuffledQuestions);
     } else {
-      setQuestions(initialQuestions);
+      setQuestions(initialQuestions.map(q => ({
+        ...q,
+        correct_answer: q.correctAnswer,
+        time_limit: q.timeLimit,
+        created_at: new Date().toISOString()
+      })));
     }
   }, [shuffleQuestions]);
 

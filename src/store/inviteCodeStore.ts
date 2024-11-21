@@ -25,13 +25,22 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
       .select('*');
     
     if (error) throw error;
-    set({ codes: data as InviteCode[] });
+    set({ codes: data });
   },
 
   addCode: async (code: string, username: string) => {
+    const newCode: InviteCode = {
+      code,
+      username,
+      used: false,
+      participant_name: null,
+      created_at: new Date().toISOString(),
+      used_at: null
+    };
+
     const { error } = await supabase
       .from('invite_codes')
-      .insert([{ code, username, used: false }]);
+      .insert([newCode]);
 
     if (error) throw error;
     await get().fetchCodes();
@@ -40,7 +49,10 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
   addCodes: async (newCodes: InviteCode[]) => {
     const { error } = await supabase
       .from('invite_codes')
-      .insert(newCodes);
+      .insert(newCodes.map(code => ({
+        ...code,
+        created_at: new Date().toISOString()
+      })));
 
     if (error) throw error;
     await get().fetchCodes();

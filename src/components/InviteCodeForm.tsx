@@ -25,7 +25,7 @@ const InviteCodeForm = () => {
     if (storedLogoUrl) setLogoUrl(storedLogoUrl);
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inviteCode.trim()) {
       toast({
@@ -36,7 +36,7 @@ const InviteCodeForm = () => {
       return;
     }
 
-    const codeDetails = getInviteCodeDetails(inviteCode.trim());
+    const codeDetails = await getInviteCodeDetails(inviteCode.trim());
     
     if (!codeDetails) {
       toast({
@@ -48,7 +48,6 @@ const InviteCodeForm = () => {
     }
 
     if (codeDetails.used) {
-      // If code is already used, redirect directly to scores page
       navigate("/scores");
       toast({
         title: "Info",
@@ -57,8 +56,7 @@ const InviteCodeForm = () => {
       return;
     }
 
-    // Valid and unused code
-    markCodeAsUsed(inviteCode.trim());
+    await markCodeAsUsed(inviteCode.trim());
     navigate(`/welcome/${encodeURIComponent(codeDetails.username || "Guest")}`);
     toast({
       title: "Success",

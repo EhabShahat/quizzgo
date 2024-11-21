@@ -1,10 +1,10 @@
 export interface InviteCode {
   code: string;
   used: boolean;
-  username: string;
+  username: string | null;
   participant_name: string | null;
-  created_at: Date;
-  used_at?: Date;
+  created_at: string;
+  used_at: string | null;
 }
 
 export interface Question {
@@ -14,7 +14,7 @@ export interface Question {
   correct_answer: string;
   time_limit: number;
   type: 'multiple-choice' | 'true-false';
-  created_at: Date;
+  created_at: string;
 }
 
 export interface Score {
@@ -24,5 +24,5 @@ export interface Score {
   score: number;
   correct_answers: number;
   total_questions: number;
-  created_at: Date;
+  created_at: string;
 }

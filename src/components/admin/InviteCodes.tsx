@@ -18,8 +18,9 @@ const InviteCodes = () => {
       code: prefix ? `${prefix}-${random}` : random,
       used: false,
       username: participantName || "Guest",
-      createdAt: new Date(),
-      participantName
+      participant_name: participantName,
+      created_at: new Date().toISOString(),
+      used_at: null
     };
   };
 
@@ -62,7 +63,7 @@ const InviteCodes = () => {
     }
     
     const textToCopy = codes.map(c => 
-      `${c.code}${c.participantName ? ` - ${c.participantName}` : ''}`
+      `${c.code}${c.participant_name ? ` - ${c.participant_name}` : ''}`
     ).join("\n");
     
     await navigator.clipboard.writeText(textToCopy);
@@ -118,7 +119,7 @@ const InviteCodes = () => {
     const csvContent = "data:text/csv;charset=utf-8," + 
       "Code,Participant Name,Status,Created At,Used At\n" +
       codes.map(code => 
-        `${code.code},${code.participantName || ''},${code.used ? "Used" : "Available"},${code.createdAt.toLocaleString()},${code.usedAt ? code.usedAt.toLocaleString() : ''}`
+        `${code.code},${code.participant_name || ''},${code.used ? "Used" : "Available"},${code.created_at},${code.used_at ? code.used_at : ''}`
       ).join("\n");
     
     const encodedUri = encodeURI(csvContent);
@@ -173,9 +174,9 @@ const InviteCodes = () => {
                     key={index}
                     code={code.code}
                     used={code.used}
-                    createdAt={code.createdAt}
-                    usedAt={code.usedAt}
-                    participantName={code.participantName}
+                    createdAt={new Date(code.created_at)}
+                    usedAt={code.used_at ? new Date(code.used_at) : undefined}
+                    participantName={code.participant_name}
                     onCopy={handleCopyCode}
                     onDelete={handleDeleteCode}
                   />
