@@ -43,7 +43,7 @@ const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
                   <div
                     key={index}
                     className={`text-sm ${
-                      option === question.correctAnswer
+                      option === question.correct_answer
                         ? "text-green-400"
                         : "text-white/70"
                     }`}

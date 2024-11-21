@@ -33,9 +33,9 @@ const QuestionForm = ({ editingQuestion, onCancelEdit }: QuestionFormProps) => {
       
       if (editingQuestion.type === 'multiple-choice') {
         setOptions(editingQuestion.options);
-        setCorrectAnswer(editingQuestion.options.indexOf(editingQuestion.correctAnswer).toString());
+        setCorrectAnswer(editingQuestion.options.indexOf(editingQuestion.correct_answer).toString());
       } else {
-        setTrueFalseAnswer(editingQuestion.correctAnswer);
+        setTrueFalseAnswer(editingQuestion.correct_answer);
       }
     }
   }, [editingQuestion]);
@@ -61,8 +61,8 @@ const QuestionForm = ({ editingQuestion, onCancelEdit }: QuestionFormProps) => {
     const questionData = {
       text: questionText,
       options: questionType === 'true-false' ? ["True", "False"] : options,
-      correctAnswer: questionType === 'true-false' ? trueFalseAnswer : options[parseInt(correctAnswer)],
-      timeLimit: timeLimit,
+      correct_answer: questionType === 'true-false' ? trueFalseAnswer : options[parseInt(correctAnswer)],
+      time_limit: timeLimit,
       type: questionType
     };
 

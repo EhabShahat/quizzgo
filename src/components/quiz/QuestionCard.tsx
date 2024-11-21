@@ -60,7 +60,7 @@ export const QuestionCard = ({
       {/* Progress Bar */}
       <div className="mt-4">
         <Progress 
-          value={(timeLeft / currentQuestion.timeLimit) * 100} 
+          value={(timeLeft / currentQuestion.time_limit) * 100} 
           className="h-2 bg-white/20"
         />
       </div>
