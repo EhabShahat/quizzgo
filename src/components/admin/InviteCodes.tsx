@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { InviteCodeItem } from "./InviteCodeItem";
 import { InviteCodeControls } from "./InviteCodeControls";
+import { InviteCodesDashboard } from "./InviteCodesDashboard";
 
 interface InviteCode {
   code: string;
@@ -147,6 +148,8 @@ const InviteCodes = () => {
         </div>
         <h2 className="text-2xl font-bold text-white">Invite Codes</h2>
       </div>
+
+      <InviteCodesDashboard codes={codes} />
 
       <div className="space-y-6">
         <InviteCodeControls
