@@ -16,7 +16,6 @@ export type Database = {
           participant_name: string | null
           used: boolean | null
           used_at: string | null
-          username: string | null
         }
         Insert: {
           code: string
@@ -24,7 +23,6 @@ export type Database = {
           participant_name?: string | null
           used?: boolean | null
           used_at?: string | null
-          username?: string | null
         }
         Update: {
           code?: string
@@ -32,7 +30,6 @@ export type Database = {
           participant_name?: string | null
           used?: boolean | null
           used_at?: string | null
-          username?: string | null
         }
         Relationships: []
       }
@@ -71,28 +68,25 @@ export type Database = {
           correct_answers: number
           created_at: string | null
           id: number
-          participant_name: string | null
+          participant_name: string
           score: number
           total_questions: number
-          username: string
         }
         Insert: {
           correct_answers: number
           created_at?: string | null
           id?: number
-          participant_name?: string | null
+          participant_name: string
           score: number
           total_questions: number
-          username: string
         }
         Update: {
           correct_answers?: number
           created_at?: string | null
           id?: number
-          participant_name?: string | null
+          participant_name?: string
           score?: number
           total_questions?: number
-          username?: string
         }
         Relationships: []
       }

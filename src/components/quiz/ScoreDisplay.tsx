@@ -27,8 +27,8 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
 
   useEffect(() => {
     const saveScore = async () => {
-      if (!currentCode?.username) {
-        console.error('No username found');
+      if (!currentCode?.participant_name) {
+        console.error('No participant name found');
         return;
       }
 
@@ -36,7 +36,6 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
         const { error } = await supabase
           .from('scores')
           .insert([{
-            username: currentCode.username,
             participant_name: currentCode.participant_name,
             score: score,
             correct_answers: correctAnswers,
@@ -66,8 +65,6 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
 
     saveScore();
   }, [score, correctAnswers, totalQuestions, currentCode, toast, navigate]);
-
-  // ... keep existing code (handleAdminAccess function and UI rendering)
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">

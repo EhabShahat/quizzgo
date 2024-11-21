@@ -94,12 +94,12 @@ const ScoresList = () => {
           </TableHeader>
           <TableBody>
             {scores.map((score, index) => {
-              const inviteCode = inviteCodes.find(code => code.username === score.username);
+              const inviteCode = inviteCodes.find(code => code.participant_name === score.participant_name);
               return (
                 <TableRow key={score.id} className="border-white/10">
                   <TableCell className="text-white font-medium">#{index + 1}</TableCell>
                   <TableCell className="text-white">
-                    {score.participant_name || score.username}
+                    {score.participant_name}
                   </TableCell>
                   <TableCell className="text-white/70">{inviteCode?.code || 'N/A'}</TableCell>
                   <TableCell className="text-white text-right">

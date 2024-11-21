@@ -1,7 +1,6 @@
 export interface InviteCode {
   code: string;
   used: boolean;
-  username: string | null;
   participant_name: string | null;
   created_at: string;
   used_at: string | null;
@@ -19,8 +18,7 @@ export interface Question {
 
 export interface Score {
   id: number;
-  username: string;
-  participant_name: string | null;
+  participant_name: string;
   score: number;
   correct_answers: number;
   total_questions: number;

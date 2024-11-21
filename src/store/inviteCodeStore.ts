@@ -5,7 +5,7 @@ import type { InviteCode } from '@/types/database';
 interface InviteCodeStore {
   codes: InviteCode[];
   currentCode: InviteCode | null;
-  addCode: (code: string, username: string) => Promise<void>;
+  addCode: (code: string, participant_name?: string) => Promise<void>;
   addCodes: (newCodes: InviteCode[]) => Promise<void>;
   deleteCode: (code: string) => Promise<void>;
   deleteAllCodes: () => Promise<void>;
@@ -28,12 +28,11 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
     set({ codes: data || [] });
   },
 
-  addCode: async (code: string, username: string) => {
+  addCode: async (code: string, participant_name?: string) => {
     const newCode: Omit<InviteCode, 'created_at'> = {
       code,
-      username,
+      participant_name: participant_name || null,
       used: false,
-      participant_name: null,
       used_at: null
     };
 
