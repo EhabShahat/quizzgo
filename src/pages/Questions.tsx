@@ -2,19 +2,25 @@ import { useState, useEffect } from "react";
 import { questions } from "@/data/questions";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
+import { useNavigate } from "react-router-dom";
 
 const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
+  const navigate = useNavigate();
   const currentQuestion = questions[currentQuestionIndex];
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length) {
       setShowScore(true);
-      return;
+      // Redirect to scores page after showing the score for 5 seconds
+      const timer = setTimeout(() => {
+        navigate("/scores");
+      }, 5000);
+      return () => clearTimeout(timer);
     }
     
     if (!currentQuestion) return;
@@ -34,7 +40,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion]);
+  }, [currentQuestionIndex, currentQuestion, navigate]);
 
   if (showScore) {
     return <ScoreDisplay score={score} questions={questions} />;

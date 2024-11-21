@@ -36,21 +36,34 @@ const InviteCodeForm = () => {
       return;
     }
 
-    if (isValidCode(inviteCode.trim())) {
-      const codeDetails = getInviteCodeDetails(inviteCode.trim());
-      markCodeAsUsed(inviteCode.trim());
-      navigate(`/welcome/${encodeURIComponent(codeDetails?.username || "Guest")}`);
-      toast({
-        title: "Success",
-        description: "Welcome to the quiz!",
-      });
-    } else {
+    const codeDetails = getInviteCodeDetails(inviteCode.trim());
+    
+    if (!codeDetails) {
       toast({
         title: "Error",
-        description: "Invalid or already used invite code",
+        description: "Invalid invite code",
         variant: "destructive",
       });
+      return;
     }
+
+    if (codeDetails.used) {
+      // If code is already used, redirect directly to scores page
+      navigate("/scores");
+      toast({
+        title: "Info",
+        description: "This code has already been used. Redirecting to scores...",
+      });
+      return;
+    }
+
+    // Valid and unused code
+    markCodeAsUsed(inviteCode.trim());
+    navigate(`/welcome/${encodeURIComponent(codeDetails.username || "Guest")}`);
+    toast({
+      title: "Success",
+      description: "Welcome to the quiz!",
+    });
   };
 
   const handleAdminAccess = () => {
