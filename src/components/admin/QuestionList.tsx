@@ -7,9 +7,10 @@ interface QuestionListProps {
   questions: Question[];
   onDelete: (id: number) => void;
   onEdit: (question: Question) => void;
+  onQuestionsUpdate?: (questions: Question[]) => void;
 }
 
-const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
+const QuestionList = ({ questions, onDelete, onEdit, onQuestionsUpdate }: QuestionListProps) => {
   const handleDelete = async (id: number) => {
     try {
       const { error } = await supabase
@@ -35,9 +36,10 @@ const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
 
       if (error) throw error;
 
-      toast.success("Questions fetched successfully");
-      // You might want to update the parent component's state here
-      // For now, we'll just show a success message
+      if (data && onQuestionsUpdate) {
+        onQuestionsUpdate(data);
+        toast.success("Questions fetched successfully");
+      }
     } catch (error) {
       console.error('Error fetching questions:', error);
       toast.error("Failed to fetch questions");
