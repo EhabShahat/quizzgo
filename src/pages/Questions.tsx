@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
+import { questions as initialQuestions } from "@/data/questions";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { useNavigate } from "react-router-dom";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { useQuizStore } from "@/store/quizStore";
-import type { Question } from "@/integrations/supabase/types";
 
 const Questions = () => {
   const navigate = useNavigate();
   const { currentCode } = useInviteCodeStore();
   const { addScore } = useScoresStore();
-  const { shuffleQuestions, fetchQuestions } = useQuizStore();
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const { shuffleQuestions } = useQuizStore();
+  const [questions, setQuestions] = useState(initialQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
@@ -20,37 +20,31 @@ const Questions = () => {
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   useEffect(() => {
-    const loadQuestions = async () => {
-      try {
-        const fetchedQuestions = await fetchQuestions();
-        if (shuffleQuestions) {
-          setQuestions([...fetchedQuestions].sort(() => Math.random() - 0.5));
-        } else {
-          setQuestions(fetchedQuestions);
-        }
-      } catch (error) {
-        console.error("Failed to load questions:", error);
-        navigate("/");
-      }
-    };
-    
-    loadQuestions();
-  }, [shuffleQuestions, fetchQuestions, navigate]);
+    if (shuffleQuestions) {
+      const shuffledQuestions = [...initialQuestions]
+        .sort(() => Math.random() - 0.5);
+      setQuestions(shuffledQuestions);
+    } else {
+      setQuestions(initialQuestions);
+    }
+  }, [shuffleQuestions]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length) {
       setShowScore(true);
+      // Save score to store
       if (currentCode) {
         addScore({
           username: currentCode.username,
-          participant_name: currentCode.participant_name,
+          participantName: currentCode.participantName,
           score,
-          correct_answers: Math.round((score / 1000)),
-          total_questions: questions.length
+          correctAnswers: Math.round((score / 1000)), // Approximate based on score
+          totalQuestions: questions.length
         });
       }
+      // Redirect to scores page after showing the score for 5 seconds
       const timer = setTimeout(() => {
         navigate("/scores");
       }, 5000);
@@ -59,7 +53,7 @@ const Questions = () => {
     
     if (!currentQuestion) return;
     
-    const questionTimeLimit = currentQuestion.time_limit;
+    const questionTimeLimit = currentQuestion.timeLimit;
     setTimeLeft(questionTimeLimit);
     
     const timer = setInterval(() => {
@@ -74,7 +68,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, navigate, score, currentCode, addScore, questions.length]);
+  }, [currentQuestionIndex, currentQuestion, navigate, score, currentCode, addScore]);
 
   if (showScore) {
     return <ScoreDisplay score={score} questions={questions} />;
@@ -85,10 +79,10 @@ const Questions = () => {
   }
 
   const handleAnswer = (selectedAnswer: string) => {
-    const isCorrect = selectedAnswer === currentQuestion.correct_answer;
+    const isCorrect = selectedAnswer === currentQuestion.correctAnswer;
     
     if (isCorrect) {
-      const timeBonus = Math.round((timeLeft / currentQuestion.time_limit) * 1000);
+      const timeBonus = Math.round((timeLeft / currentQuestion.timeLimit) * 1000);
       setScore(prev => prev + timeBonus);
     }
     

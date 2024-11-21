@@ -24,7 +24,7 @@ const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
                   <div
                     key={index}
                     className={`text-sm ${
-                      option === question.correct_answer
+                      option === question.correctAnswer
                         ? "text-green-400"
                         : "text-white/70"
                     }`}
@@ -42,7 +42,7 @@ const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
                 <Edit2 className="w-5 h-5" />
               </button>
               <button
-                onClick={() => onDelete(question.id!)}
+                onClick={() => onDelete(question.id)}
                 className="p-2 text-white/50 hover:text-red-400 transition-colors"
               >
                 <Trash2 className="w-5 h-5" />

@@ -25,7 +25,7 @@ const InviteCodeForm = () => {
     if (storedLogoUrl) setLogoUrl(storedLogoUrl);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inviteCode.trim()) {
       toast({
@@ -36,7 +36,7 @@ const InviteCodeForm = () => {
       return;
     }
 
-    const codeDetails = await getInviteCodeDetails(inviteCode.trim());
+    const codeDetails = getInviteCodeDetails(inviteCode.trim());
     
     if (!codeDetails) {
       toast({
@@ -58,7 +58,7 @@ const InviteCodeForm = () => {
     }
 
     // Valid and unused code
-    await markCodeAsUsed(inviteCode.trim());
+    markCodeAsUsed(inviteCode.trim());
     navigate(`/welcome/${encodeURIComponent(codeDetails.username || "Guest")}`);
     toast({
       title: "Success",

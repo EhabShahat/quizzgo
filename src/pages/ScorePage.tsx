@@ -86,10 +86,10 @@ const ScorePage = () => {
             {scores[1] && (
               <PodiumStand
                 rank={2}
-                name={scores[1].participant_name || scores[1].username}
+                name={scores[1].participantName || scores[1].username}
                 score={scores[1].score}
-                correctAnswers={scores[1].correct_answers}
-                totalQuestions={scores[1].total_questions}
+                correctAnswers={scores[1].correctAnswers}
+                totalQuestions={scores[1].totalQuestions}
               />
             )}
           </div>
@@ -98,10 +98,10 @@ const ScorePage = () => {
             {scores[0] && (
               <PodiumStand
                 rank={1}
-                name={scores[0].participant_name || scores[0].username}
+                name={scores[0].participantName || scores[0].username}
                 score={scores[0].score}
-                correctAnswers={scores[0].correct_answers}
-                totalQuestions={scores[0].total_questions}
+                correctAnswers={scores[0].correctAnswers}
+                totalQuestions={scores[0].totalQuestions}
               />
             )}
           </div>
@@ -110,10 +110,10 @@ const ScorePage = () => {
             {scores[2] && (
               <PodiumStand
                 rank={3}
-                name={scores[2].participant_name || scores[2].username}
+                name={scores[2].participantName || scores[2].username}
                 score={scores[2].score}
-                correctAnswers={scores[2].correct_answers}
-                totalQuestions={scores[2].total_questions}
+                correctAnswers={scores[2].correctAnswers}
+                totalQuestions={scores[2].totalQuestions}
               />
             )}
           </div>
@@ -133,10 +133,10 @@ const ScorePage = () => {
                   >
                     <RunnerUp
                       rank={index + 4}
-                      name={score.participant_name || score.username}
+                      name={score.participantName || score.username}
                       score={score.score}
-                      correctAnswers={score.correct_answers}
-                      totalQuestions={score.total_questions}
+                      correctAnswers={score.correctAnswers}
+                      totalQuestions={score.totalQuestions}
                     />
                   </div>
                 ))}

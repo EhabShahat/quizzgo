@@ -1,6 +1,4 @@
 import { create } from 'zustand';
-import { supabase } from "@/integrations/supabase/client";
-import type { Question } from '@/data/questions';
 
 interface QuizState {
   isEnabled: boolean;
@@ -11,10 +9,6 @@ interface QuizState {
   setStartTime: (time: Date | null) => void;
   setEndTime: (time: Date | null) => void;
   setShuffleQuestions: (shuffle: boolean) => void;
-  fetchQuestions: () => Promise<Question[]>;
-  addQuestion: (question: Omit<Question, 'id'>) => Promise<void>;
-  updateQuestion: (id: number, question: Partial<Question>) => Promise<void>;
-  deleteQuestion: (id: number) => Promise<void>;
 }
 
 export const useQuizStore = create<QuizState>((set) => ({
@@ -26,42 +20,4 @@ export const useQuizStore = create<QuizState>((set) => ({
   setStartTime: (time) => set({ startTime: time }),
   setEndTime: (time) => set({ endTime: time }),
   setShuffleQuestions: (shuffle) => set({ shuffleQuestions: shuffle }),
-  fetchQuestions: async () => {
-    const { data, error } = await supabase
-      .from('questions')
-      .select('*')
-      .order('id', { ascending: true });
-    
-    if (error) throw error;
-    return data as Question[];
-  },
-  addQuestion: async (question) => {
-    const { error } = await supabase
-      .from('questions')
-      .insert([{
-        text: question.text,
-        options: question.options,
-        correct_answer: question.correct_answer,
-        time_limit: question.time_limit,
-        type: question.type
-      }]);
-    
-    if (error) throw error;
-  },
-  updateQuestion: async (id, question) => {
-    const { error } = await supabase
-      .from('questions')
-      .update(question)
-      .eq('id', id);
-    
-    if (error) throw error;
-  },
-  deleteQuestion: async (id) => {
-    const { error } = await supabase
-      .from('questions')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
-  },
 }));

@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ScoresList = () => {
   const { codes } = useInviteCodeStore();
-  const { scores } = useScoresStore();
+  const { scores, updateScores } = useScoresStore();
   
   // Filter used codes and sort by score
   const usedCodes = codes
@@ -59,14 +59,14 @@ const ScoresList = () => {
                   <TableRow key={code.code} className="border-white/10">
                     <TableCell className="text-white font-medium">#{index + 1}</TableCell>
                     <TableCell className="text-white">
-                      {code.participant_name || code.username}
+                      {code.participantName || code.username}
                     </TableCell>
                     <TableCell className="text-white/70">{code.code}</TableCell>
                     <TableCell className="text-white text-right">
                       {scoreData?.score || 'N/A'}
                     </TableCell>
                     <TableCell className="text-white text-right">
-                      {scoreData ? `${scoreData.correct_answers}/${scoreData.total_questions}` : 'N/A'}
+                      {scoreData ? `${scoreData.correctAnswers}/${scoreData.totalQuestions}` : 'N/A'}
                     </TableCell>
                   </TableRow>
                 );
