@@ -7,40 +7,65 @@ interface InviteCode {
   code: string;
   used: boolean;
   createdAt: Date;
+  participantName: string;
 }
 
 const InviteCodes = () => {
   const [bulkAmount, setBulkAmount] = useState("10");
   const [prefix, setPrefix] = useState("");
+  const [participantName, setParticipantName] = useState("");
   const [codes, setCodes] = useState<InviteCode[]>([]);
   const { toast } = useToast();
 
-  const generateCode = (prefix: string) => {
+  const generateCode = (prefix: string, participantName: string) => {
     const random = Math.random().toString(36).substring(2, 8).toUpperCase();
     return {
       code: prefix ? `${prefix}-${random}` : random,
       used: false,
       createdAt: new Date(),
+      participantName,
     };
   };
 
   const handleGenerateSingle = () => {
-    const newCode = generateCode(prefix);
+    if (!participantName.trim()) {
+      toast({
+        title: "Name Required",
+        description: "Please enter a participant name",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const newCode = generateCode(prefix, participantName);
     setCodes([...codes, newCode]);
     toast({
       title: "Code Generated",
-      description: `New code: ${newCode.code}`,
+      description: `New code for ${participantName}: ${newCode.code}`,
     });
+    setParticipantName("");
   };
 
   const handleGenerateBulk = () => {
+    if (!participantName.trim()) {
+      toast({
+        title: "Name Required",
+        description: "Please enter a participant name",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const amount = Math.min(Math.max(parseInt(bulkAmount) || 1, 1), 100);
-    const newCodes = Array.from({ length: amount }, () => generateCode(prefix));
+    const newCodes = Array.from({ length: amount }, (_, i) => 
+      generateCode(prefix, `${participantName} ${i + 1}`)
+    );
     setCodes([...codes, ...newCodes]);
     toast({
       title: "Codes Generated",
-      description: `Generated ${amount} new codes`,
+      description: `Generated ${amount} new codes for ${participantName}`,
     });
+    setParticipantName("");
   };
 
   const handleCopyAll = async () => {
@@ -53,7 +78,8 @@ const InviteCodes = () => {
       return;
     }
     
-    await navigator.clipboard.writeText(codes.map(c => c.code).join("\n"));
+    const textToCopy = codes.map(c => `${c.code} (${c.participantName})`).join("\n");
+    await navigator.clipboard.writeText(textToCopy);
     toast({
       title: "Copied to clipboard",
       description: "All codes have been copied to your clipboard",
@@ -104,9 +130,9 @@ const InviteCodes = () => {
     }
 
     const csvContent = "data:text/csv;charset=utf-8," + 
-      "Code,Status,Created At\n" +
+      "Code,Participant Name,Status,Created At\n" +
       codes.map(code => 
-        `${code.code},${code.used ? "Used" : "Available"},${code.createdAt.toLocaleString()}`
+        `${code.code},${code.participantName},${code.used ? "Used" : "Available"},${code.createdAt.toLocaleString()}`
       ).join("\n");
     
     const encodedUri = encodeURI(csvContent);
@@ -136,8 +162,10 @@ const InviteCodes = () => {
         <InviteCodeControls
           bulkAmount={bulkAmount}
           prefix={prefix}
+          participantName={participantName}
           onBulkAmountChange={setBulkAmount}
           onPrefixChange={setPrefix}
+          onParticipantNameChange={setParticipantName}
           onGenerateSingle={handleGenerateSingle}
           onGenerateBulk={handleGenerateBulk}
           onDeleteAll={handleDeleteAll}
@@ -156,6 +184,7 @@ const InviteCodes = () => {
                   <InviteCodeItem
                     key={index}
                     code={code.code}
+                    participantName={code.participantName}
                     used={code.used}
                     createdAt={code.createdAt}
                     onCopy={handleCopyCode}
