@@ -38,7 +38,7 @@ const ScorePage = () => {
       <ScoresList />
       
       {/* Admin Access Section */}
-      <div className="fixed bottom-4 right-4 flex flex-col items-end gap-4 z-50">
+      <div className="flex flex-col items-center gap-4 mt-8 mb-12">
         {showAdminInput && (
           <Input
             type="password"
