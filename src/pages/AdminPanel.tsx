@@ -77,7 +77,7 @@ const AdminPanel = () => {
         </div>
 
         <Tabs defaultValue="questions" className="space-y-6">
-          <div className="inline-flex w-auto">
+          <div className="w-full">
             <TabsList className="bg-white/5 border-b border-white/10 w-full justify-between rounded-none p-0">
               <TabsTrigger
                 value="questions"
