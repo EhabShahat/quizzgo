@@ -3,7 +3,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { InviteCodeItem } from "./InviteCodeItem";
 import { InviteCodeControls } from "./InviteCodeControls";
 import { InviteCodesDashboard } from "./InviteCodesDashboard";
-import { useInviteCodeStore } from "@/store/inviteCodeStore";
+import { useInviteCodeStore, type InviteCode } from "@/store/inviteCodeStore";
 
 const InviteCodes = () => {
   const [bulkAmount, setBulkAmount] = useState("10");
@@ -12,7 +12,7 @@ const InviteCodes = () => {
   const { toast } = useToast();
   const { codes, addCode, addCodes, deleteCode, deleteAllCodes } = useInviteCodeStore();
 
-  const generateCode = (prefix: string, participantName?: string) => {
+  const generateCode = (prefix: string, participantName?: string): InviteCode => {
     const random = Math.random().toString(36).substring(2, 8).toUpperCase();
     return {
       code: prefix ? `${prefix}-${random}` : random,
