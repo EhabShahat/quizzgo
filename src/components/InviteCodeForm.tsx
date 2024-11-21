@@ -39,7 +39,7 @@ const InviteCodeForm = () => {
     if (isValidCode(inviteCode.trim())) {
       const codeDetails = getInviteCodeDetails(inviteCode.trim());
       markCodeAsUsed(inviteCode.trim());
-      navigate("/welcome", { state: { username: codeDetails?.username || "Guest" } });
+      navigate(`/welcome/${encodeURIComponent(codeDetails?.username || "Guest")}`);
       toast({
         title: "Success",
         description: "Welcome to the quiz!",
