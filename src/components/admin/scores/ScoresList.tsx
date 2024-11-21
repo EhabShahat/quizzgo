@@ -1,4 +1,6 @@
 import { Trophy, Clock, User } from "lucide-react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
 
 interface Score {
   username: string;
@@ -16,8 +18,28 @@ const ScoresList = () => {
       timeTaken: "12:30",
       completedAt: new Date(),
     },
-    // Add more mock data as needed
+    {
+      username: "JaneSmith",
+      score: 920,
+      timeTaken: "11:45",
+      completedAt: new Date(),
+    },
+    {
+      username: "BobJohnson",
+      score: 780,
+      timeTaken: "13:15",
+      completedAt: new Date(),
+    },
   ];
+
+  // Get top 3 scores
+  const top3Scores = [...scores]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map(score => ({
+      name: score.username,
+      score: score.score
+    }));
 
   return (
     <div className="glass-card p-6">
@@ -48,6 +70,33 @@ const ScoresList = () => {
             </div>
             <div className="text-white/70">Average Score</div>
           </div>
+        </div>
+
+        <div className="bg-white/5 p-6 rounded-lg">
+          <h3 className="text-xl font-bold text-white mb-4">Top 3 Scores</h3>
+          <ChartContainer
+            className="aspect-[2/1]"
+            config={{
+              score: {
+                theme: {
+                  light: "hsl(280 100% 50%)",
+                  dark: "hsl(280 100% 50%)",
+                },
+              },
+            }}
+          >
+            <BarChart data={top3Scores}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.1)" />
+              <XAxis dataKey="name" stroke="rgba(255,255,255,0.5)" />
+              <YAxis stroke="rgba(255,255,255,0.5)" />
+              <ChartTooltip />
+              <Bar
+                dataKey="score"
+                fill="var(--color-score)"
+                radius={[4, 4, 0, 0]}
+              />
+            </BarChart>
+          </ChartContainer>
         </div>
 
         <div className="bg-white/5 rounded-lg overflow-hidden">
