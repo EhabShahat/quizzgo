@@ -18,7 +18,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col items-center justify-center p-4">
       <div className="glass-card p-8 w-full max-w-md space-y-6">
         <img 
-          src="/lovable-uploads/main-logo.png" 
+          src="lovable-uploads/main-logo.png" 
           alt="Quiz Logo" 
           className="w-48 h-48 mx-auto rounded-full shadow-lg"
         />
