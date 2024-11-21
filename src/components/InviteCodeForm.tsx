@@ -63,6 +63,11 @@ const InviteCodeForm = () => {
 
   return (
     <div className="glass-card p-8 w-full max-w-md mx-auto">
+      <img 
+        src="/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png" 
+        alt="Church Logo" 
+        className="w-32 h-32 mx-auto mb-6 rounded-full shadow-lg"
+      />
       <Shield className="w-12 h-12 mx-auto mb-6 text-white/80" />
       <h1 className="text-3xl font-bold text-white text-center mb-2">
         Quiz Challenge
