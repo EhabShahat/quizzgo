@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Lock } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const PasswordManagement = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
       toast.error("Please fill in all password fields");
       return;
@@ -26,10 +27,41 @@ export const PasswordManagement = () => {
       return;
     }
 
-    toast.success("Password updated successfully");
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
+    try {
+      // First verify current password
+      const { data, error: fetchError } = await supabase
+        .from('quiz_settings')
+        .select('admin_password')
+        .eq('id', 1)
+        .single();
+
+      if (fetchError) {
+        throw fetchError;
+      }
+
+      if (data.admin_password !== currentPassword) {
+        toast.error("Current password is incorrect");
+        return;
+      }
+
+      // Update password in Supabase
+      const { error: updateError } = await supabase
+        .from('quiz_settings')
+        .update({ admin_password: newPassword })
+        .eq('id', 1);
+
+      if (updateError) {
+        throw updateError;
+      }
+
+      toast.success("Password updated successfully");
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (error) {
+      console.error('Error updating password:', error);
+      toast.error("Failed to update password");
+    }
   };
 
   return (
