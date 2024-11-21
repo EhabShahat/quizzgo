@@ -7,36 +7,56 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { QuizStatus } from "./controls/QuizStatus";
 import { QuizToggles } from "./controls/QuizToggles";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Controls = () => {
   const [startDateTime, setStartDateTime] = useState<string>("");
   const [endDateTime, setEndDateTime] = useState<string>("");
-  const { setStartTime, setEndTime } = useQuizStore();
+  const { setStartTime, setEndTime, isEnabled, shuffleQuestions } = useQuizStore();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [mainTitle, setMainTitle] = useState("Quiz Challenge");
   const [logoUrl, setLogoUrl] = useState("/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
 
-  const handleSaveSettings = () => {
-    if (!startDateTime) {
-      setStartTime(null);
-      setEndTime(null);
-      toast.success("Quiz settings saved. No time restrictions set.");
-      return;
+  const handleSaveSettings = async () => {
+    try {
+      if (!startDateTime) {
+        setStartTime(null);
+        setEndTime(null);
+      } else {
+        const selectedStartTime = new Date(startDateTime);
+        const selectedEndTime = endDateTime ? new Date(endDateTime) : new Date(startDateTime);
+
+        if (selectedEndTime <= selectedStartTime) {
+          toast.error("End time must be after start time");
+          return;
+        }
+
+        setStartTime(selectedStartTime);
+        setEndTime(selectedEndTime);
+      }
+
+      // Update quiz settings in Supabase
+      const { error } = await supabase
+        .from('quiz_settings')
+        .update({
+          start_time: startDateTime ? new Date(startDateTime).toISOString() : null,
+          end_time: endDateTime ? new Date(endDateTime).toISOString() : null,
+          is_enabled: isEnabled,
+          shuffle_questions: shuffleQuestions,
+        })
+        .eq('id', 1); // Update the first row since we only have one settings record
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Quiz settings saved successfully");
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      toast.error("Failed to save settings. Please try again.");
     }
-
-    const selectedStartTime = new Date(startDateTime);
-    const selectedEndTime = endDateTime ? new Date(endDateTime) : new Date(startDateTime);
-
-    if (selectedEndTime <= selectedStartTime) {
-      toast.error("End time must be after start time");
-      return;
-    }
-
-    setStartTime(selectedStartTime);
-    setEndTime(selectedEndTime);
-    toast.success("Quiz settings saved successfully");
   };
 
   const handlePasswordChange = () => {
