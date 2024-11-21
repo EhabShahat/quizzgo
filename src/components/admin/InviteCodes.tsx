@@ -13,17 +13,14 @@ const InviteCodes = () => {
   const { toast } = useToast();
   const { codes, addCode, addCodes, deleteCode, deleteAllCodes } = useInviteCodeStore();
 
-  const generateCode = (prefix: string, participantName?: string): InviteCode => {
-    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
-    return {
-      code: prefix ? `${prefix}-${random}` : random,
-      used: false,
-      username: participantName || "Guest",
-      participant_name: participantName || null,
-      created_at: new Date().toISOString(),
-      used_at: null
-    };
-  };
+  const generateCode = (prefix: string, participantName?: string): InviteCode => ({
+    code: prefix ? `${prefix}-${Math.random().toString(36).substring(2, 8).toUpperCase()}` : Math.random().toString(36).substring(2, 8).toUpperCase(),
+    used: false,
+    username: participantName || "Guest",
+    participant_name: participantName || null,
+    created_at: new Date().toISOString(),
+    used_at: null
+  });
 
   const handleGenerateSingle = () => {
     const names = participantNames.split('\n').filter(name => name.trim());
@@ -120,7 +117,7 @@ const InviteCodes = () => {
     const csvContent = "data:text/csv;charset=utf-8," + 
       "Code,Participant Name,Status,Created At,Used At\n" +
       codes.map(code => 
-        `${code.code},${code.participant_name || ''},${code.used ? "Used" : "Available"},${code.created_at},${code.used_at ? code.used_at : ''}`
+        `${code.code},${code.participant_name || ''},${code.used ? "Used" : "Available"},${code.created_at},${code.used_at || ''}`
       ).join("\n");
     
     const encodedUri = encodeURI(csvContent);
@@ -170,9 +167,9 @@ const InviteCodes = () => {
             <div className="space-y-2">
               <p className="font-semibold text-white mb-4">Generated Codes:</p>
               <div className="space-y-2">
-                {codes.map((code, index) => (
+                {codes.map((code) => (
                   <InviteCodeItem
-                    key={index}
+                    key={code.code}
                     code={code.code}
                     used={code.used}
                     createdAt={new Date(code.created_at)}
