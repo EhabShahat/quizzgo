@@ -7,17 +7,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
-import { useScoresStore } from "@/store/scoresStore";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 const ScoresList = () => {
-  const { codes, fetchCodes } = useInviteCodeStore();
-
   // Fetch scores directly from Supabase using React Query
-  const { data: scores = [] } = useQuery({
+  const { data: scores = [], isLoading: isLoadingScores } = useQuery({
     queryKey: ['scores'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -31,7 +28,7 @@ const ScoresList = () => {
   });
 
   // Fetch invite codes
-  const { data: inviteCodes = [] } = useQuery({
+  const { data: inviteCodes = [], isLoading: isLoadingCodes } = useQuery({
     queryKey: ['invite-codes'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -44,12 +41,36 @@ const ScoresList = () => {
     }
   });
 
-  // Filter used codes and sort by score
-  const usedCodes = inviteCodes.sort((a, b) => {
-    const scoreA = scores.find(s => s.username === a.username)?.score || 0;
-    const scoreB = scores.find(s => s.username === b.username)?.score || 0;
-    return scoreB - scoreA;
-  });
+  if (isLoadingScores || isLoadingCodes) {
+    return (
+      <Alert className="bg-white/5 border-white/10 text-white">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>
+          Loading scores...
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
+  if (scores.length === 0) {
+    return (
+      <div className="glass-card p-6">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="h-8 w-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+            <div className="h-4 w-4 rounded-full bg-purple-500" />
+          </div>
+          <h2 className="text-2xl font-bold text-white">Scores List</h2>
+        </div>
+
+        <Alert className="bg-white/5 border-white/10 text-white">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Waiting for participants to complete the quiz...
+          </AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
     <div className="glass-card p-6">
@@ -60,48 +81,39 @@ const ScoresList = () => {
         <h2 className="text-2xl font-bold text-white">Scores List</h2>
       </div>
 
-      {usedCodes.length === 0 ? (
-        <Alert className="bg-white/5 border-white/10 text-white">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
-            Waiting for participants to complete the quiz...
-          </AlertDescription>
-        </Alert>
-      ) : (
-        <div className="overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-white/10">
-                <TableHead className="text-white">Rank</TableHead>
-                <TableHead className="text-white">Participant Name</TableHead>
-                <TableHead className="text-white">Invite Code</TableHead>
-                <TableHead className="text-white text-right">Score</TableHead>
-                <TableHead className="text-white text-right">Questions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {usedCodes.map((code, index) => {
-                const scoreData = scores.find(s => s.username === code.username);
-                return (
-                  <TableRow key={code.code} className="border-white/10">
-                    <TableCell className="text-white font-medium">#{index + 1}</TableCell>
-                    <TableCell className="text-white">
-                      {code.participant_name || code.username}
-                    </TableCell>
-                    <TableCell className="text-white/70">{code.code}</TableCell>
-                    <TableCell className="text-white text-right">
-                      {scoreData?.score ?? 'N/A'}
-                    </TableCell>
-                    <TableCell className="text-white text-right">
-                      {scoreData ? `${scoreData.correct_answers}/${scoreData.total_questions}` : 'N/A'}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-white/10">
+              <TableHead className="text-white">Rank</TableHead>
+              <TableHead className="text-white">Participant Name</TableHead>
+              <TableHead className="text-white">Invite Code</TableHead>
+              <TableHead className="text-white text-right">Score</TableHead>
+              <TableHead className="text-white text-right">Questions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {scores.map((score, index) => {
+              const inviteCode = inviteCodes.find(code => code.username === score.username);
+              return (
+                <TableRow key={score.id} className="border-white/10">
+                  <TableCell className="text-white font-medium">#{index + 1}</TableCell>
+                  <TableCell className="text-white">
+                    {score.participant_name || score.username}
+                  </TableCell>
+                  <TableCell className="text-white/70">{inviteCode?.code || 'N/A'}</TableCell>
+                  <TableCell className="text-white text-right">
+                    {score.score}
+                  </TableCell>
+                  <TableCell className="text-white text-right">
+                    {`${score.correct_answers}/${score.total_questions}`}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };

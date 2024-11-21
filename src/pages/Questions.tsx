@@ -7,6 +7,7 @@ import { useScoresStore } from "@/store/scoresStore";
 import { useQuizStore } from "@/store/quizStore";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { useToast } from "@/components/ui/use-toast";
 
 const Questions = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Questions = () => {
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [correctAnswers, setCorrectAnswers] = useState(0);
+  const { toast } = useToast();
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   // Fetch questions from Supabase
@@ -42,15 +44,46 @@ const Questions = () => {
   useEffect(() => {
     if (currentQuestionIndex >= questions.length && questions.length > 0) {
       setShowScore(true);
-      if (currentCode) {
-        addScore({
-          username: currentCode.username,
-          participant_name: currentCode.participant_name,
-          score,
-          correct_answers: correctAnswers,
-          total_questions: questions.length
-        });
-      }
+      
+      // Save score to Supabase
+      const saveScore = async () => {
+        if (!currentCode?.username) {
+          toast({
+            title: "Error",
+            description: "No username found",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        try {
+          const { error } = await supabase
+            .from('scores')
+            .insert([{
+              username: currentCode.username,
+              participant_name: currentCode.participant_name,
+              score: score,
+              correct_answers: correctAnswers,
+              total_questions: questions.length
+            }]);
+
+          if (error) throw error;
+
+          toast({
+            title: "Score saved",
+            description: "Your score has been recorded successfully!",
+          });
+        } catch (error) {
+          console.error('Error saving score:', error);
+          toast({
+            title: "Error",
+            description: "Failed to save your score. Please try again.",
+            variant: "destructive",
+          });
+        }
+      };
+
+      saveScore();
     }
     
     if (!currentQuestion) return;
@@ -70,7 +103,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, score, currentCode, addScore, questions.length, correctAnswers]);
+  }, [currentQuestionIndex, currentQuestion, score, currentCode, questions.length, correctAnswers, toast]);
 
   if (isLoading) {
     return (
