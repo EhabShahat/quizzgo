@@ -22,32 +22,31 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
     { name: "Available", value: availableCodes, color: "#8B5CF6" },
   ];
 
+  const cards = [
+    { title: "Total", value: totalCodes, bgColor: "bg-purple-50", textColor: "text-purple-600" },
+    { title: "Available", value: availableCodes, bgColor: "bg-green-50", textColor: "text-green-600" },
+    { title: "Used", value: usedCodes, bgColor: "bg-red-50", textColor: "text-red-600" },
+  ];
+
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
-      <Card className="bg-white/5">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white">Total</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-white">{totalCodes}</div>
-        </CardContent>
-      </Card>
-      <Card className="bg-white/5">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white">Used</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-white">{usedCodes}</div>
-        </CardContent>
-      </Card>
-      <Card className="bg-white/5">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-          <CardTitle className="text-sm font-medium text-white">Available</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-white">{availableCodes}</div>
-        </CardContent>
-      </Card>
+    <div className="space-y-6">
+      <h3 className="text-xl font-semibold text-white">Usage Statistics</h3>
+      <div className="grid grid-cols-3 gap-4">
+        {cards.map((card, index) => (
+          <Card key={index} className={`${card.bgColor} border-none shadow-sm`}>
+            <CardHeader className="pb-2">
+              <CardTitle className={`text-sm font-medium ${card.textColor}`}>
+                {card.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className={`text-3xl font-bold ${card.textColor}`}>
+                {card.value}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
       {totalCodes > 0 && (
         <Card className="bg-white/5">
