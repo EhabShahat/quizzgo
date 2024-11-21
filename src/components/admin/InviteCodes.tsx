@@ -3,20 +3,14 @@ import { useToast } from "@/components/ui/use-toast";
 import { InviteCodeItem } from "./InviteCodeItem";
 import { InviteCodeControls } from "./InviteCodeControls";
 import { InviteCodesDashboard } from "./InviteCodesDashboard";
-
-interface InviteCode {
-  code: string;
-  used: boolean;
-  createdAt: Date;
-  participantName?: string;
-}
+import { useInviteCodeStore } from "@/store/inviteCodeStore";
 
 const InviteCodes = () => {
   const [bulkAmount, setBulkAmount] = useState("10");
   const [prefix, setPrefix] = useState("");
   const [participantNames, setParticipantNames] = useState("");
-  const [codes, setCodes] = useState<InviteCode[]>([]);
   const { toast } = useToast();
+  const { codes, addCode, addCodes, deleteCode, deleteAllCodes } = useInviteCodeStore();
 
   const generateCode = (prefix: string, participantName?: string) => {
     const random = Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -32,7 +26,7 @@ const InviteCodes = () => {
     const names = participantNames.split('\n').filter(name => name.trim());
     const participantName = names[0]?.trim() || undefined;
     const newCode = generateCode(prefix, participantName);
-    setCodes([...codes, newCode]);
+    addCode(newCode);
     toast({
       title: "Code Generated",
       description: `New code: ${newCode.code}${participantName ? ` for ${participantName}` : ''}`,
@@ -43,13 +37,13 @@ const InviteCodes = () => {
     const amount = Math.min(Math.max(parseInt(bulkAmount) || 1, 1), 100);
     const names = participantNames.split('\n')
       .map(name => name.trim())
-      .filter(name => name);
+      .filter(name);
 
     const newCodes = Array.from({ length: amount }, (_, index) => 
       generateCode(prefix, names[index])
     );
 
-    setCodes([...codes, ...newCodes]);
+    addCodes(newCodes);
     toast({
       title: "Codes Generated",
       description: `Generated ${amount} new codes`,
@@ -86,7 +80,7 @@ const InviteCodes = () => {
   };
 
   const handleDeleteCode = (codeToDelete: string) => {
-    setCodes(codes.filter(c => c.code !== codeToDelete));
+    deleteCode(codeToDelete);
     toast({
       title: "Code deleted",
       description: "The code has been removed",
@@ -103,7 +97,7 @@ const InviteCodes = () => {
       return;
     }
     
-    setCodes([]);
+    deleteAllCodes();
     toast({
       title: "Codes deleted",
       description: "All codes have been deleted",

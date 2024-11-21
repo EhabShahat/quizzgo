@@ -4,6 +4,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { useQuizStore } from "@/store/quizStore";
+import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { format } from "date-fns";
 
 const InviteCodeForm = () => {
@@ -13,6 +14,7 @@ const InviteCodeForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isEnabled, startTime, endTime } = useQuizStore();
+  const { isValidCode, markCodeAsUsed } = useInviteCodeStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,12 +27,17 @@ const InviteCodeForm = () => {
       return;
     }
 
-    if (inviteCode.trim() === "qwe123") {
+    if (isValidCode(inviteCode.trim())) {
+      markCodeAsUsed(inviteCode.trim());
       navigate("/questions");
+      toast({
+        title: "Success",
+        description: "Welcome to the quiz!",
+      });
     } else {
       toast({
         title: "Error",
-        description: "Invalid invite code",
+        description: "Invalid or already used invite code",
         variant: "destructive",
       });
     }
