@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Save, RefreshCw } from "lucide-react";
+import { Plus, Save, RefreshCw, ChevronUp, ChevronDown } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Question } from "@/data/questions";
 import MultipleChoiceSection from "./question-form/MultipleChoiceSection";
@@ -25,7 +25,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
   const [correctAnswer, setCorrectAnswer] = useState("0");
   const [questionType, setQuestionType] = useState<'multiple-choice' | 'true-false'>('multiple-choice');
   const [trueFalseAnswer, setTrueFalseAnswer] = useState("True");
-  const [timeLimit, setTimeLimit] = useState(30);
+  const [timeLimit, setTimeLimit] = useState(5);
 
   useEffect(() => {
     if (editingQuestion) {
@@ -54,7 +54,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
     setCorrectAnswer("0");
     setTrueFalseAnswer("True");
     setQuestionType('multiple-choice');
-    setTimeLimit(30);
+    setTimeLimit(5);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -89,6 +89,14 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
     }
   };
 
+  const incrementTimeLimit = () => {
+    setTimeLimit(prev => prev + 1);
+  };
+
+  const decrementTimeLimit = () => {
+    setTimeLimit(prev => prev > 1 ? prev - 1 : 1);
+  };
+
   return (
     <form onSubmit={handleSubmit} className="glass-card p-6 space-y-6">
       <h2 className="text-2xl font-bold text-white">
@@ -118,15 +126,33 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
 
           <div className="space-y-2">
             <Label htmlFor="timeLimit" className="text-white">Time Limit (seconds)</Label>
-            <Input
-              id="timeLimit"
-              type="number"
-              min={1}
-              value={timeLimit}
-              onChange={handleTimeLimitChange}
-              className="bg-white/5 border-white/10 text-white w-32"
-              required
-            />
+            <div className="flex items-center gap-2">
+              <Input
+                id="timeLimit"
+                type="number"
+                min={1}
+                value={timeLimit}
+                onChange={handleTimeLimitChange}
+                className="bg-white/5 border-white/10 text-white w-24"
+                required
+              />
+              <div className="flex flex-col gap-1">
+                <button
+                  type="button"
+                  onClick={incrementTimeLimit}
+                  className="p-1 hover:bg-white/10 rounded"
+                >
+                  <ChevronUp className="w-4 h-4 text-white" />
+                </button>
+                <button
+                  type="button"
+                  onClick={decrementTimeLimit}
+                  className="p-1 hover:bg-white/10 rounded"
+                >
+                  <ChevronDown className="w-4 h-4 text-white" />
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 
