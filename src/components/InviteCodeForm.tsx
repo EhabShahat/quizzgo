@@ -88,7 +88,7 @@ const InviteCodeForm = () => {
             </p>
           )}
           {!isEnabled && !startTime && (
-            <p className="text-white/70 text-sm mt-2">
+            <p className="text-2xl font-semibold text-white text-center mt-4 animate-pulse">
               We will open soon...
             </p>
           )}
