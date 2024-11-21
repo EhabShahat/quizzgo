@@ -1,5 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
 
 interface InviteCode {
   code: string;
@@ -16,11 +15,6 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
   const totalCodes = codes.length;
   const usedCodes = codes.filter((code) => code.used).length;
   const availableCodes = totalCodes - usedCodes;
-
-  const pieData = [
-    { name: "Used", value: usedCodes, color: "#F97316" },
-    { name: "Available", value: availableCodes, color: "#8B5CF6" },
-  ];
 
   const cards = [
     { title: "Total", value: totalCodes, bgColor: "bg-card", textColor: "text-purple-400", icon: "▲" },
@@ -48,36 +42,6 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
           </Card>
         ))}
       </div>
-
-      {totalCodes > 0 && (
-        <Card className="bg-card border-white/10 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-white">Usage</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-[150px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={30}
-                    outerRadius={40}
-                    paddingAngle={5}
-                    dataKey="value"
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
-                  <Legend />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };
