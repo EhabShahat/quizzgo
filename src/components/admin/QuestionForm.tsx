@@ -25,7 +25,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
   const [correctAnswer, setCorrectAnswer] = useState("0");
   const [questionType, setQuestionType] = useState<'multiple-choice' | 'true-false'>('multiple-choice');
   const [trueFalseAnswer, setTrueFalseAnswer] = useState("True");
-  const [timeLimit, setTimeLimit] = useState(5);
+  const [timeLimit, setTimeLimit] = useState(30);
 
   useEffect(() => {
     if (editingQuestion) {
@@ -54,7 +54,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
     setCorrectAnswer("0");
     setTrueFalseAnswer("True");
     setQuestionType('multiple-choice');
-    setTimeLimit(5);
+    setTimeLimit(30);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -84,7 +84,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
 
   const handleTimeLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
-    if (value >= 5 && value <= 30) {
+    if (!isNaN(value) && value > 0) {
       setTimeLimit(value);
     }
   };
@@ -117,12 +117,11 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
           />
 
           <div className="space-y-2">
-            <Label htmlFor="timeLimit" className="text-white">Time Limit (5-30 seconds)</Label>
+            <Label htmlFor="timeLimit" className="text-white">Time Limit (seconds)</Label>
             <Input
               id="timeLimit"
               type="number"
-              min={5}
-              max={30}
+              min={1}
               value={timeLimit}
               onChange={handleTimeLimitChange}
               className="bg-white/5 border-white/10 text-white w-32"
