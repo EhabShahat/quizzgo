@@ -37,7 +37,17 @@ const QuestionList = ({ questions, onDelete, onEdit, onQuestionsUpdate }: Questi
       if (error) throw error;
 
       if (data && onQuestionsUpdate) {
-        onQuestionsUpdate(data);
+        // Map the database response to match our Question interface
+        const mappedQuestions: Question[] = data.map(q => ({
+          id: q.id,
+          text: q.text,
+          options: q.options,
+          correct_answer: q.correct_answer,
+          timeLimit: q.time_limit,
+          type: q.type as 'multiple-choice' | 'true-false'
+        }));
+        
+        onQuestionsUpdate(mappedQuestions);
         toast.success("Questions fetched successfully");
       }
     } catch (error) {
