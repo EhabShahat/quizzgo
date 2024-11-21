@@ -9,7 +9,7 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      invite_codes: {
+      InviteCode: {
         Row: {
           code: string
           created_at: string | null
