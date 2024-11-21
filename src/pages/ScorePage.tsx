@@ -56,7 +56,7 @@ const ScorePage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#4C1D95] to-[#6366F1] p-4 md:p-8 relative overflow-hidden flex flex-col">
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
         <div className="flex-grow flex items-center justify-center">
           <Card className="max-w-md w-full bg-white/5 border-white/10">
             <Alert className="bg-transparent border-white/10">
@@ -74,7 +74,7 @@ const ScorePage = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#4C1D95] to-[#6366F1] p-4 md:p-8 relative overflow-hidden flex flex-col">
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
         <div className="flex-grow flex items-center justify-center">
           <Card className="max-w-md w-full bg-white/5 border-white/10">
             <Alert className="bg-transparent border-white/10">
@@ -92,7 +92,7 @@ const ScorePage = () => {
 
   if (scores.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-[#4C1D95] to-[#6366F1] p-4 md:p-8 relative overflow-hidden flex flex-col">
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
         <div className="flex-grow flex items-center justify-center">
           <Card className="max-w-md w-full bg-white/5 border-white/10">
             <Alert className="bg-transparent border-white/10">
@@ -109,7 +109,7 @@ const ScorePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#4C1D95] to-[#6366F1] p-4 md:p-8 relative overflow-hidden flex flex-col">
+    <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
       {[...Array(30)].map((_, i) => (
         <div
           key={i}
