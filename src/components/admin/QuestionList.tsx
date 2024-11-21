@@ -1,4 +1,6 @@
 import { Trash2, Edit2 } from "lucide-react";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import type { Question } from "@/data/questions";
 
 interface QuestionListProps {
@@ -8,6 +10,23 @@ interface QuestionListProps {
 }
 
 const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
+  const handleDelete = async (id: number) => {
+    try {
+      const { error } = await supabase
+        .from('questions')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      onDelete(id);
+      toast.success("Question deleted successfully");
+    } catch (error) {
+      console.error('Error deleting question:', error);
+      toast.error("Failed to delete question");
+    }
+  };
+
   return (
     <div className="glass-card p-6 mt-6">
       <h2 className="text-2xl font-bold text-white mb-4">Question List</h2>
@@ -42,7 +61,7 @@ const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
                 <Edit2 className="w-5 h-5" />
               </button>
               <button
-                onClick={() => onDelete(question.id)}
+                onClick={() => handleDelete(question.id)}
                 className="p-2 text-white/50 hover:text-red-400 transition-colors"
               >
                 <Trash2 className="w-5 h-5" />

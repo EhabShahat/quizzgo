@@ -1,25 +1,23 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Plus, Save, RefreshCw, ChevronUp, ChevronDown } from "lucide-react";
+import { Plus, Save, RefreshCw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import type { Question } from "@/data/questions";
 import MultipleChoiceSection from "./question-form/MultipleChoiceSection";
 import TrueFalseSection from "./question-form/TrueFalseSection";
+import TimeLimitControl from "./question-form/TimeLimitControl";
+import QuestionHeader from "./question-form/QuestionHeader";
 
 interface QuestionFormProps {
-  onSubmit: (question: {
-    text: string;
-    options: string[];
-    correctAnswer: string;
-    timeLimit: number;
-    type: 'multiple-choice' | 'true-false';
-  }) => void;
+  onSubmit: (question: Question) => void;
   editingQuestion?: Question | null;
   onCancelEdit?: () => void;
 }
 
-const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormProps) => {
+const QuestionForm = ({ editingQuestion, onCancelEdit }: QuestionFormProps) => {
   const [questionText, setQuestionText] = useState("");
   const [options, setOptions] = useState(["", "", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState("0");
@@ -57,51 +55,46 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
     setTimeLimit(5);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (questionType === 'true-false') {
-      onSubmit({
-        text: questionText,
-        options: ["True", "False"],
-        correctAnswer: trueFalseAnswer,
-        timeLimit: timeLimit,
-        type: 'true-false'
-      });
-    } else {
-      onSubmit({
-        text: questionText,
-        options: options,
-        correctAnswer: options[parseInt(correctAnswer)],
-        timeLimit: timeLimit,
-        type: 'multiple-choice'
-      });
+    const questionData = {
+      text: questionText,
+      options: questionType === 'true-false' ? ["True", "False"] : options,
+      correctAnswer: questionType === 'true-false' ? trueFalseAnswer : options[parseInt(correctAnswer)],
+      timeLimit: timeLimit,
+      type: questionType
+    };
+
+    try {
+      if (editingQuestion) {
+        const { error } = await supabase
+          .from('questions')
+          .update(questionData)
+          .eq('id', editingQuestion.id);
+
+        if (error) throw error;
+        toast.success("Question updated successfully");
+      } else {
+        const { error } = await supabase
+          .from('questions')
+          .insert([questionData]);
+
+        if (error) throw error;
+        toast.success("Question added successfully");
+      }
+
+      resetForm();
+      if (onCancelEdit) onCancelEdit();
+    } catch (error) {
+      console.error('Error saving question:', error);
+      toast.error(editingQuestion ? "Failed to update question" : "Failed to add question");
     }
-
-    resetForm();
-    if (onCancelEdit) onCancelEdit();
-  };
-
-  const handleTimeLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value > 0) {
-      setTimeLimit(value);
-    }
-  };
-
-  const incrementTimeLimit = () => {
-    setTimeLimit(prev => prev + 1);
-  };
-
-  const decrementTimeLimit = () => {
-    setTimeLimit(prev => prev > 1 ? prev - 1 : 1);
   };
 
   return (
     <form onSubmit={handleSubmit} className="glass-card p-6 space-y-6">
-      <h2 className="text-2xl font-bold text-white">
-        {editingQuestion ? "Edit Question" : "Add New Question"}
-      </h2>
+      <QuestionHeader editingQuestion={editingQuestion} />
       
       <Tabs defaultValue={questionType} onValueChange={(value) => setQuestionType(value as 'multiple-choice' | 'true-false')}>
         <TabsList className="bg-white/5 border-white/10">
@@ -124,36 +117,10 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
             required
           />
 
-          <div className="space-y-2">
-            <Label htmlFor="timeLimit" className="text-white">Time Limit (seconds)</Label>
-            <div className="flex items-center gap-2">
-              <Input
-                id="timeLimit"
-                type="number"
-                min={1}
-                value={timeLimit}
-                onChange={handleTimeLimitChange}
-                className="bg-white/5 border-white/10 text-white w-24"
-                required
-              />
-              <div className="flex flex-col gap-1">
-                <button
-                  type="button"
-                  onClick={incrementTimeLimit}
-                  className="p-1 hover:bg-white/10 rounded"
-                >
-                  <ChevronUp className="w-4 h-4 text-white" />
-                </button>
-                <button
-                  type="button"
-                  onClick={decrementTimeLimit}
-                  className="p-1 hover:bg-white/10 rounded"
-                >
-                  <ChevronDown className="w-4 h-4 text-white" />
-                </button>
-              </div>
-            </div>
-          </div>
+          <TimeLimitControl 
+            timeLimit={timeLimit}
+            onTimeLimitChange={setTimeLimit}
+          />
         </div>
 
         <TabsContent value="multiple-choice">
