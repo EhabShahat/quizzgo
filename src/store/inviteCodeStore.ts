@@ -4,6 +4,7 @@ interface InviteCode {
   code: string;
   used: boolean;
   createdAt: Date;
+  usedAt?: Date;
   participantName?: string;
 }
 
@@ -24,7 +25,7 @@ export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
   markCodeAsUsed: (code) =>
     set((state) => ({
       codes: state.codes.map((c) =>
-        c.code === code ? { ...c, used: true } : c
+        c.code === code ? { ...c, used: true, usedAt: new Date() } : c
       ),
     })),
   deleteCode: (code) =>
