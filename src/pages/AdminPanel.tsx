@@ -62,15 +62,6 @@ const AdminPanel = () => {
     }
   };
 
-  const handleShuffleQuestions = () => {
-    const shuffledQuestions = [...questions].sort(() => Math.random() - 0.5);
-    setQuestions(shuffledQuestions);
-    toast({
-      title: "Questions shuffled",
-      description: "The questions have been randomly reordered",
-    });
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1c2e] to-[#2d1f47] p-4">
       <div className="max-w-4xl mx-auto">
@@ -129,7 +120,6 @@ const AdminPanel = () => {
               questions={questions}
               onDelete={handleDeleteQuestion}
               onEdit={handleEditQuestion}
-              onShuffle={handleShuffleQuestions}
             />
           </TabsContent>
 
