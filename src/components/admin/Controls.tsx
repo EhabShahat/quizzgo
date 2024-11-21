@@ -1,23 +1,19 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useQuizStore } from "@/store/quizStore";
+import { Save } from "lucide-react";
 import { toast } from "sonner";
-import { Save, Lock, Image } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { useQuizStore } from "@/store/quizStore";
 import { QuizStatus } from "./controls/QuizStatus";
 import { QuizToggles } from "./controls/QuizToggles";
+import { PasswordManagement } from "./controls/PasswordManagement";
+import { MainScreenSettings } from "./controls/MainScreenSettings";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Controls = () => {
   const [startDateTime, setStartDateTime] = useState<string>("");
   const [endDateTime, setEndDateTime] = useState<string>("");
   const { setStartTime, setEndTime, isEnabled, shuffleQuestions } = useQuizStore();
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [mainTitle, setMainTitle] = useState("Quiz Challenge");
-  const [logoUrl, setLogoUrl] = useState("/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
 
   const handleSaveSettings = async () => {
     try {
@@ -46,7 +42,7 @@ export const Controls = () => {
           is_enabled: isEnabled,
           shuffle_questions: shuffleQuestions,
         })
-        .eq('id', 1); // Update the first row since we only have one settings record
+        .eq('id', 1);
 
       if (error) {
         throw error;
@@ -57,34 +53,6 @@ export const Controls = () => {
       console.error('Error saving settings:', error);
       toast.error("Failed to save settings. Please try again.");
     }
-  };
-
-  const handlePasswordChange = () => {
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Please fill in all password fields");
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      toast.error("New passwords do not match");
-      return;
-    }
-
-    if (newPassword.length < 6) {
-      toast.error("New password must be at least 6 characters long");
-      return;
-    }
-
-    toast.success("Password updated successfully");
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
-
-  const handleMainScreenUpdate = () => {
-    localStorage.setItem('mainTitle', mainTitle);
-    localStorage.setItem('logoUrl', logoUrl);
-    toast.success("Main screen settings updated successfully");
   };
 
   return (
@@ -122,91 +90,8 @@ export const Controls = () => {
         </Button>
       </div>
 
-      <div className="border-t border-white/10 pt-8">
-        <div className="space-y-6">
-          <h3 className="text-lg font-semibold text-white flex items-center">
-            <Lock className="w-5 h-5 mr-2" />
-            Change Admin Password
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <Label className="text-white">Current Password</Label>
-              <Input
-                type="password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-                className="bg-white/5 text-white border-white/10"
-                placeholder="Enter current password"
-              />
-            </div>
-            <div>
-              <Label className="text-white">New Password</Label>
-              <Input
-                type="password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                className="bg-white/5 text-white border-white/10"
-                placeholder="Enter new password"
-              />
-            </div>
-            <div>
-              <Label className="text-white">Confirm New Password</Label>
-              <Input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                className="bg-white/5 text-white border-white/10"
-                placeholder="Confirm new password"
-              />
-            </div>
-            <Button
-              onClick={handlePasswordChange}
-              className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg"
-            >
-              <Lock className="w-5 h-5 mr-2" />
-              Update Password
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      <div className="border-t border-white/10 pt-8">
-        <div className="space-y-6">
-          <h3 className="text-lg font-semibold text-white flex items-center">
-            <Image className="w-5 h-5 mr-2" />
-            Main Screen Settings
-          </h3>
-          <div className="space-y-4">
-            <div>
-              <Label className="text-white">Main Title</Label>
-              <Input
-                type="text"
-                value={mainTitle}
-                onChange={(e) => setMainTitle(e.target.value)}
-                className="bg-white/5 text-white border-white/10"
-                placeholder="Enter main title"
-              />
-            </div>
-            <div>
-              <Label className="text-white">Logo URL</Label>
-              <Input
-                type="text"
-                value={logoUrl}
-                onChange={(e) => setLogoUrl(e.target.value)}
-                className="bg-white/5 text-white border-white/10"
-                placeholder="Enter logo URL"
-              />
-            </div>
-            <Button
-              onClick={handleMainScreenUpdate}
-              className="w-full bg-purple-500 hover:bg-purple-600 text-white py-6 text-lg"
-            >
-              <Save className="w-5 h-5 mr-2" />
-              Update Main Screen
-            </Button>
-          </div>
-        </div>
-      </div>
+      <PasswordManagement />
+      <MainScreenSettings />
     </div>
   );
 };
