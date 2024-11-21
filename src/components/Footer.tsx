@@ -1,5 +1,5 @@
 import React from 'react';
-import { Facebook } from 'lucide-react';
+import { Facebook, WhatsApp } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -14,6 +14,7 @@ const Footer = () => {
         >
           <Facebook />
         </a>
+        <WhatsApp className="hover:text-white transition-colors cursor-pointer" />
       </div>
     </footer>
   );
