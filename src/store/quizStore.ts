@@ -38,7 +38,13 @@ export const useQuizStore = create<QuizState>((set) => ({
   addQuestion: async (question) => {
     const { error } = await supabase
       .from('questions')
-      .insert([question]);
+      .insert([{
+        text: question.text,
+        options: question.options,
+        correct_answer: question.correct_answer,
+        time_limit: question.time_limit,
+        type: question.type
+      }]);
     
     if (error) throw error;
   },
