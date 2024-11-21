@@ -56,7 +56,6 @@ const ScorePage = () => {
 
   return (
     <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden">
-      {/* Confetti Animation */}
       {[...Array(30)].map((_, i) => (
         <div
           key={i}
@@ -86,7 +85,7 @@ const ScorePage = () => {
             {scores[1] && (
               <PodiumStand
                 rank={2}
-                name={scores[1].participant_name || scores[1].username}
+                name={scores[1].participant_name}
                 score={scores[1].score}
                 correctAnswers={scores[1].correct_answers}
                 totalQuestions={scores[1].total_questions}
@@ -98,7 +97,7 @@ const ScorePage = () => {
             {scores[0] && (
               <PodiumStand
                 rank={1}
-                name={scores[0].participant_name || scores[0].username}
+                name={scores[0].participant_name}
                 score={scores[0].score}
                 correctAnswers={scores[0].correct_answers}
                 totalQuestions={scores[0].total_questions}
@@ -110,7 +109,7 @@ const ScorePage = () => {
             {scores[2] && (
               <PodiumStand
                 rank={3}
-                name={scores[2].participant_name || scores[2].username}
+                name={scores[2].participant_name}
                 score={scores[2].score}
                 correctAnswers={scores[2].correct_answers}
                 totalQuestions={scores[2].total_questions}
@@ -119,7 +118,7 @@ const ScorePage = () => {
           </div>
         </div>
 
-        {/* Runners Up Section - Only show if there are 4 or more participants */}
+        {/* Runners Up Section */}
         {scores.length > 3 && (
           <div className="space-y-4 max-w-2xl mx-auto">
             <div className="bg-[#3C1278]/50 rounded-xl p-6">
@@ -133,7 +132,7 @@ const ScorePage = () => {
                   >
                     <RunnerUp
                       rank={index + 4}
-                      name={score.participant_name || score.username}
+                      name={score.participant_name}
                       score={score.score}
                       correctAnswers={score.correct_answers}
                       totalQuestions={score.total_questions}
@@ -145,7 +144,6 @@ const ScorePage = () => {
           </div>
         )}
 
-        {/* Admin Access Section */}
         <div className="flex flex-col items-center gap-4 mt-12 pt-8">
           {showAdminInput && (
             <Input

@@ -47,12 +47,8 @@ const Questions = () => {
       
       // Save score to Supabase
       const saveScore = async () => {
-        if (!currentCode?.username) {
-          toast({
-            title: "Error",
-            description: "No username found",
-            variant: "destructive",
-          });
+        if (!currentCode?.participant_name) {
+          console.error('No participant name found');
           return;
         }
 
@@ -60,7 +56,6 @@ const Questions = () => {
           const { error } = await supabase
             .from('scores')
             .insert([{
-              username: currentCode.username,
               participant_name: currentCode.participant_name,
               score: score,
               correct_answers: correctAnswers,

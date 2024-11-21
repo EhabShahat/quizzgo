@@ -57,7 +57,7 @@ const InviteCodeForm = () => {
     }
 
     await markCodeAsUsed(inviteCode.trim());
-    navigate(`/welcome/${encodeURIComponent(codeDetails.username || "Guest")}`);
+    navigate(`/welcome/${encodeURIComponent(codeDetails.participant_name || "Guest")}`);
     toast({
       title: "Success",
       description: "Welcome to the quiz!",

@@ -16,7 +16,6 @@ const InviteCodes = () => {
   const generateCode = (prefix: string, participantName?: string): InviteCode => ({
     code: prefix ? `${prefix}-${Math.random().toString(36).substring(2, 8).toUpperCase()}` : Math.random().toString(36).substring(2, 8).toUpperCase(),
     used: false,
-    username: participantName || null, // Set username to participant_name
     participant_name: participantName || null,
     created_at: new Date().toISOString(),
     used_at: null
@@ -26,7 +25,7 @@ const InviteCodes = () => {
     const names = participantNames.split('\n').filter(name => name.trim());
     const participantName = names[0]?.trim() || undefined;
     const newCode = generateCode(prefix, participantName);
-    addCode(newCode.code, newCode.username || '');
+    addCode(newCode.code, newCode.participant_name || '');
     toast({
       title: "Code Generated",
       description: `New code: ${newCode.code}${participantName ? ` for ${participantName}` : ''}`,
