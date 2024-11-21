@@ -1,4 +1,4 @@
-import { Book, Timer, Key, LogOut, Trophy } from "lucide-react";
+import { Book, Timer, Key, LogOut, Trophy, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { questions as initialQuestions, Question } from "@/data/questions";
@@ -9,12 +9,15 @@ import { Controls } from "@/components/admin/Controls";
 import InviteCodes from "@/components/admin/InviteCodes";
 import ScoresList from "@/components/admin/scores/ScoresList";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
+  const queryClient = useQueryClient();
 
   const handleLogout = () => {
     navigate("/");
@@ -22,6 +25,23 @@ const AdminPanel = () => {
       title: "Logged out successfully",
       description: "You have been logged out of the admin panel",
     });
+  };
+
+  const handleRefreshData = async () => {
+    try {
+      // Refetch all queries
+      await queryClient.refetchQueries();
+      toast({
+        title: "Data refreshed",
+        description: "All data has been refreshed from the database",
+      });
+    } catch (error) {
+      toast({
+        title: "Refresh failed",
+        description: "Failed to refresh data. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleAddQuestion = (question: Omit<Question, "id">) => {
@@ -67,13 +87,22 @@ const AdminPanel = () => {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Admin Panel</h1>
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-white"
-          >
-            <LogOut className="w-5 h-5" />
-            Logout
-          </button>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleRefreshData}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-white"
+            >
+              <RefreshCw className="w-5 h-5" />
+              Refresh Data
+            </Button>
+            <Button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-white"
+            >
+              <LogOut className="w-5 h-5" />
+              Logout
+            </Button>
+          </div>
         </div>
 
         <Tabs defaultValue="questions" className="space-y-6">
