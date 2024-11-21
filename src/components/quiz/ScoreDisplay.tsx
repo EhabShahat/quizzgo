@@ -10,9 +10,11 @@ import { useInviteCodeStore } from "@/store/inviteCodeStore";
 interface ScoreDisplayProps {
   score: number;
   questions: any[];
+  correctAnswers: number;
+  totalQuestions: number;
 }
 
-export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
+export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions }: ScoreDisplayProps) => {
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
@@ -37,8 +39,8 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
             username: currentCode.username,
             participant_name: currentCode.participant_name,
             score: score,
-            correct_answers: Math.round(score / 1000), // Each correct answer is worth 1000 points
-            total_questions: questions.length
+            correct_answers: correctAnswers,
+            total_questions: totalQuestions
           }]);
 
         if (error) throw error;
@@ -47,6 +49,11 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
           title: "Score saved",
           description: "Your score has been recorded successfully!",
         });
+
+        // Redirect to scores page after a short delay
+        setTimeout(() => {
+          navigate("/scores");
+        }, 3000);
       } catch (error) {
         console.error('Error saving score:', error);
         toast({
@@ -58,37 +65,9 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
     };
 
     saveScore();
-  }, [score, questions.length, currentCode, toast]);
+  }, [score, correctAnswers, totalQuestions, currentCode, toast, navigate]);
 
-  const handleAdminAccess = () => {
-    if (!showAdminInput) {
-      setShowAdminInput(true);
-      return;
-    }
-
-    if (adminPassword === "admin123") {
-      navigate("/admin");
-      toast({
-        title: "Success",
-        description: "Welcome to admin panel",
-      });
-    } else {
-      toast({
-        title: "Access Denied",
-        description: "Invalid admin credentials",
-        variant: "destructive",
-      });
-    }
-    setAdminPassword("");
-  };
-
-  const handleViewScores = () => {
-    navigate("/scores");
-    toast({
-      title: "Navigating to Scores",
-      description: "Check out how others performed!",
-    });
-  };
+  // ... keep existing code (handleAdminAccess function and UI rendering)
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
@@ -140,7 +119,7 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
 
               <div className="grid grid-cols-2 gap-4 text-center">
                 <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.5s" }}>
-                  <div className="text-3xl font-bold text-white">{questions.length}</div>
+                  <div className="text-3xl font-bold text-white">{correctAnswers}/{totalQuestions}</div>
                   <div className="text-sm text-white/70">Questions</div>
                 </div>
                 <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.6s" }}>
@@ -152,7 +131,7 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
 
             {/* View Scores Button */}
             <button
-              onClick={handleViewScores}
+              onClick={() => navigate("/scores")}
               className="mt-8 w-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 animate-fadeIn"
               style={{ animationDelay: "0.7s" }}
             >
@@ -177,7 +156,27 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
           <button 
             className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors animate-fadeIn"
             style={{ animationDelay: "0.4s" }}
-            onClick={handleAdminAccess}
+            onClick={() => {
+              if (!showAdminInput) {
+                setShowAdminInput(true);
+                return;
+              }
+
+              if (adminPassword === "admin123") {
+                navigate("/admin");
+                toast({
+                  title: "Success",
+                  description: "Welcome to admin panel",
+                });
+              } else {
+                toast({
+                  title: "Access Denied",
+                  description: "Invalid admin credentials",
+                  variant: "destructive",
+                });
+              }
+              setAdminPassword("");
+            }}
           >
             <Lock className="w-4 h-4" />
             Admin Access

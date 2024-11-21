@@ -6,7 +6,6 @@ import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { useQuizStore } from "@/store/quizStore";
 import { supabase } from "@/integrations/supabase/client";
-import type { Question } from "@/types/database";
 import { useQuery } from "@tanstack/react-query";
 
 const Questions = () => {
@@ -18,6 +17,7 @@ const Questions = () => {
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
+  const [correctAnswers, setCorrectAnswers] = useState(0);
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   // Fetch questions from Supabase
@@ -30,7 +30,6 @@ const Questions = () => {
       
       if (error) throw error;
       
-      // Shuffle questions if needed
       if (shuffleQuestions && data) {
         return [...data].sort(() => Math.random() - 0.5);
       }
@@ -48,14 +47,10 @@ const Questions = () => {
           username: currentCode.username,
           participant_name: currentCode.participant_name,
           score,
-          correct_answers: Math.round(score / 1000),
+          correct_answers: correctAnswers,
           total_questions: questions.length
         });
       }
-      const timer = setTimeout(() => {
-        navigate("/scores");
-      }, 5000);
-      return () => clearTimeout(timer);
     }
     
     if (!currentQuestion) return;
@@ -75,7 +70,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, navigate, score, currentCode, addScore, questions.length]);
+  }, [currentQuestionIndex, currentQuestion, score, currentCode, addScore, questions.length, correctAnswers]);
 
   if (isLoading) {
     return (
@@ -86,7 +81,12 @@ const Questions = () => {
   }
 
   if (showScore) {
-    return <ScoreDisplay score={score} questions={questions} />;
+    return <ScoreDisplay 
+      score={score} 
+      questions={questions} 
+      correctAnswers={correctAnswers} 
+      totalQuestions={questions.length}
+    />;
   }
 
   if (!currentQuestion) {
@@ -99,6 +99,7 @@ const Questions = () => {
     if (isCorrect) {
       const timeBonus = Math.round((timeLeft / currentQuestion.time_limit) * 1000);
       setScore(prev => prev + timeBonus);
+      setCorrectAnswers(prev => prev + 1);
     }
     
     setCurrentQuestionIndex(prev => prev + 1);
