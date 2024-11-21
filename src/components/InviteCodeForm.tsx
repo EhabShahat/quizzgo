@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Shield, ArrowRight, Lock } from "lucide-react";
+import { ArrowRight, Lock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
@@ -66,7 +66,7 @@ const InviteCodeForm = () => {
       <img 
         src="/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png" 
         alt="Church Logo" 
-        className="w-32 h-32 mx-auto mb-6 rounded-full shadow-lg"
+        className="w-40 h-40 mx-auto mb-6 rounded-full shadow-lg"
       />
       <h1 className="text-3xl font-bold text-white text-center mb-2">
         Quiz Challenge
