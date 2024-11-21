@@ -10,7 +10,7 @@ interface RunnerUpProps {
 
 export const RunnerUp = ({ rank, name, score, correctAnswers, totalQuestions }: RunnerUpProps) => {
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center gap-4 hover:bg-white/20 transition-colors">
+    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center gap-4 hover:bg-white/20 transition-all duration-300 transform hover:scale-102 hover:translate-x-1">
       <div className="bg-purple-500/20 p-2 rounded-full">
         <User className="w-6 h-6 text-purple-300" />
       </div>

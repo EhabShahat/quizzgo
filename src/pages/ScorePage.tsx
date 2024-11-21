@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Lock, Sparkles } from "lucide-react";
 import { PodiumStand } from "@/components/leaderboard/PodiumStand";
 import { RunnerUp } from "@/components/leaderboard/RunnerUp";
+import { Card } from "@/components/ui/card";
 
 const ScorePage = () => {
   const [showAdminInput, setShowAdminInput] = useState(false);
@@ -45,7 +46,7 @@ const ScorePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#8B5CF6] to-[#6366F1] p-4 md:p-8 relative overflow-hidden">
-      {/* Confetti Animation */}
+      {/* Animated Confetti */}
       {[...Array(20)].map((_, i) => (
         <div
           key={i}
@@ -58,7 +59,7 @@ const ScorePage = () => {
           }}
         >
           <Sparkles
-            className="text-white/50 w-6 h-6"
+            className="text-white/30 w-6 h-6 transform rotate-45"
             style={{
               transform: `rotate(${Math.random() * 360}deg)`,
             }}
@@ -66,31 +67,43 @@ const ScorePage = () => {
         </div>
       ))}
 
-      <div className="max-w-4xl mx-auto space-y-8">
-        <h1 className="text-4xl font-bold text-center text-white mb-12">
+      <Card className="max-w-4xl mx-auto space-y-8 bg-black/20 backdrop-blur-sm border-white/10 p-8">
+        <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-12 animate-fadeIn">
           Leaderboard
         </h1>
 
         {/* Podium Section */}
         <div className="flex justify-center items-end gap-4 md:gap-8 mb-12">
           {/* 2nd Place */}
-          <PodiumStand {...scores[1]} rank={2} />
+          <div className="animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+            <PodiumStand {...scores[1]} rank={2} />
+          </div>
           {/* 1st Place */}
-          <PodiumStand {...scores[0]} rank={1} />
+          <div className="animate-fadeIn" style={{ animationDelay: "0.1s" }}>
+            <PodiumStand {...scores[0]} rank={1} />
+          </div>
           {/* 3rd Place */}
-          <PodiumStand {...scores[2]} rank={3} />
+          <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
+            <PodiumStand {...scores[2]} rank={3} />
+          </div>
         </div>
 
         {/* Runners Up Section */}
         <div className="space-y-4 max-w-2xl mx-auto">
           <h2 className="text-xl font-semibold text-white/90 mb-4">Runners Up</h2>
           {scores.slice(3).map((score, index) => (
-            <RunnerUp key={index} {...score} rank={index + 4} />
+            <div 
+              key={index} 
+              className="animate-fadeIn"
+              style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+            >
+              <RunnerUp {...score} rank={index + 4} />
+            </div>
           ))}
         </div>
 
         {/* Admin Access Section */}
-        <div className="flex flex-col items-center gap-4 mt-12">
+        <div className="flex flex-col items-center gap-4 mt-12 pt-8 border-t border-white/10">
           {showAdminInput && (
             <Input
               type="password"
@@ -102,14 +115,14 @@ const ScorePage = () => {
             />
           )}
           <button 
-            className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors bg-black/20 px-4 py-2 rounded-lg"
+            className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors bg-black/20 px-4 py-2 rounded-lg hover:bg-black/30"
             onClick={handleAdminAccess}
           >
             <Lock className="w-4 h-4" />
             Admin Access
           </button>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

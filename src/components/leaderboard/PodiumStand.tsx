@@ -14,7 +14,7 @@ export const PodiumStand = ({ rank, name, score, correctAnswers, totalQuestions 
       case 1:
         return "bg-yellow-400";
       case 2:
-        return "bg-gray-400";
+        return "bg-silver-400";
       case 3:
         return "bg-bronze-400";
       default:
@@ -36,8 +36,8 @@ export const PodiumStand = ({ rank, name, score, correctAnswers, totalQuestions 
   };
 
   return (
-    <div className="flex flex-col items-center justify-end">
-      <div className="flex flex-col items-center gap-4 mb-4">
+    <div className="flex flex-col items-center justify-end group">
+      <div className="flex flex-col items-center gap-4 mb-4 transform transition-transform duration-300 group-hover:scale-105">
         <PodiumBadge rank={rank} color={getBadgeColor()} />
         <div className="text-center">
           <h3 className="text-white font-bold text-lg">{name}</h3>
@@ -47,7 +47,10 @@ export const PodiumStand = ({ rank, name, score, correctAnswers, totalQuestions 
           </p>
         </div>
       </div>
-      <div className={`${getHeight()} w-24 bg-white/20 rounded-t-lg backdrop-blur-sm`} />
+      <div 
+        className={`${getHeight()} w-24 bg-white/20 rounded-t-lg backdrop-blur-sm 
+        transform transition-all duration-300 group-hover:bg-white/30`} 
+      />
     </div>
   );
 };
