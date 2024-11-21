@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Score {
   username: string;
@@ -10,14 +11,44 @@ export interface Score {
 
 interface ScoresStore {
   scores: Score[];
-  addScore: (score: Score) => void;
-  updateScores: (scores: Score[]) => void;
+  fetchScores: () => Promise<void>;
+  addScore: (score: Score) => Promise<void>;
+  updateScores: (scores: Score[]) => Promise<void>;
 }
 
 export const useScoresStore = create<ScoresStore>((set) => ({
   scores: [],
-  addScore: (score) => set((state) => ({ 
-    scores: [...state.scores, score].sort((a, b) => b.score - a.score)
-  })),
-  updateScores: (scores) => set({ scores }),
+  fetchScores: async () => {
+    const { data, error } = await supabase
+      .from('scores')
+      .select('*')
+      .order('score', { ascending: false });
+    
+    if (error) throw error;
+    set({ scores: data });
+  },
+  addScore: async (score) => {
+    const { error } = await supabase
+      .from('scores')
+      .insert([score]);
+    
+    if (error) throw error;
+    
+    const { data: updatedScores } = await supabase
+      .from('scores')
+      .select('*')
+      .order('score', { ascending: false });
+      
+    if (updatedScores) {
+      set({ scores: updatedScores });
+    }
+  },
+  updateScores: async (scores) => {
+    const { error } = await supabase
+      .from('scores')
+      .insert(scores);
+    
+    if (error) throw error;
+    set({ scores });
+  },
 }));

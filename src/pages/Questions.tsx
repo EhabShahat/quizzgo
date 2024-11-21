@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
-import { questions as initialQuestions } from "@/data/questions";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { useNavigate } from "react-router-dom";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { useQuizStore } from "@/store/quizStore";
+import type { Question } from "@/data/questions";
 
 const Questions = () => {
   const navigate = useNavigate();
   const { currentCode } = useInviteCodeStore();
   const { addScore } = useScoresStore();
-  const { shuffleQuestions } = useQuizStore();
-  const [questions, setQuestions] = useState(initialQuestions);
+  const { shuffleQuestions, fetchQuestions } = useQuizStore();
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
@@ -20,31 +20,37 @@ const Questions = () => {
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   useEffect(() => {
-    if (shuffleQuestions) {
-      const shuffledQuestions = [...initialQuestions]
-        .sort(() => Math.random() - 0.5);
-      setQuestions(shuffledQuestions);
-    } else {
-      setQuestions(initialQuestions);
-    }
-  }, [shuffleQuestions]);
+    const loadQuestions = async () => {
+      try {
+        const fetchedQuestions = await fetchQuestions();
+        if (shuffleQuestions) {
+          setQuestions([...fetchedQuestions].sort(() => Math.random() - 0.5));
+        } else {
+          setQuestions(fetchedQuestions);
+        }
+      } catch (error) {
+        console.error("Failed to load questions:", error);
+        navigate("/");
+      }
+    };
+    
+    loadQuestions();
+  }, [shuffleQuestions, fetchQuestions, navigate]);
 
   const currentQuestion = questions[currentQuestionIndex];
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length) {
       setShowScore(true);
-      // Save score to store
       if (currentCode) {
         addScore({
           username: currentCode.username,
           participantName: currentCode.participantName,
           score,
-          correctAnswers: Math.round((score / 1000)), // Approximate based on score
+          correctAnswers: Math.round((score / 1000)),
           totalQuestions: questions.length
         });
       }
-      // Redirect to scores page after showing the score for 5 seconds
       const timer = setTimeout(() => {
         navigate("/scores");
       }, 5000);
@@ -68,7 +74,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, navigate, score, currentCode, addScore]);
+  }, [currentQuestionIndex, currentQuestion, navigate, score, currentCode, addScore, questions.length]);
 
   if (showScore) {
     return <ScoreDisplay score={score} questions={questions} />;
