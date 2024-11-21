@@ -1,4 +1,4 @@
-import { Plus, Copy, FileSpreadsheet, Trash2, Upload, X } from "lucide-react";
+import { Plus, Copy, FileSpreadsheet, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,28 +84,17 @@ export const InviteCodeControls = ({
         </div>
 
         <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <Label className="text-white">
-              Participant Names (One per line)
-              <Button
-                variant="ghost"
-                className="ml-2 text-xs text-white/70 hover:text-white"
-                onClick={() => document.getElementById('file-upload')?.click()}
-              >
-                <Upload className="w-4 h-4 mr-1" />
-                Import from file
-              </Button>
-            </Label>
+          <Label className="text-white">
+            Participant Names (One per line)
             <Button
               variant="ghost"
-              size="sm"
-              className="text-white/70 hover:text-white"
-              onClick={() => onParticipantNamesChange('')}
+              className="ml-2 text-xs text-white/70 hover:text-white"
+              onClick={() => document.getElementById('file-upload')?.click()}
             >
-              <X className="w-4 h-4 mr-1" />
-              Clear
+              <Upload className="w-4 h-4 mr-1" />
+              Import from file
             </Button>
-          </div>
+          </Label>
           <Input
             id="file-upload"
             type="file"
