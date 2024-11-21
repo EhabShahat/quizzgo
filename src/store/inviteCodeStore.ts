@@ -1,97 +1,65 @@
 import { create } from 'zustand';
 
-export interface InviteCode {
+interface InviteCode {
   code: string;
-  username: string;
-  participantName?: string;
   used: boolean;
+  username: string;
   createdAt: Date;
   usedAt?: Date;
+  participantName?: string;
 }
 
 interface InviteCodeStore {
   codes: InviteCode[];
-  currentCode: InviteCode | null;
   addCode: (code: string, username: string) => void;
   addCodes: (codes: InviteCode[]) => void;
+  removeCode: (code: string) => void;
   deleteCode: (code: string) => void;
   deleteAllCodes: () => void;
   isValidCode: (code: string) => boolean;
   markCodeAsUsed: (code: string) => void;
   getInviteCodeDetails: (code: string) => InviteCode | undefined;
-  setCurrentCode: (code: InviteCode) => void;
 }
 
 export const useInviteCodeStore = create<InviteCodeStore>((set, get) => ({
-  codes: [
-    { 
-      code: "ABC123", 
-      username: "Johannes", 
-      participantName: "Johannes", 
-      used: false,
-      createdAt: new Date()
-    },
-    { 
-      code: "DEF456", 
-      username: "Jennie", 
-      participantName: "Jennie", 
-      used: false,
-      createdAt: new Date()
-    },
-    { 
-      code: "GHI789", 
-      username: "Victoria", 
-      participantName: "Victoria", 
-      used: false,
-      createdAt: new Date()
-    },
-    { 
-      code: "JKL012", 
-      username: "Winner", 
-      participantName: "Winner", 
-      used: false,
-      createdAt: new Date()
-    },
-    { 
-      code: "MNO345", 
-      username: "iLNzeJ", 
-      participantName: "iLNzeJ", 
-      used: false,
-      createdAt: new Date()
-    }
-  ],
-  currentCode: null,
+  codes: [],
   addCode: (code, username) => 
-    set((state) => ({
+    set(state => ({
       codes: [...state.codes, { 
         code, 
-        username, 
         used: false, 
-        createdAt: new Date() 
+        username,
+        createdAt: new Date(),
+        participantName: username
       }]
     })),
   addCodes: (newCodes) => 
-    set((state) => ({
-      codes: [...state.codes, ...newCodes]
+    set(state => ({ 
+      codes: [...state.codes, ...newCodes] 
     })),
-  deleteCode: (codeToDelete) => 
-    set((state) => ({
-      codes: state.codes.filter(c => c.code !== codeToDelete)
+  removeCode: (code) =>
+    set(state => ({
+      codes: state.codes.filter(c => c.code !== code)
+    })),
+  deleteCode: (code) =>
+    set(state => ({
+      codes: state.codes.filter(c => c.code !== code)
     })),
   deleteAllCodes: () => 
     set({ codes: [] }),
   isValidCode: (code) => {
-    const foundCode = get().codes.find(c => c.code === code);
-    return !!foundCode;
+    const state = get();
+    const foundCode = state.codes.find(c => c.code === code);
+    return foundCode ? !foundCode.used : false;
   },
-  markCodeAsUsed: (code) => 
-    set((state) => ({
-      codes: state.codes.map(c => 
+  markCodeAsUsed: (code) =>
+    set(state => ({
+      codes: state.codes.map(c =>
         c.code === code ? { ...c, used: true, usedAt: new Date() } : c
       )
     })),
-  getInviteCodeDetails: (code) => 
-    get().codes.find(c => c.code === code),
-  setCurrentCode: (code) => 
-    set({ currentCode: code }),
+  getInviteCodeDetails: (code) => {
+    const state = get();
+    return state.codes.find(c => c.code === code);
+  },
 }));

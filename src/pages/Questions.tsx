@@ -1,10 +1,8 @@
+import { useState, useEffect } from "react";
 import { questions } from "@/data/questions";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useScoresStore } from "@/store/scoresStore";
-import { useInviteCodeStore } from "@/store/inviteCodeStore";
 
 const Questions = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -12,24 +10,12 @@ const Questions = () => {
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const navigate = useNavigate();
-  const { addScore } = useScoresStore();
-  const { currentCode } = useInviteCodeStore();
-  
   const currentQuestion = questions[currentQuestionIndex];
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length) {
       setShowScore(true);
-      // Save score to store
-      if (currentCode) {
-        addScore({
-          username: currentCode.username,
-          participantName: currentCode.participantName,
-          score,
-          outOf: questions.length
-        });
-      }
       // Redirect to scores page after showing the score for 5 seconds
       const timer = setTimeout(() => {
         navigate("/scores");
@@ -38,19 +24,23 @@ const Questions = () => {
     }
     
     if (!currentQuestion) return;
-
+    
+    const questionTimeLimit = currentQuestion.timeLimit;
+    setTimeLeft(questionTimeLimit);
+    
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
-        if (prev <= 1) {
-          setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-          return 10;
+        if (prev <= 0) {
+          clearInterval(timer);
+          setCurrentQuestionIndex(prev => prev + 1);
+          return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, navigate, score, addScore, currentCode]);
+  }, [currentQuestionIndex, currentQuestion, navigate]);
 
   if (showScore) {
     return <ScoreDisplay score={score} questions={questions} />;
