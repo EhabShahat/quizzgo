@@ -16,7 +16,7 @@ const InviteCodeForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isEnabled, startTime, endTime } = useQuizStore();
-  const { isValidCode, markCodeAsUsed } = useInviteCodeStore();
+  const { isValidCode, markCodeAsUsed, getInviteCodeDetails } = useInviteCodeStore();
 
   useEffect(() => {
     const storedTitle = localStorage.getItem('mainTitle');
@@ -37,8 +37,9 @@ const InviteCodeForm = () => {
     }
 
     if (isValidCode(inviteCode.trim())) {
+      const codeDetails = getInviteCodeDetails(inviteCode.trim());
       markCodeAsUsed(inviteCode.trim());
-      navigate("/questions");
+      navigate("/welcome", { state: { username: codeDetails?.username || "Guest" } });
       toast({
         title: "Success",
         description: "Welcome to the quiz!",

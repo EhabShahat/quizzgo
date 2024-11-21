@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Questions from "./pages/Questions";
 import AdminPanel from "./pages/AdminPanel";
+import WelcomeScreen from "./components/quiz/WelcomeScreen";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/welcome" element={<WelcomeScreen username="" />} />
           <Route path="/questions" element={<Questions />} />
           <Route path="/admin" element={<AdminPanel />} />
         </Routes>
