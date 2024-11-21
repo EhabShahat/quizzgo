@@ -1,5 +1,9 @@
 import { Progress } from "@/components/ui/progress";
-import { Trophy, Medal, Award, Star, Sparkles } from "lucide-react";
+import { Trophy, Medal, Award, Star, Sparkles, Lock } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
 
 interface ScoreDisplayProps {
   score: number;
@@ -7,10 +11,36 @@ interface ScoreDisplayProps {
 }
 
 export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
+  const [showAdminInput, setShowAdminInput] = useState(false);
+  const [adminPassword, setAdminPassword] = useState("");
+  const { toast } = useToast();
+  const navigate = useNavigate();
   const maxPossibleScore = questions.length * 1000;
   const percentage = (score / maxPossibleScore) * 100;
   const rank = percentage >= 80 ? "Amazing!" : percentage >= 60 ? "Great!" : "Good try!";
   const emoji = percentage >= 80 ? "🏆" : percentage >= 60 ? "🌟" : "👏";
+
+  const handleAdminAccess = () => {
+    if (!showAdminInput) {
+      setShowAdminInput(true);
+      return;
+    }
+
+    if (adminPassword === "admin123") {
+      navigate("/admin");
+      toast({
+        title: "Success",
+        description: "Welcome to admin panel",
+      });
+    } else {
+      toast({
+        title: "Access Denied",
+        description: "Invalid admin credentials",
+        variant: "destructive",
+      });
+    }
+    setAdminPassword("");
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
@@ -72,6 +102,28 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Admin Access Section */}
+        <div className="mt-8 flex flex-col items-center gap-4">
+          {showAdminInput && (
+            <Input
+              type="password"
+              value={adminPassword}
+              onChange={(e) => setAdminPassword(e.target.value)}
+              placeholder="Enter admin password"
+              className="max-w-[200px] bg-white/5 border-white/10 text-white placeholder:text-white/50"
+              autoFocus
+            />
+          )}
+          <button 
+            className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors animate-fadeIn"
+            style={{ animationDelay: "0.4s" }}
+            onClick={handleAdminAccess}
+          >
+            <Lock className="w-4 h-4" />
+            Admin Access
+          </button>
         </div>
       </div>
     </div>
