@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ArrowRight, Lock } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { useNavigate } from "react-router-dom";
@@ -11,10 +11,19 @@ const InviteCodeForm = () => {
   const [inviteCode, setInviteCode] = useState("");
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
+  const [mainTitle, setMainTitle] = useState("Quiz Challenge");
+  const [logoUrl, setLogoUrl] = useState("/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
   const { toast } = useToast();
   const navigate = useNavigate();
   const { isEnabled, startTime, endTime } = useQuizStore();
   const { isValidCode, markCodeAsUsed } = useInviteCodeStore();
+
+  useEffect(() => {
+    const storedTitle = localStorage.getItem('mainTitle');
+    const storedLogoUrl = localStorage.getItem('logoUrl');
+    if (storedTitle) setMainTitle(storedTitle);
+    if (storedLogoUrl) setLogoUrl(storedLogoUrl);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,12 +73,12 @@ const InviteCodeForm = () => {
   return (
     <div className="glass-card p-8 w-full max-w-md mx-auto">
       <img 
-        src="/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png" 
+        src={logoUrl}
         alt="Church Logo" 
         className="w-40 h-40 mx-auto mb-6 rounded-full shadow-lg"
       />
       <h1 className="text-3xl font-bold text-white text-center mb-2">
-        Quiz Challenge
+        {mainTitle}
       </h1>
       <p className="text-white/70 text-center mb-8">
         Enter your invite code to begin
