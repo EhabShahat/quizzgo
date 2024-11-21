@@ -4,6 +4,7 @@ import { InviteCodeItem } from "./InviteCodeItem";
 import { InviteCodeControls } from "./InviteCodeControls";
 import { InviteCodesDashboard } from "./InviteCodesDashboard";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
+import type { InviteCode } from "@/types/database";
 
 const InviteCodes = () => {
   const [bulkAmount, setBulkAmount] = useState("10");
@@ -12,13 +13,13 @@ const InviteCodes = () => {
   const { toast } = useToast();
   const { codes, addCode, addCodes, deleteCode, deleteAllCodes } = useInviteCodeStore();
 
-  const generateCode = (prefix: string, participantName?: string) => {
+  const generateCode = (prefix: string, participantName?: string): InviteCode => {
     const random = Math.random().toString(36).substring(2, 8).toUpperCase();
     return {
       code: prefix ? `${prefix}-${random}` : random,
       used: false,
       username: participantName || "Guest",
-      participant_name: participantName,
+      participant_name: participantName || null,
       created_at: new Date().toISOString(),
       used_at: null
     };
@@ -176,7 +177,7 @@ const InviteCodes = () => {
                     used={code.used}
                     createdAt={new Date(code.created_at)}
                     usedAt={code.used_at ? new Date(code.used_at) : undefined}
-                    participantName={code.participant_name}
+                    participantName={code.participant_name || undefined}
                     onCopy={handleCopyCode}
                     onDelete={handleDeleteCode}
                   />

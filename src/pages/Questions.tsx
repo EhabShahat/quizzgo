@@ -13,7 +13,7 @@ const Questions = () => {
   const { currentCode } = useInviteCodeStore();
   const { addScore } = useScoresStore();
   const { shuffleQuestions } = useQuizStore();
-  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
+  const [questions, setQuestions] = useState<Question[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
@@ -21,21 +21,20 @@ const Questions = () => {
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
   useEffect(() => {
+    const convertedQuestions: Question[] = initialQuestions.map(q => ({
+      id: q.id,
+      text: q.text,
+      options: q.options,
+      correct_answer: q.correctAnswer,
+      time_limit: q.timeLimit,
+      type: q.type,
+      created_at: new Date().toISOString()
+    }));
+
     if (shuffleQuestions) {
-      const shuffledQuestions = [...initialQuestions].map(q => ({
-        ...q,
-        correct_answer: q.correctAnswer,
-        time_limit: q.timeLimit,
-        created_at: new Date().toISOString()
-      })).sort(() => Math.random() - 0.5);
-      setQuestions(shuffledQuestions);
+      setQuestions([...convertedQuestions].sort(() => Math.random() - 0.5));
     } else {
-      setQuestions(initialQuestions.map(q => ({
-        ...q,
-        correct_answer: q.correctAnswer,
-        time_limit: q.timeLimit,
-        created_at: new Date().toISOString()
-      })));
+      setQuestions(convertedQuestions);
     }
   }, [shuffleQuestions]);
 
