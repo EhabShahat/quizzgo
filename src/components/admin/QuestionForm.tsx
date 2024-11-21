@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Plus, Save, RefreshCw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Slider } from "@/components/ui/slider";
 import type { Question } from "@/data/questions";
+import MultipleChoiceSection from "./question-form/MultipleChoiceSection";
+import TrueFalseSection from "./question-form/TrueFalseSection";
 
 interface QuestionFormProps {
   onSubmit: (question: {
@@ -82,6 +82,13 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
     if (onCancelEdit) onCancelEdit();
   };
 
+  const handleTimeLimitChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    if (value >= 5 && value <= 30) {
+      setTimeLimit(value);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="glass-card p-6 space-y-6">
       <h2 className="text-2xl font-bold text-white">
@@ -110,57 +117,34 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
           />
 
           <div className="space-y-2">
-            <Label htmlFor="timeLimit" className="text-white">Time Limit: {timeLimit} seconds</Label>
-            <Slider
+            <Label htmlFor="timeLimit" className="text-white">Time Limit (5-30 seconds)</Label>
+            <Input
               id="timeLimit"
+              type="number"
               min={5}
               max={30}
-              step={5}
-              value={[timeLimit]}
-              onValueChange={(value) => setTimeLimit(value[0])}
-              className="w-full"
+              value={timeLimit}
+              onChange={handleTimeLimitChange}
+              className="bg-white/5 border-white/10 text-white w-32"
+              required
             />
           </div>
         </div>
 
         <TabsContent value="multiple-choice">
-          <RadioGroup value={correctAnswer} onValueChange={setCorrectAnswer}>
-            {options.map((option, index) => (
-              <div key={index} className="flex items-center space-x-4">
-                <div className="flex-1 space-y-2">
-                  <Label htmlFor={`option${index + 1}`} className="text-white">
-                    Option {index + 1}
-                  </Label>
-                  <Input
-                    id={`option${index + 1}`}
-                    value={option}
-                    onChange={(e) => handleOptionChange(index, e.target.value)}
-                    placeholder={`Enter option ${index + 1}`}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-white/50"
-                    required
-                  />
-                </div>
-                <RadioGroupItem
-                  value={index.toString()}
-                  id={`radio${index}`}
-                  className="mt-6 border-white/50 text-white"
-                />
-              </div>
-            ))}
-          </RadioGroup>
+          <MultipleChoiceSection
+            options={options}
+            correctAnswer={correctAnswer}
+            onOptionChange={handleOptionChange}
+            onCorrectAnswerChange={setCorrectAnswer}
+          />
         </TabsContent>
 
         <TabsContent value="true-false">
-          <RadioGroup value={trueFalseAnswer} onValueChange={setTrueFalseAnswer} className="mt-4">
-            <div className="flex items-center space-x-4">
-              <RadioGroupItem value="True" id="true" className="border-white/50 text-white" />
-              <Label htmlFor="true" className="text-white">True</Label>
-            </div>
-            <div className="flex items-center space-x-4">
-              <RadioGroupItem value="False" id="false" className="border-white/50 text-white" />
-              <Label htmlFor="false" className="text-white">False</Label>
-            </div>
-          </RadioGroup>
+          <TrueFalseSection
+            value={trueFalseAnswer}
+            onChange={setTrueFalseAnswer}
+          />
         </TabsContent>
       </Tabs>
 
