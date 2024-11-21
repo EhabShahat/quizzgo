@@ -10,11 +10,17 @@ import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useEffect } from "react";
 
 const ScoresList = () => {
-  const { codes } = useInviteCodeStore();
-  const { scores, updateScores } = useScoresStore();
+  const { codes, fetchCodes } = useInviteCodeStore();
+  const { scores, fetchScores } = useScoresStore();
   
+  useEffect(() => {
+    fetchCodes();
+    fetchScores();
+  }, [fetchCodes, fetchScores]);
+
   // Filter used codes and sort by score
   const usedCodes = codes
     .filter(code => code.used)
@@ -59,14 +65,14 @@ const ScoresList = () => {
                   <TableRow key={code.code} className="border-white/10">
                     <TableCell className="text-white font-medium">#{index + 1}</TableCell>
                     <TableCell className="text-white">
-                      {code.participantName || code.username}
+                      {code.participant_name || code.username}
                     </TableCell>
                     <TableCell className="text-white/70">{code.code}</TableCell>
                     <TableCell className="text-white text-right">
                       {scoreData?.score || 'N/A'}
                     </TableCell>
                     <TableCell className="text-white text-right">
-                      {scoreData ? `${scoreData.correctAnswers}/${scoreData.totalQuestions}` : 'N/A'}
+                      {scoreData ? `${scoreData.correct_answers}/${scoreData.total_questions}` : 'N/A'}
                     </TableCell>
                   </TableRow>
                 );

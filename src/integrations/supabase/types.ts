@@ -9,7 +9,93 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      invite_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          participant_name: string | null
+          used: boolean | null
+          used_at: string | null
+          username: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          participant_name?: string | null
+          used?: boolean | null
+          used_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          participant_name?: string | null
+          used?: boolean | null
+          used_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      questions: {
+        Row: {
+          correct_answer: string
+          created_at: string | null
+          id: number
+          options: string[]
+          text: string
+          time_limit: number
+          type: string
+        }
+        Insert: {
+          correct_answer: string
+          created_at?: string | null
+          id?: number
+          options: string[]
+          text: string
+          time_limit?: number
+          type?: string
+        }
+        Update: {
+          correct_answer?: string
+          created_at?: string | null
+          id?: number
+          options?: string[]
+          text?: string
+          time_limit?: number
+          type?: string
+        }
+        Relationships: []
+      }
+      scores: {
+        Row: {
+          correct_answers: number
+          created_at: string | null
+          id: number
+          participant_name: string | null
+          score: number
+          total_questions: number
+          username: string
+        }
+        Insert: {
+          correct_answers: number
+          created_at?: string | null
+          id?: number
+          participant_name?: string | null
+          score: number
+          total_questions: number
+          username: string
+        }
+        Update: {
+          correct_answers?: number
+          created_at?: string | null
+          id?: number
+          participant_name?: string | null
+          score?: number
+          total_questions?: number
+          username?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
