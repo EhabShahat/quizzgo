@@ -1,8 +1,9 @@
-import { Plus, Copy, FileSpreadsheet, Trash2 } from "lucide-react";
+import { Plus, Copy, FileSpreadsheet, Trash2, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import * as XLSX from 'xlsx';
 
 interface InviteCodeControlsProps {
   bulkAmount: string;
@@ -31,6 +32,28 @@ export const InviteCodeControls = ({
   onCopyAll,
   onExportExcel,
 }: InviteCodeControlsProps) => {
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    let names: string[] = [];
+
+    if (file.name.endsWith('.txt')) {
+      const text = await file.text();
+      names = text.split('\n').map(name => name.trim()).filter(Boolean);
+    } else if (file.name.endsWith('.xlsx')) {
+      const buffer = await file.arrayBuffer();
+      const workbook = XLSX.read(buffer);
+      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+      names = data.flat().map(name => String(name).trim()).filter(Boolean);
+    }
+
+    if (names.length > 0) {
+      onParticipantNamesChange(names.join('\n'));
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -61,7 +84,24 @@ export const InviteCodeControls = ({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-white">Participant Names (One per line)</Label>
+          <Label className="text-white">
+            Participant Names (One per line)
+            <Button
+              variant="ghost"
+              className="ml-2 text-xs text-white/70 hover:text-white"
+              onClick={() => document.getElementById('file-upload')?.click()}
+            >
+              <Upload className="w-4 h-4 mr-1" />
+              Import from file
+            </Button>
+          </Label>
+          <Input
+            id="file-upload"
+            type="file"
+            accept=".txt,.xlsx"
+            className="hidden"
+            onChange={handleFileUpload}
+          />
           <Textarea
             value={participantNames}
             onChange={(e) => onParticipantNamesChange(e.target.value)}
