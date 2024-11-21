@@ -37,7 +37,7 @@ const InviteCodes = () => {
     const amount = Math.min(Math.max(parseInt(bulkAmount) || 1, 1), 100);
     const names = participantNames.split('\n')
       .map(name => name.trim())
-      .filter(name);
+      .filter(Boolean);
 
     const newCodes = Array.from({ length: amount }, (_, index) => 
       generateCode(prefix, names[index])
