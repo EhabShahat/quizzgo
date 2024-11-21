@@ -1,16 +1,26 @@
-import { Trash2, Edit2 } from "lucide-react";
+import { Trash2, Edit2, Shuffle } from "lucide-react";
 import type { Question } from "@/data/questions";
 
 interface QuestionListProps {
   questions: Question[];
   onDelete: (id: number) => void;
   onEdit: (question: Question) => void;
+  onShuffle: () => void;
 }
 
-const QuestionList = ({ questions, onDelete, onEdit }: QuestionListProps) => {
+const QuestionList = ({ questions, onDelete, onEdit, onShuffle }: QuestionListProps) => {
   return (
     <div className="glass-card p-6 mt-6">
-      <h2 className="text-2xl font-bold text-white mb-4">Question List</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold text-white">Question List</h2>
+        <button
+          onClick={onShuffle}
+          className="flex items-center gap-2 px-4 py-2 bg-white/10 rounded-lg hover:bg-white/20 transition-colors text-white"
+        >
+          <Shuffle className="w-4 h-4" />
+          Shuffle Questions
+        </button>
+      </div>
       <div className="space-y-4">
         {questions.map((question) => (
           <div
