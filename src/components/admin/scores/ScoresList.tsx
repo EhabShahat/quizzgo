@@ -7,45 +7,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
-
-interface Score {
-  username: string;
-  score: number;
-  outOf: number;
-}
+import { useScoresStore } from "@/store/scoresStore";
 
 const ScoresList = () => {
   const { codes } = useInviteCodeStore();
+  const { scores } = useScoresStore();
   
-  // Placeholder data
-  const scores: Score[] = [
-    {
-      username: "Johannes",
-      score: 6895,
-      outOf: 7
-    },
-    {
-      username: "Jennie",
-      score: 5928,
-      outOf: 6
-    },
-    {
-      username: "Victoria",
-      score: 5848,
-      outOf: 6
-    },
-    {
-      username: "Winner",
-      score: 5500,
-      outOf: 6
-    },
-    {
-      username: "iLNzeJ",
-      score: 5200,
-      outOf: 6
-    }
-  ];
-
   // Filter used codes and sort by score
   const usedCodes = codes
     .filter(code => code.used)

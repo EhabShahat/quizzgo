@@ -6,21 +6,17 @@ import { Lock } from "lucide-react";
 import { PodiumStand } from "@/components/leaderboard/PodiumStand";
 import { RunnerUp } from "@/components/leaderboard/RunnerUp";
 import { Card } from "@/components/ui/card";
+import { useScoresStore } from "@/store/scoresStore";
 
 const ScorePage = () => {
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { scores } = useScoresStore();
 
-  // Placeholder data - replace with your actual data
-  const scores = [
-    { name: "Johannes", score: 6895, correctAnswers: 7, totalQuestions: 8 },
-    { name: "Jennie", score: 5928, correctAnswers: 6, totalQuestions: 8 },
-    { name: "Victoria", score: 5848, correctAnswers: 6, totalQuestions: 8 },
-    { name: "Winner", score: 5500, correctAnswers: 6, totalQuestions: 8 },
-    { name: "iLNzeJ", score: 5200, correctAnswers: 6, totalQuestions: 8 }
-  ];
+  // Sort scores by score value
+  const sortedScores = [...scores].sort((a, b) => b.score - a.score);
 
   const handleAdminAccess = () => {
     if (!showAdminInput) {
@@ -72,17 +68,41 @@ const ScorePage = () => {
         {/* Podium Section */}
         <div className="flex justify-center items-end gap-4 md:gap-8 mb-12">
           {/* 2nd Place */}
-          <div className="animate-fadeIn" style={{ animationDelay: "0.2s" }}>
-            <PodiumStand {...scores[1]} rank={2} />
-          </div>
+          {sortedScores[1] && (
+            <div className="animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+              <PodiumStand 
+                rank={2} 
+                name={sortedScores[1].participantName || sortedScores[1].username} 
+                score={sortedScores[1].score}
+                correctAnswers={sortedScores[1].outOf}
+                totalQuestions={8}
+              />
+            </div>
+          )}
           {/* 1st Place */}
-          <div className="animate-fadeIn" style={{ animationDelay: "0.1s" }}>
-            <PodiumStand {...scores[0]} rank={1} />
-          </div>
+          {sortedScores[0] && (
+            <div className="animate-fadeIn" style={{ animationDelay: "0.1s" }}>
+              <PodiumStand 
+                rank={1} 
+                name={sortedScores[0].participantName || sortedScores[0].username} 
+                score={sortedScores[0].score}
+                correctAnswers={sortedScores[0].outOf}
+                totalQuestions={8}
+              />
+            </div>
+          )}
           {/* 3rd Place */}
-          <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
-            <PodiumStand {...scores[2]} rank={3} />
-          </div>
+          {sortedScores[2] && (
+            <div className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
+              <PodiumStand 
+                rank={3} 
+                name={sortedScores[2].participantName || sortedScores[2].username} 
+                score={sortedScores[2].score}
+                correctAnswers={sortedScores[2].outOf}
+                totalQuestions={8}
+              />
+            </div>
+          )}
         </div>
 
         {/* Runners Up Section */}
@@ -90,13 +110,19 @@ const ScorePage = () => {
           <div className="bg-[#3C1278]/50 rounded-xl p-6">
             <h2 className="text-xl font-semibold text-white/90 mb-4">Runners Up</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {scores.slice(3).map((score, index) => (
+              {sortedScores.slice(3).map((score, index) => (
                 <div 
-                  key={index} 
+                  key={score.username} 
                   className="animate-fadeIn"
                   style={{ animationDelay: `${0.4 + index * 0.1}s` }}
                 >
-                  <RunnerUp {...score} rank={index + 4} />
+                  <RunnerUp 
+                    rank={index + 4}
+                    name={score.participantName || score.username}
+                    score={score.score}
+                    correctAnswers={score.outOf}
+                    totalQuestions={8}
+                  />
                 </div>
               ))}
             </div>
