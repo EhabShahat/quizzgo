@@ -115,9 +115,9 @@ const InviteCodes = () => {
     }
 
     const csvContent = "data:text/csv;charset=utf-8," + 
-      "Code,Participant Name,Status,Created At\n" +
+      "Code,Participant Name,Status,Created At,Used At\n" +
       codes.map(code => 
-        `${code.code},${code.participantName || ''},${code.used ? "Used" : "Available"},${code.createdAt.toLocaleString()}`
+        `${code.code},${code.participantName || ''},${code.used ? "Used" : "Available"},${code.createdAt.toLocaleString()},${code.usedAt ? code.usedAt.toLocaleString() : ''}`
       ).join("\n");
     
     const encodedUri = encodeURI(csvContent);
@@ -173,6 +173,7 @@ const InviteCodes = () => {
                     code={code.code}
                     used={code.used}
                     createdAt={code.createdAt}
+                    usedAt={code.usedAt}
                     participantName={code.participantName}
                     onCopy={handleCopyCode}
                     onDelete={handleDeleteCode}
