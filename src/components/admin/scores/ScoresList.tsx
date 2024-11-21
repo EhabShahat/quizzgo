@@ -10,25 +10,46 @@ import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const ScoresList = () => {
   const { codes, fetchCodes } = useInviteCodeStore();
-  const { scores, fetchScores } = useScoresStore();
-  
-  useEffect(() => {
-    fetchCodes();
-    fetchScores();
-  }, [fetchCodes, fetchScores]);
+
+  // Fetch scores directly from Supabase using React Query
+  const { data: scores = [] } = useQuery({
+    queryKey: ['scores'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('scores')
+        .select('*')
+        .order('score', { ascending: false });
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
+
+  // Fetch invite codes
+  const { data: inviteCodes = [] } = useQuery({
+    queryKey: ['invite-codes'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('InviteCode')
+        .select('*')
+        .eq('used', true);
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
   // Filter used codes and sort by score
-  const usedCodes = codes
-    .filter(code => code.used)
-    .sort((a, b) => {
-      const scoreA = scores.find(s => s.username === a.username)?.score || 0;
-      const scoreB = scores.find(s => s.username === b.username)?.score || 0;
-      return scoreB - scoreA;
-    });
+  const usedCodes = inviteCodes.sort((a, b) => {
+    const scoreA = scores.find(s => s.username === a.username)?.score || 0;
+    const scoreB = scores.find(s => s.username === b.username)?.score || 0;
+    return scoreB - scoreA;
+  });
 
   return (
     <div className="glass-card p-6">
@@ -69,7 +90,7 @@ const ScoresList = () => {
                     </TableCell>
                     <TableCell className="text-white/70">{code.code}</TableCell>
                     <TableCell className="text-white text-right">
-                      {scoreData?.score || 'N/A'}
+                      {scoreData?.score ?? 'N/A'}
                     </TableCell>
                     <TableCell className="text-white text-right">
                       {scoreData ? `${scoreData.correct_answers}/${scoreData.total_questions}` : 'N/A'}
