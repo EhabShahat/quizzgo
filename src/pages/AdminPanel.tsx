@@ -106,8 +106,8 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#1a1c2e] to-[#2d1f47] p-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-[#1a1c2e] to-[#2d1f47] p-4 flex flex-col">
+      <div className="max-w-4xl mx-auto flex-grow">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-white">Admin Panel</h1>
           <div className="flex gap-2">
@@ -189,6 +189,11 @@ const AdminPanel = () => {
           </TabsContent>
         </Tabs>
       </div>
+      
+      {/* New Footer */}
+      <footer className="text-center text-white/70 text-sm mt-8 py-4">
+        Made w/ ♥️, st. Mina and po. Cyril
+      </footer>
     </div>
   );
 };
