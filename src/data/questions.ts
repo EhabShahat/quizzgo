@@ -4,6 +4,6 @@ export interface Question {
   options: string[];
   correct_answer: string;
   time_limit: number;
-  type: string;
+  type: 'multiple-choice' | 'true-false';
   created_at?: string;
 }
