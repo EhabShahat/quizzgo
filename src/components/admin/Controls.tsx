@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useQuizStore } from "@/store/quizStore";
-import { format } from "date-fns";
 import { toast } from "sonner";
 import { Save, Lock, Image } from "lucide-react";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { QuizStatus } from "./controls/QuizStatus";
+import { QuizToggles } from "./controls/QuizToggles";
 
 export const Controls = () => {
   const [startDateTime, setStartDateTime] = useState<string>("");
   const [endDateTime, setEndDateTime] = useState<string>("");
-  const { isEnabled, startTime: quizStartTime, endTime: quizEndTime, setEnabled, setStartTime, setEndTime } = useQuizStore();
+  const { setStartTime, setEndTime } = useQuizStore();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -62,8 +62,6 @@ export const Controls = () => {
   };
 
   const handleMainScreenUpdate = () => {
-    // Here you would typically make an API call to update these values
-    // For now, we'll just show a success message
     localStorage.setItem('mainTitle', mainTitle);
     localStorage.setItem('logoUrl', logoUrl);
     toast.success("Main screen settings updated successfully");
@@ -71,38 +69,8 @@ export const Controls = () => {
 
   return (
     <div className="glass-card p-6 space-y-8">
-      <div className="bg-white/5 rounded-lg p-4 space-y-2">
-        <h3 className="text-lg font-semibold text-white">Current Status</h3>
-        <p className="text-white/70">
-          Start Time: {quizStartTime ? format(quizStartTime, "PPP 'at' p") : 'Not set'}
-        </p>
-        <p className="text-white/70">
-          End Time: {quizEndTime ? format(quizEndTime, "PPP 'at' p") : 'Not set'}
-        </p>
-        <p className="text-white/70">
-          Status: <span className={isEnabled ? "text-green-400" : "text-red-400"}>
-            {isEnabled ? 'Active' : 'Inactive'}
-          </span>
-        </p>
-      </div>
-
-      <div className="flex items-center justify-center mb-6">
-        <div className="flex items-center space-x-2">
-          <Switch
-            checked={isEnabled}
-            onCheckedChange={(checked) => {
-              setEnabled(checked);
-              if (checked) {
-                toast.success("Quiz is now active");
-              } else {
-                toast.info("Quiz is now inactive");
-              }
-            }}
-            className="data-[state=checked]:bg-purple-500"
-          />
-          <Label className="text-white">Active</Label>
-        </div>
-      </div>
+      <QuizStatus />
+      <QuizToggles />
       
       <div className="space-y-6">
         <div className="space-y-4">

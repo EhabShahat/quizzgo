@@ -1,21 +1,35 @@
 import { useState, useEffect } from "react";
-import { questions } from "@/data/questions";
+import { questions as initialQuestions } from "@/data/questions";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
 import { useNavigate } from "react-router-dom";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
+import { useQuizStore } from "@/store/quizStore";
 
 const Questions = () => {
+  const navigate = useNavigate();
+  const { currentCode } = useInviteCodeStore();
+  const { addScore } = useScoresStore();
+  const { shuffleQuestions } = useQuizStore();
+  const [questions, setQuestions] = useState(initialQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [timeLeft, setTimeLeft] = useState(10);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
-  const navigate = useNavigate();
-  const currentQuestion = questions[currentQuestionIndex];
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
-  const { currentCode } = useInviteCodeStore();
-  const { addScore } = useScoresStore();
+
+  useEffect(() => {
+    if (shuffleQuestions) {
+      const shuffledQuestions = [...initialQuestions]
+        .sort(() => Math.random() - 0.5);
+      setQuestions(shuffledQuestions);
+    } else {
+      setQuestions(initialQuestions);
+    }
+  }, [shuffleQuestions]);
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   useEffect(() => {
     if (currentQuestionIndex >= questions.length) {
