@@ -10,7 +10,6 @@ import { format } from "date-fns";
 
 interface InviteCodeItemProps {
   code: string;
-  participantName: string;
   used: boolean;
   createdAt: Date;
   onCopy: (code: string) => void;
@@ -19,7 +18,6 @@ interface InviteCodeItemProps {
 
 export const InviteCodeItem = ({
   code,
-  participantName,
   used,
   createdAt,
   onCopy,
@@ -28,10 +26,7 @@ export const InviteCodeItem = ({
   return (
     <div className="bg-white/5 rounded-lg p-3 flex items-center justify-between group hover:bg-white/10 transition-colors">
       <div className="flex flex-col gap-1">
-        <div className="flex items-center gap-2">
-          <span className="text-white/80">{code}</span>
-          <span className="text-sm text-purple-400">({participantName})</span>
-        </div>
+        <span className="text-white/80">{code}</span>
         <span className="text-xs text-white/50">
           Created: {format(createdAt, "MMM d, yyyy 'at' h:mm a")}
         </span>

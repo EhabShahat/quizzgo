@@ -14,11 +14,6 @@ const InviteCodeForm = () => {
   const navigate = useNavigate();
   const { isEnabled, startTime, endTime } = useQuizStore();
 
-  // This would typically come from your backend
-  const mockInviteCodes = [
-    { code: "qwe123", participantName: "John Doe" }
-  ];
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inviteCode.trim()) {
@@ -30,12 +25,7 @@ const InviteCodeForm = () => {
       return;
     }
 
-    const foundCode = mockInviteCodes.find(code => code.code === inviteCode.trim());
-    if (foundCode) {
-      toast({
-        title: "Welcome!",
-        description: `Welcome, ${foundCode.participantName}! Good luck with your quiz.`,
-      });
+    if (inviteCode.trim() === "qwe123") {
       navigate("/questions");
     } else {
       toast({

@@ -6,10 +6,8 @@ import { Label } from "@/components/ui/label";
 interface InviteCodeControlsProps {
   bulkAmount: string;
   prefix: string;
-  participantName: string;
   onBulkAmountChange: (value: string) => void;
   onPrefixChange: (value: string) => void;
-  onParticipantNameChange: (value: string) => void;
   onGenerateSingle: () => void;
   onGenerateBulk: () => void;
   onDeleteAll: () => void;
@@ -20,10 +18,8 @@ interface InviteCodeControlsProps {
 export const InviteCodeControls = ({
   bulkAmount,
   prefix,
-  participantName,
   onBulkAmountChange,
   onPrefixChange,
-  onParticipantNameChange,
   onGenerateSingle,
   onGenerateBulk,
   onDeleteAll,
@@ -35,17 +31,6 @@ export const InviteCodeControls = ({
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Generate Codes</h3>
         
-        <div className="space-y-2">
-          <Label className="text-white">Participant Name</Label>
-          <Input
-            type="text"
-            value={participantName}
-            onChange={(e) => onParticipantNameChange(e.target.value)}
-            className="bg-white/5 border-white/10 text-white"
-            placeholder="Enter participant name"
-          />
-        </div>
-
         <div className="space-y-2">
           <Label className="text-white">Bulk Generation Amount (1-100)</Label>
           <Input
