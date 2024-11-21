@@ -1,5 +1,5 @@
 import { Progress } from "@/components/ui/progress";
-import { Trophy, Medal, Award, Star, Sparkles, Lock } from "lucide-react";
+import { Trophy, Medal, Award, Star, Sparkles, Lock, BarChart2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -40,6 +40,14 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
       });
     }
     setAdminPassword("");
+  };
+
+  const handleViewScores = () => {
+    navigate("/scores");
+    toast({
+      title: "Navigating to Scores",
+      description: "Check out how others performed!",
+    });
   };
 
   return (
@@ -101,6 +109,16 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
                 </div>
               </div>
             </div>
+
+            {/* View Scores Button */}
+            <button
+              onClick={handleViewScores}
+              className="mt-8 w-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 animate-fadeIn"
+              style={{ animationDelay: "0.7s" }}
+            >
+              <BarChart2 className="w-6 h-6" />
+              View All Scores
+            </button>
           </div>
         </div>
 
