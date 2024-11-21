@@ -23,9 +23,9 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
   ];
 
   const cards = [
-    { title: "Total", value: totalCodes, bgColor: "bg-purple-50", textColor: "text-purple-600" },
-    { title: "Available", value: availableCodes, bgColor: "bg-green-50", textColor: "text-green-600" },
-    { title: "Used", value: usedCodes, bgColor: "bg-red-50", textColor: "text-red-600" },
+    { title: "Total", value: totalCodes, bgColor: "bg-card", textColor: "text-purple-400", icon: "▲" },
+    { title: "Available", value: availableCodes, bgColor: "bg-card", textColor: "text-green-400", icon: "●" },
+    { title: "Used", value: usedCodes, bgColor: "bg-card", textColor: "text-orange-400", icon: "■" },
   ];
 
   return (
@@ -33,9 +33,10 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
       <h3 className="text-xl font-semibold text-white">Usage Statistics</h3>
       <div className="grid grid-cols-3 gap-4">
         {cards.map((card, index) => (
-          <Card key={index} className={`${card.bgColor} border-none shadow-sm`}>
+          <Card key={index} className={`${card.bgColor} border-white/10 backdrop-blur-sm transition-all duration-300 hover:scale-105`}>
             <CardHeader className="pb-2">
-              <CardTitle className={`text-sm font-medium ${card.textColor}`}>
+              <CardTitle className={`text-sm font-medium flex items-center gap-2 ${card.textColor}`}>
+                <span>{card.icon}</span>
                 {card.title}
               </CardTitle>
             </CardHeader>
@@ -49,7 +50,7 @@ export const InviteCodesDashboard = ({ codes }: InviteCodesDashboardProps) => {
       </div>
 
       {totalCodes > 0 && (
-        <Card className="bg-white/5">
+        <Card className="bg-card border-white/10 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-white">Usage</CardTitle>
           </CardHeader>
