@@ -1,8 +1,9 @@
 import InviteCodeForm from "@/components/InviteCodeForm";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 relative overflow-hidden">
       {/* Confetti Animation */}
       {[...Array(30)].map((_, i) => (
         <div
@@ -20,7 +21,10 @@ const Index = () => {
           }}
         />
       ))}
-      <InviteCodeForm />
+      <div className="flex-grow flex items-center justify-center">
+        <InviteCodeForm />
+      </div>
+      <Footer />
     </div>
   );
 };

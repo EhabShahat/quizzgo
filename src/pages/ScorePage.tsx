@@ -10,6 +10,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import Footer from "@/components/Footer";
 
 const ScorePage = () => {
   const [showAdminInput, setShowAdminInput] = useState(false);
@@ -55,51 +56,60 @@ const ScorePage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex items-center justify-center">
-        <Card className="max-w-md w-full bg-white/5 border-white/10">
-          <Alert className="bg-transparent border-white/10">
-            <AlertCircle className="h-4 w-4 text-white" />
-            <AlertDescription className="text-white">
-              Loading scores...
-            </AlertDescription>
-          </Alert>
-        </Card>
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
+        <div className="flex-grow flex items-center justify-center">
+          <Card className="max-w-md w-full bg-white/5 border-white/10">
+            <Alert className="bg-transparent border-white/10">
+              <AlertCircle className="h-4 w-4 text-white" />
+              <AlertDescription className="text-white">
+                Loading scores...
+              </AlertDescription>
+            </Alert>
+          </Card>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex items-center justify-center">
-        <Card className="max-w-md w-full bg-white/5 border-white/10">
-          <Alert className="bg-transparent border-white/10">
-            <AlertCircle className="h-4 w-4 text-white" />
-            <AlertDescription className="text-white">
-              Error loading scores. Please try again.
-            </AlertDescription>
-          </Alert>
-        </Card>
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
+        <div className="flex-grow flex items-center justify-center">
+          <Card className="max-w-md w-full bg-white/5 border-white/10">
+            <Alert className="bg-transparent border-white/10">
+              <AlertCircle className="h-4 w-4 text-white" />
+              <AlertDescription className="text-white">
+                Error loading scores. Please try again.
+              </AlertDescription>
+            </Alert>
+          </Card>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   if (scores.length === 0) {
     return (
-      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex items-center justify-center">
-        <Card className="max-w-md w-full bg-white/5 border-white/10">
-          <Alert className="bg-transparent border-white/10">
-            <AlertCircle className="h-4 w-4 text-white" />
-            <AlertDescription className="text-white">
-              Waiting for quiz participants to complete their sessions...
-            </AlertDescription>
-          </Alert>
-        </Card>
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
+        <div className="flex-grow flex items-center justify-center">
+          <Card className="max-w-md w-full bg-white/5 border-white/10">
+            <Alert className="bg-transparent border-white/10">
+              <AlertCircle className="h-4 w-4 text-white" />
+              <AlertDescription className="text-white">
+                Waiting for quiz participants to complete their sessions...
+              </AlertDescription>
+            </Alert>
+          </Card>
+        </div>
+        <Footer />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden">
+    <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex flex-col">
       {[...Array(30)].map((_, i) => (
         <div
           key={i}
@@ -117,7 +127,8 @@ const ScorePage = () => {
         />
       ))}
 
-      <Card className="max-w-4xl mx-auto space-y-8 bg-transparent border-none shadow-none">
+      <div className="flex-grow">
+        <Card className="max-w-4xl mx-auto space-y-8 bg-transparent border-none shadow-none">
         <h1 className="text-4xl md:text-5xl font-bold text-center text-white mb-12 animate-fadeIn">
           Winners
         </h1>
@@ -207,7 +218,9 @@ const ScorePage = () => {
             Admin Access
           </button>
         </div>
-      </Card>
+        </Card>
+      </div>
+      <Footer />
     </div>
   );
 };
