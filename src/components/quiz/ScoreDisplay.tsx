@@ -1,9 +1,11 @@
 import { Progress } from "@/components/ui/progress";
 import { Trophy, Medal, Award, Star, Sparkles, Lock, BarChart2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
+import { useInviteCodeStore } from "@/store/inviteCodeStore";
 
 interface ScoreDisplayProps {
   score: number;
@@ -15,10 +17,48 @@ export const ScoreDisplay = ({ score, questions }: ScoreDisplayProps) => {
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { currentCode } = useInviteCodeStore();
   const maxPossibleScore = questions.length * 1000;
   const percentage = (score / maxPossibleScore) * 100;
   const rank = percentage >= 80 ? "Amazing!" : percentage >= 60 ? "Great!" : "Good try!";
   const emoji = percentage >= 80 ? "🏆" : percentage >= 60 ? "🌟" : "👏";
+
+  useEffect(() => {
+    const saveScore = async () => {
+      if (!currentCode?.username) {
+        console.error('No username found');
+        return;
+      }
+
+      try {
+        const { error } = await supabase
+          .from('scores')
+          .insert([{
+            username: currentCode.username,
+            participant_name: currentCode.participant_name,
+            score: score,
+            correct_answers: Math.round(score / 1000), // Each correct answer is worth 1000 points
+            total_questions: questions.length
+          }]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Score saved",
+          description: "Your score has been recorded successfully!",
+        });
+      } catch (error) {
+        console.error('Error saving score:', error);
+        toast({
+          title: "Error",
+          description: "Failed to save your score. Please try again.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    saveScore();
+  }, [score, questions.length, currentCode, toast]);
 
   const handleAdminAccess = () => {
     if (!showAdminInput) {
