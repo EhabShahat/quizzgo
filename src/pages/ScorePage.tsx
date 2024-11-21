@@ -7,6 +7,8 @@ import { PodiumStand } from "@/components/leaderboard/PodiumStand";
 import { RunnerUp } from "@/components/leaderboard/RunnerUp";
 import { Card } from "@/components/ui/card";
 import { useScoresStore } from "@/store/scoresStore";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const ScorePage = () => {
   const [showAdminInput, setShowAdminInput] = useState(false);
@@ -36,6 +38,21 @@ const ScorePage = () => {
     }
     setAdminPassword("");
   };
+
+  if (scores.length === 0) {
+    return (
+      <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden flex items-center justify-center">
+        <Card className="max-w-md w-full bg-white/5 border-white/10">
+          <Alert className="bg-transparent border-white/10">
+            <AlertCircle className="h-4 w-4 text-white" />
+            <AlertDescription className="text-white">
+              Waiting for quiz participants to complete their sessions...
+            </AlertDescription>
+          </Alert>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#4C1D95] p-4 md:p-8 relative overflow-hidden">

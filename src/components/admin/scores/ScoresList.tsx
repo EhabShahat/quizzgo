@@ -8,6 +8,8 @@ import {
 } from "@/components/ui/table";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ScoresList = () => {
   const { codes } = useInviteCodeStore();
@@ -31,39 +33,48 @@ const ScoresList = () => {
         <h2 className="text-2xl font-bold text-white">Scores List</h2>
       </div>
 
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-white/10">
-              <TableHead className="text-white">Rank</TableHead>
-              <TableHead className="text-white">Participant Name</TableHead>
-              <TableHead className="text-white">Invite Code</TableHead>
-              <TableHead className="text-white text-right">Score</TableHead>
-              <TableHead className="text-white text-right">Questions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {usedCodes.map((code, index) => {
-              const scoreData = scores.find(s => s.username === code.username);
-              return (
-                <TableRow key={code.code} className="border-white/10">
-                  <TableCell className="text-white font-medium">#{index + 1}</TableCell>
-                  <TableCell className="text-white">
-                    {code.participantName || code.username}
-                  </TableCell>
-                  <TableCell className="text-white/70">{code.code}</TableCell>
-                  <TableCell className="text-white text-right">
-                    {scoreData?.score || 'N/A'}
-                  </TableCell>
-                  <TableCell className="text-white text-right">
-                    {scoreData ? `${scoreData.correctAnswers}/${scoreData.totalQuestions}` : 'N/A'}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </div>
+      {usedCodes.length === 0 ? (
+        <Alert className="bg-white/5 border-white/10 text-white">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            Waiting for participants to complete the quiz...
+          </AlertDescription>
+        </Alert>
+      ) : (
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-white/10">
+                <TableHead className="text-white">Rank</TableHead>
+                <TableHead className="text-white">Participant Name</TableHead>
+                <TableHead className="text-white">Invite Code</TableHead>
+                <TableHead className="text-white text-right">Score</TableHead>
+                <TableHead className="text-white text-right">Questions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {usedCodes.map((code, index) => {
+                const scoreData = scores.find(s => s.username === code.username);
+                return (
+                  <TableRow key={code.code} className="border-white/10">
+                    <TableCell className="text-white font-medium">#{index + 1}</TableCell>
+                    <TableCell className="text-white">
+                      {code.participantName || code.username}
+                    </TableCell>
+                    <TableCell className="text-white/70">{code.code}</TableCell>
+                    <TableCell className="text-white text-right">
+                      {scoreData?.score || 'N/A'}
+                    </TableCell>
+                    <TableCell className="text-white text-right">
+                      {scoreData ? `${scoreData.correctAnswers}/${scoreData.totalQuestions}` : 'N/A'}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      )}
     </div>
   );
 };
