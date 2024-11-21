@@ -11,6 +11,7 @@ import ScoresList from "@/components/admin/scores/ScoresList";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { useInviteCodeStore } from "@/store/inviteCodeStore";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const AdminPanel = () => {
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const queryClient = useQueryClient();
+  const { fetchCodes } = useInviteCodeStore();
 
   const handleLogout = () => {
     navigate("/");
@@ -29,7 +31,6 @@ const AdminPanel = () => {
 
   const handleRefreshData = async () => {
     try {
-      // Refetch all queries
       await queryClient.refetchQueries();
       toast({
         title: "Data refreshed",
@@ -41,6 +42,24 @@ const AdminPanel = () => {
         description: "Failed to refresh data. Please try again.",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleTabChange = async (value: string) => {
+    if (value === 'invites') {
+      try {
+        await fetchCodes();
+        toast({
+          title: "Success",
+          description: "Invite codes refreshed successfully",
+        });
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Failed to refresh invite codes",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -109,7 +128,7 @@ const AdminPanel = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="questions" className="space-y-6">
+        <Tabs defaultValue="questions" className="space-y-6" onValueChange={handleTabChange}>
           <div className="max-w-4xl mx-auto">
             <TabsList className="bg-white/5 border-b border-white/10 w-full justify-between rounded-none p-0">
               <TabsTrigger
