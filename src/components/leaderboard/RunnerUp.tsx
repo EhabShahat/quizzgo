@@ -1,5 +1,3 @@
-import { User } from "lucide-react";
-
 interface RunnerUpProps {
   rank: number;
   name: string;
@@ -10,20 +8,17 @@ interface RunnerUpProps {
 
 export const RunnerUp = ({ rank, name, score, correctAnswers, totalQuestions }: RunnerUpProps) => {
   return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 flex items-center gap-4 hover:bg-white/20 transition-all duration-300 transform hover:scale-102 hover:translate-x-1">
-      <div className="bg-purple-500/20 p-2 rounded-full">
-        <User className="w-6 h-6 text-purple-300" />
+    <div className="bg-[#3C1278]/30 backdrop-blur-sm rounded-xl p-4 flex items-center gap-4 hover:bg-[#3C1278]/50 transition-all duration-300">
+      <div className="w-10 h-10 rounded-full bg-[#3C1278] flex items-center justify-center text-white font-bold">
+        {rank}
       </div>
       <div className="flex-1">
         <div className="flex items-center justify-between">
           <h3 className="text-white font-medium">{name}</h3>
-          <span className="text-white/60 text-sm">#{rank}</span>
+          <span className="text-white/60 text-sm">{score}</span>
         </div>
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-white/80">{score} points</span>
-          <span className="text-white/60">
-            {correctAnswers}/{totalQuestions} correct
-          </span>
+        <div className="text-sm text-white/60">
+          {correctAnswers} out of {totalQuestions}
         </div>
       </div>
     </div>

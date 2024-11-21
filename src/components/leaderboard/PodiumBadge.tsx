@@ -1,5 +1,3 @@
-import { Trophy, Award } from "lucide-react";
-
 interface PodiumBadgeProps {
   rank: number;
   color: string;
@@ -8,14 +6,13 @@ interface PodiumBadgeProps {
 export const PodiumBadge = ({ rank, color }: PodiumBadgeProps) => {
   return (
     <div 
-      className={`${color} p-4 rounded-full shadow-lg transform transition-all duration-300 
-      hover:scale-110 hover:rotate-12 cursor-pointer`}
+      className={`${color} w-16 h-16 flex items-center justify-center text-3xl font-bold text-white
+      clip-path-pentagon transform transition-all duration-300 hover:scale-110`}
+      style={{
+        clipPath: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)"
+      }}
     >
-      {rank === 1 ? (
-        <Trophy className="w-8 h-8 text-white" />
-      ) : (
-        <Award className="w-8 h-8 text-white" />
-      )}
+      {rank}
     </div>
   );
 };
