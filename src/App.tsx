@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import Questions from "./pages/Questions";
 import AdminPanel from "./pages/AdminPanel";
 import WelcomeScreen from "./components/quiz/WelcomeScreen";
+import ScorePage from "./pages/ScorePage";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/welcome/:username" element={<WelcomeScreen />} />
           <Route path="/questions" element={<Questions />} />
           <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/scores" element={<ScorePage />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
