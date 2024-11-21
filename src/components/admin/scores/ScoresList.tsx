@@ -13,7 +13,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const ScoresList = () => {
   const { codes } = useInviteCodeStore();
-  const { scores, updateScores } = useScoresStore();
+  const { scores } = useScoresStore();
   
   // Filter used codes and sort by score
   const usedCodes = codes
