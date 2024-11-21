@@ -4,15 +4,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Image, Save } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export const MainScreenSettings = () => {
   const [mainTitle, setMainTitle] = useState("Quiz Challenge");
   const [logoUrl, setLogoUrl] = useState("/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
 
-  const handleMainScreenUpdate = () => {
-    localStorage.setItem('mainTitle', mainTitle);
-    localStorage.setItem('logoUrl', logoUrl);
-    toast.success("Main screen settings updated successfully");
+  const handleMainScreenUpdate = async () => {
+    try {
+      // Update localStorage
+      localStorage.setItem('mainTitle', mainTitle);
+      localStorage.setItem('logoUrl', logoUrl);
+
+      // Update Supabase
+      const { error } = await supabase
+        .from('quiz_settings')
+        .update({
+          main_title: mainTitle,
+          logo_url: logoUrl,
+        })
+        .eq('id', 1);
+
+      if (error) {
+        throw error;
+      }
+
+      toast.success("Main screen settings updated successfully");
+    } catch (error) {
+      console.error('Error updating main screen settings:', error);
+      toast.error("Failed to update main screen settings");
+    }
   };
 
   return (
