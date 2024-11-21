@@ -1,11 +1,9 @@
 import { Progress } from "@/components/ui/progress";
 import { Trophy, Medal, Award, Star, Sparkles, Lock, BarChart2 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
-import { useInviteCodeStore } from "@/store/inviteCodeStore";
 
 interface ScoreDisplayProps {
   score: number;
@@ -15,78 +13,20 @@ interface ScoreDisplayProps {
   inviteCode?: string;
 }
 
-export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions, inviteCode }: ScoreDisplayProps) => {
+export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions }: ScoreDisplayProps) => {
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { currentCode } = useInviteCodeStore();
   const maxPossibleScore = questions.length * 1000;
   const percentage = (score / maxPossibleScore) * 100;
   const rank = percentage >= 80 ? "Amazing!" : percentage >= 60 ? "Great!" : "Good try!";
   const emoji = percentage >= 80 ? "🏆" : percentage >= 60 ? "🌟" : "👏";
 
-  useEffect(() => {
-    const saveScore = async () => {
-      if (!inviteCode) {
-        toast({
-          title: "Error",
-          description: "No invite code found. Score cannot be saved.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const codeDetails = await supabase
-        .from('InviteCode')
-        .select('*')
-        .eq('code', inviteCode)
-        .single();
-
-      if (!codeDetails.data?.participant_name) {
-        toast({
-          title: "Error",
-          description: "No participant name found. Score cannot be saved.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      try {
-        const { error } = await supabase
-          .from('scores')
-          .insert([{
-            participant_name: codeDetails.data.participant_name,
-            score: score,
-            correct_answers: correctAnswers,
-            total_questions: totalQuestions
-          }]);
-
-        if (error) {
-          throw error;
-        }
-
-        toast({
-          title: "Score saved",
-          description: "Your score has been recorded successfully!",
-        });
-
-        // Redirect to scores page after a short delay
-        setTimeout(() => {
-          navigate("/scores");
-        }, 3000);
-      } catch (error) {
-        console.error('Error saving score:', error);
-        toast({
-          title: "Error",
-          description: "Failed to save your score. Please try again.",
-          variant: "destructive",
-        });
-      }
-    };
-
-    saveScore();
-  }, [score, correctAnswers, totalQuestions, inviteCode, toast, navigate]);
+  // Automatically redirect to scores page after a short delay
+  setTimeout(() => {
+    navigate("/scores");
+  }, 3000);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
