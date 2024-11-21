@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { useQuizStore } from "@/store/quizStore";
@@ -11,7 +11,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 const Questions = () => {
   const navigate = useNavigate();
-  const { currentCode } = useInviteCodeStore();
+  const { inviteCode } = useParams();
+  const { getInviteCodeDetails } = useInviteCodeStore();
   const { addScore } = useScoresStore();
   const { shuffleQuestions } = useQuizStore();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -47,8 +48,22 @@ const Questions = () => {
       
       // Save score to Supabase
       const saveScore = async () => {
-        if (!currentCode?.participant_name) {
-          console.error('No participant name found');
+        if (!inviteCode) {
+          toast({
+            title: "Error",
+            description: "No invite code found. Score cannot be saved.",
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const codeDetails = await getInviteCodeDetails(inviteCode);
+        if (!codeDetails?.participant_name) {
+          toast({
+            title: "Error",
+            description: "No participant name found. Score cannot be saved.",
+            variant: "destructive",
+          });
           return;
         }
 
@@ -56,7 +71,7 @@ const Questions = () => {
           const { error } = await supabase
             .from('scores')
             .insert([{
-              participant_name: currentCode.participant_name,
+              participant_name: codeDetails.participant_name,
               score: score,
               correct_answers: correctAnswers,
               total_questions: questions.length
@@ -98,7 +113,7 @@ const Questions = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [currentQuestionIndex, currentQuestion, score, currentCode, questions.length, correctAnswers, toast]);
+  }, [currentQuestionIndex, currentQuestion, score, inviteCode, questions.length, correctAnswers, toast, getInviteCodeDetails]);
 
   if (isLoading) {
     return (
@@ -114,6 +129,7 @@ const Questions = () => {
       questions={questions} 
       correctAnswers={correctAnswers} 
       totalQuestions={questions.length}
+      inviteCode={inviteCode}
     />;
   }
 

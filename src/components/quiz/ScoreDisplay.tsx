@@ -12,9 +12,10 @@ interface ScoreDisplayProps {
   questions: any[];
   correctAnswers: number;
   totalQuestions: number;
+  inviteCode?: string;
 }
 
-export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions }: ScoreDisplayProps) => {
+export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions, inviteCode }: ScoreDisplayProps) => {
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
   const { toast } = useToast();
@@ -27,7 +28,22 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
 
   useEffect(() => {
     const saveScore = async () => {
-      if (!currentCode?.participant_name) {
+      if (!inviteCode) {
+        toast({
+          title: "Error",
+          description: "No invite code found. Score cannot be saved.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const codeDetails = await supabase
+        .from('InviteCode')
+        .select('*')
+        .eq('code', inviteCode)
+        .single();
+
+      if (!codeDetails.data?.participant_name) {
         toast({
           title: "Error",
           description: "No participant name found. Score cannot be saved.",
@@ -40,7 +56,7 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
         const { error } = await supabase
           .from('scores')
           .insert([{
-            participant_name: currentCode.participant_name,
+            participant_name: codeDetails.data.participant_name,
             score: score,
             correct_answers: correctAnswers,
             total_questions: totalQuestions
@@ -70,7 +86,7 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
     };
 
     saveScore();
-  }, [score, correctAnswers, totalQuestions, currentCode, toast, navigate]);
+  }, [score, correctAnswers, totalQuestions, inviteCode, toast, navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">

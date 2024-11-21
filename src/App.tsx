@@ -19,8 +19,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/welcome/:username" element={<WelcomeScreen />} />
-          <Route path="/questions" element={<Questions />} />
+          <Route path="/welcome/:username/:inviteCode" element={<WelcomeScreen />} />
+          <Route path="/questions/:inviteCode" element={<Questions />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/scores" element={<ScorePage />} />
         </Routes>

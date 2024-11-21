@@ -4,15 +4,16 @@ import { useNavigate, useParams } from "react-router-dom";
 const WelcomeScreen = () => {
   const [countdown, setCountdown] = useState(5);
   const navigate = useNavigate();
-  const { username } = useParams();
+  const { username, inviteCode } = useParams();
   const decodedUsername = decodeURIComponent(username || "Guest");
+  const decodedInviteCode = decodeURIComponent(inviteCode || "");
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          navigate("/questions");
+          navigate(`/questions/${decodedInviteCode}`);
           return 0;
         }
         return prev - 1;
@@ -20,7 +21,7 @@ const WelcomeScreen = () => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [navigate]);
+  }, [navigate, decodedInviteCode]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#8B5CF6] to-[#6366F1]">
