@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { useScoresStore } from "@/store/scoresStore";
 import { useQuizStore } from "@/store/quizStore";
-import type { Question } from "@/data/questions";
+import type { Question } from "@/integrations/supabase/types";
 
 const Questions = () => {
   const navigate = useNavigate();
