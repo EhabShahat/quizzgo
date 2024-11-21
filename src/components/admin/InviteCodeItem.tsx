@@ -12,6 +12,7 @@ interface InviteCodeItemProps {
   code: string;
   used: boolean;
   createdAt: Date;
+  participantName?: string;
   onCopy: (code: string) => void;
   onDelete: (code: string) => void;
 }
@@ -20,13 +21,19 @@ export const InviteCodeItem = ({
   code,
   used,
   createdAt,
+  participantName,
   onCopy,
   onDelete,
 }: InviteCodeItemProps) => {
   return (
     <div className="bg-white/5 rounded-lg p-3 flex items-center justify-between group hover:bg-white/10 transition-colors">
       <div className="flex flex-col gap-1">
-        <span className="text-white/80">{code}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-white/80">{code}</span>
+          {participantName && (
+            <span className="text-sm text-purple-400">({participantName})</span>
+          )}
+        </div>
         <span className="text-xs text-white/50">
           Created: {format(createdAt, "MMM d, yyyy 'at' h:mm a")}
         </span>

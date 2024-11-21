@@ -2,12 +2,15 @@ import { Plus, Copy, FileSpreadsheet, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 interface InviteCodeControlsProps {
   bulkAmount: string;
   prefix: string;
+  participantNames: string;
   onBulkAmountChange: (value: string) => void;
   onPrefixChange: (value: string) => void;
+  onParticipantNamesChange: (value: string) => void;
   onGenerateSingle: () => void;
   onGenerateBulk: () => void;
   onDeleteAll: () => void;
@@ -18,8 +21,10 @@ interface InviteCodeControlsProps {
 export const InviteCodeControls = ({
   bulkAmount,
   prefix,
+  participantNames,
   onBulkAmountChange,
   onPrefixChange,
+  onParticipantNamesChange,
   onGenerateSingle,
   onGenerateBulk,
   onDeleteAll,
@@ -52,6 +57,16 @@ export const InviteCodeControls = ({
             onChange={(e) => onPrefixChange(e.target.value)}
             className="bg-white/5 border-white/10 text-white"
             placeholder="e.g., QUIZ2024"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-white">Participant Names (One per line)</Label>
+          <Textarea
+            value={participantNames}
+            onChange={(e) => onParticipantNamesChange(e.target.value)}
+            className="bg-white/5 border-white/10 text-white min-h-[100px]"
+            placeholder="John Doe&#10;Jane Smith&#10;Alex Johnson"
           />
         </div>
 
