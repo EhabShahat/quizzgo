@@ -4,6 +4,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Plus, Save, RefreshCw } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Slider } from "@/components/ui/slider";
 import type { Question } from "@/data/questions";
 
 interface QuestionFormProps {
@@ -24,11 +25,13 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
   const [correctAnswer, setCorrectAnswer] = useState("0");
   const [questionType, setQuestionType] = useState<'multiple-choice' | 'true-false'>('multiple-choice');
   const [trueFalseAnswer, setTrueFalseAnswer] = useState("True");
+  const [timeLimit, setTimeLimit] = useState(5);
 
   useEffect(() => {
     if (editingQuestion) {
       setQuestionText(editingQuestion.text);
       setQuestionType(editingQuestion.type);
+      setTimeLimit(editingQuestion.timeLimit);
       
       if (editingQuestion.type === 'multiple-choice') {
         setOptions(editingQuestion.options);
@@ -51,6 +54,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
     setCorrectAnswer("0");
     setTrueFalseAnswer("True");
     setQuestionType('multiple-choice');
+    setTimeLimit(5);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -61,7 +65,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
         text: questionText,
         options: ["True", "False"],
         correctAnswer: trueFalseAnswer,
-        timeLimit: 10,
+        timeLimit: timeLimit,
         type: 'true-false'
       });
     } else {
@@ -69,7 +73,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
         text: questionText,
         options: options,
         correctAnswer: options[parseInt(correctAnswer)],
-        timeLimit: 10,
+        timeLimit: timeLimit,
         type: 'multiple-choice'
       });
     }
@@ -94,7 +98,7 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
           </TabsTrigger>
         </TabsList>
 
-        <div className="space-y-2 mt-4">
+        <div className="space-y-4 mt-4">
           <Label htmlFor="question" className="text-white">Question</Label>
           <Input
             id="question"
@@ -104,6 +108,19 @@ const QuestionForm = ({ onSubmit, editingQuestion, onCancelEdit }: QuestionFormP
             className="bg-white/5 border-white/10 text-white placeholder:text-white/50"
             required
           />
+
+          <div className="space-y-2">
+            <Label htmlFor="timeLimit" className="text-white">Time Limit: {timeLimit} seconds</Label>
+            <Slider
+              id="timeLimit"
+              min={5}
+              max={30}
+              step={5}
+              value={[timeLimit]}
+              onValueChange={(value) => setTimeLimit(value[0])}
+              className="w-full"
+            />
+          </div>
         </div>
 
         <TabsContent value="multiple-choice">
