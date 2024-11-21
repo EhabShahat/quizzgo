@@ -82,15 +82,27 @@ const InviteCodeForm = () => {
             disabled={!isEnabled}
           />
           {!isEnabled && startTime && (
-            <p className="text-white/70 text-sm mt-2">
-              Quiz will run from {format(startTime, "PPP 'at' p")} 
-              {endTime && ` to ${format(endTime, "PPP 'at' p")}`}
-            </p>
+            <div className="mt-4 p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10">
+              <p className="text-xl font-semibold text-white text-center animate-pulse">
+                Quiz Schedule
+              </p>
+              <p className="text-lg text-white/90 text-center mt-2">
+                From: {format(startTime, "PPP 'at' p")}
+                {endTime && (
+                  <>
+                    <br />
+                    To: {format(endTime, "PPP 'at' p")}
+                  </>
+                )}
+              </p>
+            </div>
           )}
           {!isEnabled && !startTime && (
-            <p className="text-2xl font-semibold text-white text-center mt-4 animate-pulse">
-              We will open soon...
-            </p>
+            <div className="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-white/10">
+              <p className="text-3xl font-bold text-white text-center animate-pulse">
+                We will open soon...
+              </p>
+            </div>
           )}
         </div>
         
