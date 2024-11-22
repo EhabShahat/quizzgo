@@ -8,10 +8,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Controls } from "@/components/admin/Controls";
 import InviteCodes from "@/components/admin/InviteCodes";
 import ScoresList from "@/components/admin/scores/ScoresList";
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminPanel = () => {
   const navigate = useNavigate();
@@ -20,6 +21,40 @@ const AdminPanel = () => {
   const [editingQuestion, setEditingQuestion] = useState<Question | null>(null);
   const queryClient = useQueryClient();
   const { fetchCodes } = useInviteCodeStore();
+
+  // Fetch quiz settings
+  const { data: quizSettings } = useQuery({
+    queryKey: ['quiz-settings'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('quiz_settings')
+        .select('*')
+        .single();
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  // Fetch questions
+  const { data: fetchedQuestions } = useQuery({
+    queryKey: ['questions'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('questions')
+        .select('*');
+      
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  // Update local state when questions are fetched
+  useEffect(() => {
+    if (fetchedQuestions) {
+      setQuestions(fetchedQuestions);
+    }
+  }, [fetchedQuestions]);
 
   const handleLogout = () => {
     navigate("/");
@@ -69,6 +104,7 @@ const AdminPanel = () => {
       id: questions.length + 1,
     };
     setQuestions([...questions, newQuestion]);
+    queryClient.invalidateQueries({ queryKey: ['questions'] });
     toast({
       title: "Question added",
       description: "The question has been added successfully",
@@ -77,6 +113,7 @@ const AdminPanel = () => {
 
   const handleDeleteQuestion = (id: number) => {
     setQuestions(questions.filter((q) => q.id !== id));
+    queryClient.invalidateQueries({ queryKey: ['questions'] });
     toast({
       title: "Question deleted",
       description: "The question has been deleted successfully",
@@ -94,6 +131,7 @@ const AdminPanel = () => {
       );
       setQuestions(updatedQuestions);
       setEditingQuestion(null);
+      queryClient.invalidateQueries({ queryKey: ['questions'] });
       toast({
         title: "Question updated",
         description: "The question has been updated successfully",
@@ -103,7 +141,30 @@ const AdminPanel = () => {
 
   const handleQuestionsUpdate = (newQuestions: Question[]) => {
     setQuestions(newQuestions);
+    queryClient.invalidateQueries({ queryKey: ['questions'] });
   };
+
+  // Fetch all data when component mounts
+  useEffect(() => {
+    const fetchAllData = async () => {
+      try {
+        await Promise.all([
+          queryClient.prefetchQuery({ queryKey: ['quiz-settings'] }),
+          queryClient.prefetchQuery({ queryKey: ['questions'] }),
+          queryClient.prefetchQuery({ queryKey: ['scores'] }),
+          fetchCodes()
+        ]);
+      } catch (error) {
+        toast({
+          title: "Error loading data",
+          description: "Some data could not be loaded. Please try refreshing.",
+          variant: "destructive",
+        });
+      }
+    };
+
+    fetchAllData();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#1a1c2e] to-[#2d1f47] p-4 flex flex-col">
