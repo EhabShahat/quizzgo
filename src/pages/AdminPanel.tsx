@@ -52,7 +52,16 @@ const AdminPanel = () => {
   // Update local state when questions are fetched
   useEffect(() => {
     if (fetchedQuestions) {
-      setQuestions(fetchedQuestions);
+      // Map the database response to match our Question interface
+      const mappedQuestions: Question[] = fetchedQuestions.map(q => ({
+        id: q.id,
+        text: q.text,
+        options: q.options,
+        correct_answer: q.correct_answer,
+        timeLimit: q.time_limit,
+        type: q.type as 'multiple-choice' | 'true-false'
+      }));
+      setQuestions(mappedQuestions);
     }
   }, [fetchedQuestions]);
 
