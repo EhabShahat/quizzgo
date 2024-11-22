@@ -1,5 +1,4 @@
 import InviteCodeForm from "@/components/InviteCodeForm";
-import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -24,7 +23,6 @@ const Index = () => {
       <div className="flex-grow flex items-center justify-center">
         <InviteCodeForm />
       </div>
-      <Footer />
     </div>
   );
 };

@@ -2,14 +2,34 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import Questions from "./pages/Questions";
 import AdminPanel from "./pages/AdminPanel";
 import WelcomeScreen from "./components/quiz/WelcomeScreen";
 import ScorePage from "./pages/ScorePage";
+import Footer from "./components/Footer";
 
 const queryClient = new QueryClient();
+
+const AppContent = () => {
+  const location = useLocation();
+  const showFooter = !['/questions', '/admin'].includes(location.pathname) && 
+    !location.pathname.startsWith('/questions/');
+
+  return (
+    <>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/welcome/:username/:inviteCode" element={<WelcomeScreen />} />
+        <Route path="/questions/:inviteCode" element={<Questions />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/scores" element={<ScorePage />} />
+      </Routes>
+      {showFooter && <Footer />}
+    </>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -17,13 +37,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/welcome/:username/:inviteCode" element={<WelcomeScreen />} />
-          <Route path="/questions/:inviteCode" element={<Questions />} />
-          <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/scores" element={<ScorePage />} />
-        </Routes>
+        <AppContent />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
