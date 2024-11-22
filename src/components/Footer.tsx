@@ -3,7 +3,7 @@ import { Facebook, MessageCircle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="w-full text-center text-white/70 text-sm py-4 bg-black/20 flex flex-col items-center justify-center gap-2">
+    <footer className="fixed bottom-0 left-0 w-full text-center text-white/70 text-sm py-4 bg-black/20 flex flex-col items-center justify-center gap-2">
       <span>Made w/ ♥️, st. Mina and po. Cyril</span>
       <div className="flex items-center gap-2">
         <a
