@@ -76,10 +76,6 @@ const AdminPanel = () => {
     if (value === 'invites') {
       try {
         await fetchCodes();
-        toast({
-          title: "Success",
-          description: "Invite codes refreshed successfully",
-        });
       } catch (error) {
         toast({
           title: "Error",
