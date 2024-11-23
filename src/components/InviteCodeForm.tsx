@@ -6,12 +6,13 @@ import { Input } from "@/components/ui/input";
 import { useQuizStore } from "@/store/quizStore";
 import { useInviteCodeStore } from "@/store/inviteCodeStore";
 import { format } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
 
 const InviteCodeForm = () => {
   const [inviteCode, setInviteCode] = useState("");
   const [showAdminInput, setShowAdminInput] = useState(false);
   const [adminPassword, setAdminPassword] = useState("");
-  const [mainTitle, setMainTitle] = useState("Quiz Challenge");
+  const [mainTitle, setMainTitle] = useState("QuizGo");
   const [logoUrl, setLogoUrl] = useState("/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -19,10 +20,25 @@ const InviteCodeForm = () => {
   const { isValidCode, markCodeAsUsed, getInviteCodeDetails } = useInviteCodeStore();
 
   useEffect(() => {
-    const storedTitle = localStorage.getItem('mainTitle');
-    const storedLogoUrl = localStorage.getItem('logoUrl');
-    if (storedTitle) setMainTitle(storedTitle);
-    if (storedLogoUrl) setLogoUrl(storedLogoUrl);
+    const fetchSettings = async () => {
+      const { data, error } = await supabase
+        .from('quiz_settings')
+        .select('main_title, logo_url')
+        .eq('id', 1)
+        .single();
+
+      if (error) {
+        console.error('Error fetching settings:', error);
+        return;
+      }
+
+      if (data) {
+        setMainTitle(data.main_title || "QuizGo");
+        setLogoUrl(data.logo_url || "/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
+      }
+    };
+
+    fetchSettings();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,7 +102,7 @@ const InviteCodeForm = () => {
     <div className="glass-card p-8 w-full max-w-md mx-auto">
       <img 
         src={logoUrl}
-        alt="Church Logo" 
+        alt="Quiz Logo" 
         className="w-40 h-40 mx-auto mb-6 rounded-full shadow-lg"
       />
       <h1 className="text-3xl font-bold text-white text-center mb-2">

@@ -1,21 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Image, Save } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const MainScreenSettings = () => {
-  const [mainTitle, setMainTitle] = useState("Quiz Challenge");
+  const [mainTitle, setMainTitle] = useState("QuizGo");
   const [logoUrl, setLogoUrl] = useState("/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
+  const queryClient = useQueryClient();
+
+  // Fetch initial values
+  useEffect(() => {
+    const fetchSettings = async () => {
+      const { data, error } = await supabase
+        .from('quiz_settings')
+        .select('main_title, logo_url')
+        .eq('id', 1)
+        .single();
+
+      if (error) {
+        console.error('Error fetching settings:', error);
+        return;
+      }
+
+      if (data) {
+        setMainTitle(data.main_title || "QuizGo");
+        setLogoUrl(data.logo_url || "/lovable-uploads/93d9dacf-3f86-4876-8e06-1fe8ff282f71.png");
+      }
+    };
+
+    fetchSettings();
+  }, []);
 
   const handleMainScreenUpdate = async () => {
     try {
-      // Update localStorage
-      localStorage.setItem('mainTitle', mainTitle);
-      localStorage.setItem('logoUrl', logoUrl);
-
       // Update Supabase
       const { error } = await supabase
         .from('quiz_settings')
@@ -28,6 +49,13 @@ export const MainScreenSettings = () => {
       if (error) {
         throw error;
       }
+
+      // Update localStorage
+      localStorage.setItem('mainTitle', mainTitle);
+      localStorage.setItem('logoUrl', logoUrl);
+
+      // Invalidate and refetch quiz settings
+      await queryClient.invalidateQueries({ queryKey: ['quiz-settings'] });
 
       toast.success("Main screen settings updated successfully");
     } catch (error) {
