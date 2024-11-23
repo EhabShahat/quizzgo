@@ -1,7 +1,18 @@
-import { Trash2, Edit2 } from "lucide-react";
+import { Trash2, Edit2, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import type { Question } from "@/data/questions";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface QuestionListProps {
   questions: Question[];
@@ -28,10 +39,57 @@ const QuestionList = ({ questions, onDelete, onEdit, onQuestionsUpdate }: Questi
     }
   };
 
+  const handleDeleteAll = async () => {
+    try {
+      const { error } = await supabase
+        .from('questions')
+        .delete()
+        .neq('id', 0); // This will delete all questions
+
+      if (error) throw error;
+
+      if (onQuestionsUpdate) {
+        onQuestionsUpdate([]);
+      }
+      toast.success("All questions deleted successfully");
+    } catch (error) {
+      console.error('Error deleting all questions:', error);
+      toast.error("Failed to delete all questions");
+    }
+  };
+
   return (
     <div className="glass-card p-6 mt-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-white">Question List</h2>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-red-500/10 text-red-500 rounded-lg hover:bg-red-500/20 transition-colors"
+            >
+              <AlertTriangle className="w-4 h-4" />
+              Delete All
+            </button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This action cannot be undone. This will permanently delete all questions
+                from the database.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={handleDeleteAll}
+                className="bg-red-500 hover:bg-red-600"
+              >
+                Delete All
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <div className="space-y-4">
         {questions.map((question) => (
