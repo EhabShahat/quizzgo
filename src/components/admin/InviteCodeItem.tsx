@@ -29,13 +29,25 @@ export const InviteCodeItem = ({
             used ? "bg-red-500" : "bg-green-500"
           }`}
         />
-        <div>
-          <p className="font-mono text-white">{code}</p>
-          <p className="text-sm text-white/60">
-            Created: {format(new Date(created_at), "PPp")}
-            {used_at && ` • Used: ${format(new Date(used_at), "PPp")}`}
-            {participant_name && ` • For: ${participant_name}`}
-          </p>
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <p className="font-mono text-white">{code}</p>
+            {participant_name && (
+              <span className="px-2 py-0.5 text-xs border border-purple-500/50 rounded-full text-purple-400">
+                {participant_name}
+              </span>
+            )}
+          </div>
+          <div className="space-y-0.5">
+            <p className="text-xs text-white/60">
+              Created: {format(new Date(created_at), "PPp")}
+            </p>
+            {used_at && (
+              <p className="text-xs text-white/60">
+                Used: {format(new Date(used_at), "PPp")}
+              </p>
+            )}
+          </div>
         </div>
       </div>
       <div className="flex items-center gap-2">
