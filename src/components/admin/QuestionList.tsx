@@ -102,7 +102,7 @@ const QuestionList = ({ questions, onEdit, onQuestionsUpdate }: QuestionListProp
               <div className="flex-1 space-y-1">
                 <h3 className="text-white font-medium break-words">{question.text}</h3>
                 <p className="text-white/60 text-sm">
-                  Time limit: {question.time_limit} seconds
+                  Time limit: {question.timeLimit} seconds
                 </p>
               </div>
               <div className="flex items-center gap-2 w-full sm:w-auto justify-end">

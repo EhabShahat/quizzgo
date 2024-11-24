@@ -202,19 +202,18 @@ const AdminPanel = () => {
             </TabsList>
           </div>
 
-          <TabsContent value="questions" className="space-y-6">
-            <QuestionForm
-              onSubmit={editingQuestion ? handleUpdateQuestion : handleAddQuestion}
-              editingQuestion={editingQuestion}
-              onCancelEdit={() => setEditingQuestion(null)}
-            />
-            <QuestionList
-              questions={questions}
-              onDelete={handleDeleteQuestion}
-              onEdit={handleEditQuestion}
-              onQuestionsUpdate={handleQuestionsUpdate}
-            />
-          </TabsContent>
+        <TabsContent value="questions" className="space-y-6">
+          <QuestionForm
+            onSubmit={editingQuestion ? handleUpdateQuestion : handleAddQuestion}
+            editingQuestion={editingQuestion}
+            onCancelEdit={() => setEditingQuestion(null)}
+          />
+          <QuestionList
+            questions={questions}
+            onEdit={handleEditQuestion}
+            onQuestionsUpdate={handleQuestionsUpdate}
+          />
+        </TabsContent>
 
           <TabsContent value="controls">
             <Controls />
