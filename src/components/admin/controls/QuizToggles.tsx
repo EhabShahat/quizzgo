@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEffect } from "react";
 
 export const QuizToggles = () => {
-  const { isEnabled, shuffleQuestions, setEnabled, setShuffleQuestions } = useQuizStore();
+  const { isEnabled, shuffleQuestions, setEnabled, setShuffleQuestions, startTime, endTime } = useQuizStore();
 
   useEffect(() => {
     // Subscribe to real-time changes
@@ -38,7 +38,11 @@ export const QuizToggles = () => {
     try {
       const { error } = await supabase
         .from('quiz_settings')
-        .update({ is_enabled: checked })
+        .update({ 
+          is_enabled: checked,
+          start_time: startTime?.toISOString(),
+          end_time: endTime?.toISOString()
+        })
         .eq('id', 1);
 
       if (error) throw error;

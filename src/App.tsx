@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 
 const AppContent = () => {
   const location = useLocation();
-  const { setEnabled } = useQuizStore();
+  const { setEnabled, setStartTime, setEndTime } = useQuizStore();
   const showFooter = !['/questions', '/admin'].includes(location.pathname) && 
     !location.pathname.startsWith('/questions/');
 
@@ -26,13 +26,15 @@ const AppContent = () => {
       try {
         const { data, error } = await supabase
           .from('quiz_settings')
-          .select('is_enabled')
+          .select('is_enabled, start_time, end_time')
           .single();
         
         if (error) throw error;
         
         if (data) {
           setEnabled(data.is_enabled);
+          setStartTime(data.start_time ? new Date(data.start_time) : null);
+          setEndTime(data.end_time ? new Date(data.end_time) : null);
         }
       } catch (error) {
         console.error('Error checking quiz status:', error);
@@ -53,6 +55,8 @@ const AppContent = () => {
         },
         (payload) => {
           setEnabled(payload.new.is_enabled);
+          setStartTime(payload.new.start_time ? new Date(payload.new.start_time) : null);
+          setEndTime(payload.new.end_time ? new Date(payload.new.end_time) : null);
         }
       )
       .subscribe();
@@ -60,7 +64,7 @@ const AppContent = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [setEnabled]);
+  }, [setEnabled, setStartTime, setEndTime]);
 
   return (
     <>
