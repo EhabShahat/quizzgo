@@ -98,6 +98,37 @@ const InviteCodeForm = () => {
     setAdminPassword("");
   };
 
+  const renderQuizStatus = () => {
+    if (!isEnabled) {
+      if (startTime) {
+        return (
+          <div className="mt-4 p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-yellow-300/30">
+            <p className="text-xl font-semibold text-white text-center">
+              Quiz Will Start Soon
+            </p>
+            <p className="text-lg text-white/90 text-center mt-2">
+              Start Time: {format(startTime, "PPP 'at' p")}
+              {endTime && (
+                <>
+                  <br />
+                  End Time: {format(endTime, "PPP 'at' p")}
+                </>
+              )}
+            </p>
+          </div>
+        );
+      }
+      return (
+        <div className="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
+          <p className="text-3xl font-bold text-white text-center">
+            Quiz is currently inactive
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="glass-card p-8 w-full max-w-md mx-auto">
       <img 
@@ -122,29 +153,7 @@ const InviteCodeForm = () => {
             className="input-styles"
             disabled={!isEnabled}
           />
-          {!isEnabled && startTime && (
-            <div className="mt-4 p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
-              <p className="text-xl font-semibold text-white text-center">
-                Quiz Schedule
-              </p>
-              <p className="text-lg text-white/90 text-center mt-2">
-                From: {format(startTime, "PPP 'at' p")}
-                {endTime && (
-                  <>
-                    <br />
-                    To: {format(endTime, "PPP 'at' p")}
-                  </>
-                )}
-              </p>
-            </div>
-          )}
-          {!isEnabled && !startTime && (
-            <div className="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
-              <p className="text-3xl font-bold text-white text-center">
-                We will open soon...
-              </p>
-            </div>
-          )}
+          {renderQuizStatus()}
         </div>
         
         <button 
