@@ -30,7 +30,7 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
-      <div className="glass-card p-8 max-w-lg w-full relative animate-scaleIn">
+      <div className="glass-card p-4 sm:p-8 max-w-lg w-full relative animate-scaleIn">
         {/* Background animations */}
         {[...Array(20)].map((_, i) => (
           <div
@@ -52,38 +52,38 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
         ))}
 
         {/* Main content */}
-        <div className="relative z-10 space-y-8">
+        <div className="relative z-10 space-y-6 sm:space-y-8">
           <div className="text-center space-y-4">
-            <h1 className="text-4xl font-bold text-white mb-2 animate-bounce">
+            <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2 animate-bounce">
               {emoji} {rank}
             </h1>
             
-            <div className="flex justify-center mb-6 animate-fadeIn" style={{ animationDelay: "0.2s" }}>
-              {percentage >= 60 && <Trophy className="w-20 h-20 text-yellow-400 animate-pulse" />}
-              {percentage >= 40 && percentage < 60 && <Medal className="w-20 h-20 text-silver-400 animate-pulse" />}
-              {percentage < 40 && <Award className="w-20 h-20 text-bronze-400 animate-pulse" />}
+            <div className="flex justify-center mb-4 sm:mb-6 animate-fadeIn" style={{ animationDelay: "0.2s" }}>
+              {percentage >= 60 && <Trophy className="w-16 sm:w-20 h-16 sm:h-20 text-yellow-400 animate-pulse" />}
+              {percentage >= 40 && percentage < 60 && <Medal className="w-16 sm:w-20 h-16 sm:h-20 text-silver-400 animate-pulse" />}
+              {percentage < 40 && <Award className="w-16 sm:w-20 h-16 sm:h-20 text-bronze-400 animate-pulse" />}
             </div>
 
-            <div className="bg-black/30 p-6 rounded-xl backdrop-blur-sm animate-fadeIn" style={{ animationDelay: "0.3s" }}>
-              <div className="text-6xl font-bold text-primary-foreground mb-2 animate-pulse">{score}</div>
-              <div className="text-xl text-white/80">points</div>
+            <div className="bg-black/30 p-4 sm:p-6 rounded-xl backdrop-blur-sm animate-fadeIn" style={{ animationDelay: "0.3s" }}>
+              <div className="text-4xl sm:text-6xl font-bold text-primary-foreground mb-2 animate-pulse">{score}</div>
+              <div className="text-lg sm:text-xl text-white/80">points</div>
             </div>
 
-            <div className="space-y-4 mt-8">
-              <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.4s" }}>
-                <div className="text-lg text-white/90 mb-2">Your Score</div>
-                <Progress value={percentage} className="h-4" />
-                <div className="text-sm text-white/70 mt-2">{Math.round(percentage)}% of max score</div>
+            <div className="space-y-4 mt-6 sm:mt-8">
+              <div className="bg-black/20 p-3 sm:p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.4s" }}>
+                <div className="text-base sm:text-lg text-white/90 mb-2">Your Score</div>
+                <Progress value={percentage} className="h-3 sm:h-4" />
+                <div className="text-xs sm:text-sm text-white/70 mt-2">{Math.round(percentage)}% of max score</div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-center">
-                <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.5s" }}>
-                  <div className="text-3xl font-bold text-white">{correctAnswers}/{totalQuestions}</div>
-                  <div className="text-sm text-white/70">Questions</div>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 text-center">
+                <div className="bg-black/20 p-3 sm:p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.5s" }}>
+                  <div className="text-2xl sm:text-3xl font-bold text-white">{correctAnswers}/{totalQuestions}</div>
+                  <div className="text-xs sm:text-sm text-white/70">Questions</div>
                 </div>
-                <div className="bg-black/20 p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.6s" }}>
-                  <div className="text-3xl font-bold text-white">{Math.round(percentage)}%</div>
-                  <div className="text-sm text-white/70">Accuracy</div>
+                <div className="bg-black/20 p-3 sm:p-4 rounded-lg animate-fadeIn" style={{ animationDelay: "0.6s" }}>
+                  <div className="text-2xl sm:text-3xl font-bold text-white">{Math.round(percentage)}%</div>
+                  <div className="text-xs sm:text-sm text-white/70">Accuracy</div>
                 </div>
               </div>
             </div>
@@ -91,17 +91,17 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
             {/* View Scores Button */}
             <button
               onClick={() => navigate("/scores")}
-              className="mt-8 w-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-white py-4 px-6 rounded-xl font-bold text-lg shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 animate-fadeIn"
+              className="mt-6 sm:mt-8 w-full bg-gradient-to-r from-[#8B5CF6] to-[#D946EF] text-white py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-base sm:text-lg shadow-lg hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 animate-fadeIn"
               style={{ animationDelay: "0.7s" }}
             >
-              <BarChart2 className="w-6 h-6" />
+              <BarChart2 className="w-5 h-5 sm:w-6 sm:h-6" />
               View All Scores
             </button>
           </div>
         </div>
 
         {/* Admin Access Section */}
-        <div className="mt-8 flex flex-col items-center gap-4">
+        <div className="mt-6 sm:mt-8 flex flex-col items-center gap-3 sm:gap-4">
           {showAdminInput && (
             <Input
               type="password"
@@ -113,7 +113,7 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
             />
           )}
           <button 
-            className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors animate-fadeIn"
+            className="text-white/50 text-xs sm:text-sm flex items-center gap-2 hover:text-white transition-colors animate-fadeIn"
             style={{ animationDelay: "0.4s" }}
             onClick={() => {
               if (!showAdminInput) {
@@ -137,7 +137,7 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
               setAdminPassword("");
             }}
           >
-            <Lock className="w-4 h-4" />
+            <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
             Admin Access
           </button>
         </div>
