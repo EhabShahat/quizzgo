@@ -102,11 +102,11 @@ const InviteCodeForm = () => {
     if (!isEnabled) {
       if (startTime) {
         return (
-          <div className="mt-4 p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-yellow-300/30">
-            <p className="text-xl font-semibold text-white text-center">
+          <div className="mt-4 p-3 sm:p-4 bg-white/5 rounded-lg backdrop-blur-sm border border-yellow-300/30">
+            <p className="text-lg sm:text-xl font-semibold text-white text-center">
               Quiz Will Start Soon
             </p>
-            <p className="text-lg text-white/90 text-center mt-2">
+            <p className="text-sm sm:text-base text-white/90 text-center mt-2">
               Start Time: {format(startTime, "PPP 'at' p")}
               {endTime && (
                 <>
@@ -119,8 +119,8 @@ const InviteCodeForm = () => {
         );
       }
       return (
-        <div className="mt-4 p-6 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
-          <p className="text-3xl font-bold text-white text-center">
+        <div className="mt-4 p-4 sm:p-5 bg-white/5 rounded-lg backdrop-blur-sm border border-red-300/30">
+          <p className="text-xl sm:text-2xl font-bold text-white text-center">
             Quiz is currently inactive
           </p>
         </div>
@@ -130,20 +130,20 @@ const InviteCodeForm = () => {
   };
 
   return (
-    <div className="glass-card p-8 w-full max-w-md mx-auto">
+    <div className="glass-card p-6 sm:p-8 w-full max-w-md mx-auto">
       <img 
         src={logoUrl}
         alt="Quiz Logo" 
-        className="w-40 h-40 mx-auto mb-6 rounded-full shadow-lg"
+        className="w-32 h-32 sm:w-40 sm:h-40 mx-auto mb-4 sm:mb-6 rounded-full shadow-lg"
       />
-      <h1 className="text-3xl font-bold text-white text-center mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-white text-center mb-2">
         {mainTitle}
       </h1>
-      <p className="text-white/70 text-center mb-8">
+      <p className="text-sm sm:text-base text-white/70 text-center mb-6 sm:mb-8">
         Enter your invite code to begin
       </p>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
         <div>
           <input
             type="text"
@@ -162,26 +162,26 @@ const InviteCodeForm = () => {
           disabled={!isEnabled}
         >
           Start Quiz
-          <ArrowRight className="w-5 h-5" />
+          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </form>
 
-      <div className="mt-8 flex flex-col items-center gap-4">
+      <div className="mt-6 sm:mt-8 flex flex-col items-center gap-3 sm:gap-4">
         {showAdminInput && (
           <Input
             type="password"
             value={adminPassword}
             onChange={(e) => setAdminPassword(e.target.value)}
             placeholder="Enter admin password"
-            className="max-w-[200px] bg-white/5 border-white/10 text-white placeholder:text-white/50"
+            className="max-w-[200px] bg-white/5 border-white/10 text-white placeholder:text-white/50 text-sm"
             autoFocus
           />
         )}
         <button 
-          className="text-white/50 text-sm flex items-center gap-2 hover:text-white transition-colors"
+          className="text-white/50 text-xs sm:text-sm flex items-center gap-2 hover:text-white transition-colors"
           onClick={handleAdminAccess}
         >
-          <Lock className="w-4 h-4" />
+          <Lock className="w-3 h-3 sm:w-4 sm:h-4" />
           Admin Access
         </button>
       </div>
