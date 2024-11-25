@@ -2,25 +2,15 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
+  content: ["./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
     container: {
       center: true,
-      padding: {
-        DEFAULT: '1rem',
-        sm: '2rem',
-      },
+      padding: { DEFAULT: '1rem', sm: '2rem' },
       screens: {
-        sm: '640px',
-        md: '768px',
-        lg: '1024px',
-        xl: '1280px',
+        sm: '640px', md: '768px',
+        lg: '1024px', xl: '1280px',
         '2xl': '1400px',
       },
     },
@@ -59,18 +49,6 @@ export default {
           DEFAULT: "#000000e6",
           foreground: "#FFFFFF",
         },
-        silver: {
-          400: "#A5A9B4",
-        },
-        bronze: {
-          400: "#CD7F32",
-        },
-      },
-      spacing: {
-        'safe-top': 'env(safe-area-inset-top)',
-        'safe-bottom': 'env(safe-area-inset-bottom)',
-        'safe-left': 'env(safe-area-inset-left)',
-        'safe-right': 'env(safe-area-inset-right)',
       },
       keyframes: {
         "accordion-down": {
