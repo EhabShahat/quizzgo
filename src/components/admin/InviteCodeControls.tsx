@@ -3,9 +3,6 @@ import { useParticipants } from "@/hooks/useParticipants";
 import { BulkGeneration } from "./invite-controls/BulkGeneration";
 import { ParticipantNames } from "./invite-controls/ParticipantNames";
 import { ActionButtons } from "./invite-controls/ActionButtons";
-import { Button } from "@/components/ui/button";
-import { Database } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 
 interface InviteCodeControlsProps {
   bulkAmount: string;
@@ -34,22 +31,10 @@ export const InviteCodeControls = ({
   onCopyAll,
   onExportExcel,
 }: InviteCodeControlsProps) => {
-  const navigate = useNavigate();
-
   return (
     <div className="space-y-6">
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold text-white">Generate Codes</h3>
-          <Button
-            variant="outline"
-            className="bg-white/5 border-white/10 text-white hover:bg-white/10"
-            onClick={() => navigate('/external-database')}
-          >
-            <Database className="w-4 h-4 mr-2" />
-            External Database
-          </Button>
-        </div>
+        <h3 className="text-lg font-semibold text-white">Generate Codes</h3>
 
         <BulkGeneration
           bulkAmount={bulkAmount}
