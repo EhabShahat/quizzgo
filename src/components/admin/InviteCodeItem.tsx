@@ -1,6 +1,9 @@
 import { format } from "date-fns";
-import { Copy, Trash2 } from "lucide-react";
+import { Copy, User, ExternalLink } from "lucide-react";
 import type { InviteCode } from "@/types/database";
+import { Button } from "@/components/ui/button";
+import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface InviteCodeItemProps {
   code: string;
@@ -19,51 +22,69 @@ export const InviteCodeItem = ({
   used_at,
   participant_name,
   onCopy,
-  onDelete,
 }: InviteCodeItemProps) => {
   return (
-    <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg backdrop-blur-sm">
-      <div className="flex items-center gap-3">
-        <div
-          className={`h-3 w-3 rounded-full ${
-            used ? "bg-red-500" : "bg-green-500"
-          }`}
-        />
-        <div className="space-y-1">
+    <Card className="bg-white/5 backdrop-blur-sm border-white/10">
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <p className="font-mono text-white">{code}</p>
+            <div
+              className={`h-3 w-3 rounded-full ${
+                used ? "bg-red-500" : "bg-green-500"
+              }`}
+            />
             {participant_name && (
-              <span className="px-2 py-0.5 text-xs border border-purple-500/50 rounded-full text-purple-400">
+              <span className="text-sm font-medium text-white">
                 {participant_name}
               </span>
             )}
           </div>
-          <div className="space-y-0.5">
-            <p className="text-xs text-white/60">
-              Created: {format(new Date(created_at), "PPp")}
-            </p>
-            {used_at && (
-              <p className="text-xs text-white/60">
-                Used: {format(new Date(used_at), "PPp")}
-              </p>
-            )}
-          </div>
+          <Badge 
+            variant="outline" 
+            className={used ? "border-red-500/50 text-red-400" : "border-green-500/50 text-green-400"}
+          >
+            {used ? "Used" : "Available"}
+          </Badge>
         </div>
-      </div>
-      <div className="flex items-center gap-2">
-        <button
+      </CardHeader>
+      
+      <CardContent className="space-y-4">
+        <div className="space-y-1">
+          <p className="text-xs text-white/60">Invite Code:</p>
+          <code className="px-2 py-1 rounded bg-white/10 text-white font-mono text-sm">
+            {code}
+          </code>
+        </div>
+        
+        <div className="space-y-0.5 text-xs text-white/60">
+          <p>Created: {format(new Date(created_at), "PPp")}</p>
+          {used_at && (
+            <p>Used: {format(new Date(used_at), "PPp")}</p>
+          )}
+        </div>
+      </CardContent>
+
+      <CardFooter className="flex justify-between pt-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-white/70 hover:text-white hover:bg-white/10"
           onClick={() => onCopy(code)}
-          className="p-2 hover:bg-white/10 rounded-lg transition-colors"
         >
-          <Copy className="w-4 h-4 text-white/60" />
-        </button>
-        <button
-          onClick={() => onDelete(code)}
-          className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+          <Copy className="w-4 h-4 mr-2" />
+          Copy Code
+        </Button>
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          className="text-white/70 hover:text-white hover:bg-white/10"
+          onClick={() => window.open(`/profile/${participant_name}`, '_blank')}
         >
-          <Trash2 className="w-4 h-4 text-white/60" />
-        </button>
-      </div>
-    </div>
+          <ExternalLink className="w-4 h-4 mr-2" />
+          View Profile
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
