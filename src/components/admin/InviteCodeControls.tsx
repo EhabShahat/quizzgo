@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import * as XLSX from 'xlsx';
+import { useParticipants } from "@/hooks/useParticipants";
+import { useState } from "react";
 
 interface InviteCodeControlsProps {
   bulkAmount: string;
@@ -32,6 +34,10 @@ export const InviteCodeControls = ({
   onCopyAll,
   onExportExcel,
 }: InviteCodeControlsProps) => {
+  const [databaseUrl, setDatabaseUrl] = useState('');
+  const [anonKey, setAnonKey] = useState('');
+  const { data: participants, isLoading } = useParticipants(databaseUrl, anonKey);
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -54,11 +60,52 @@ export const InviteCodeControls = ({
     }
   };
 
+  const handleFetchParticipants = () => {
+    if (participants) {
+      const names = participants.map(p => p.name).join('\n');
+      onParticipantNamesChange(names);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
         <h3 className="text-lg font-semibold text-white">Generate Codes</h3>
         
+        <div className="space-y-4 p-4 bg-white/5 rounded-lg">
+          <h4 className="text-sm font-medium text-white">External Database Connection</h4>
+          
+          <div className="space-y-2">
+            <Label className="text-white">Database URL</Label>
+            <Input
+              type="text"
+              value={databaseUrl}
+              onChange={(e) => setDatabaseUrl(e.target.value)}
+              className="bg-white/5 border-white/10 text-white"
+              placeholder="https://your-project.supabase.co"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-white">Anon Key</Label>
+            <Input
+              type="password"
+              value={anonKey}
+              onChange={(e) => setAnonKey(e.target.value)}
+              className="bg-white/5 border-white/10 text-white"
+              placeholder="your-anon-key"
+            />
+          </div>
+
+          <Button
+            onClick={handleFetchParticipants}
+            disabled={!databaseUrl || !anonKey || isLoading}
+            className="w-full bg-purple-500 hover:bg-purple-600"
+          >
+            {isLoading ? 'Loading...' : 'Fetch Participants'}
+          </Button>
+        </div>
+
         <div className="space-y-2">
           <Label className="text-white">Bulk Generation Amount (1-100)</Label>
           <Input
