@@ -76,8 +76,9 @@ export const InviteCodeControls = ({
           <h4 className="text-sm font-medium text-white">External Database Connection</h4>
           
           <div className="space-y-2">
-            <Label className="text-white">Database URL</Label>
+            <Label htmlFor="database-url" className="text-white">Database URL</Label>
             <Input
+              id="database-url"
               type="text"
               value={databaseUrl}
               onChange={(e) => setDatabaseUrl(e.target.value)}
@@ -87,8 +88,9 @@ export const InviteCodeControls = ({
           </div>
 
           <div className="space-y-2">
-            <Label className="text-white">Anon Key</Label>
+            <Label htmlFor="anon-key" className="text-white">Anon Key</Label>
             <Input
+              id="anon-key"
               type="password"
               value={anonKey}
               onChange={(e) => setAnonKey(e.target.value)}
@@ -107,8 +109,9 @@ export const InviteCodeControls = ({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-white">Bulk Generation Amount (1-100)</Label>
+          <Label htmlFor="bulk-amount" className="text-white">Bulk Generation Amount (1-100)</Label>
           <Input
+            id="bulk-amount"
             type="number"
             value={bulkAmount}
             onChange={(e) => onBulkAmountChange(e.target.value)}
@@ -120,8 +123,9 @@ export const InviteCodeControls = ({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-white">Code Prefix (Optional)</Label>
+          <Label htmlFor="prefix" className="text-white">Code Prefix (Optional)</Label>
           <Input
+            id="prefix"
             type="text"
             value={prefix}
             onChange={(e) => onPrefixChange(e.target.value)}
@@ -131,7 +135,7 @@ export const InviteCodeControls = ({
         </div>
 
         <div className="space-y-2">
-          <Label className="text-white flex items-center justify-between">
+          <Label htmlFor="participant-names" className="text-white flex items-center justify-between">
             <span>Participant Names (One per line)</span>
             <div className="space-x-2">
               <Button
@@ -162,6 +166,7 @@ export const InviteCodeControls = ({
             onChange={handleFileUpload}
           />
           <Textarea
+            id="participant-names"
             value={participantNames}
             onChange={(e) => onParticipantNamesChange(e.target.value)}
             className="bg-white/5 border-white/10 text-white min-h-[100px]"
