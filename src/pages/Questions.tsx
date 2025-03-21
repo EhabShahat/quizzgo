@@ -8,6 +8,7 @@ import { useQuizStore } from "@/store/quizStore";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
+import { playSuccessSound } from "@/utils/audio";
 
 const Questions = () => {
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ const Questions = () => {
   const { toast } = useToast();
   const colors = ["#E21B3C", "#1368CE", "#D89E00", "#26890C"];
 
-  // Fetch questions from Supabase
   const { data: questions = [], isLoading } = useQuery({
     queryKey: ['questions'],
     queryFn: async () => {
@@ -46,7 +46,6 @@ const Questions = () => {
     if (currentQuestionIndex >= questions.length && questions.length > 0) {
       setShowScore(true);
       
-      // Save score to Supabase
       const saveScore = async () => {
         if (!inviteCode) {
           toast({
@@ -141,6 +140,7 @@ const Questions = () => {
     const isCorrect = selectedAnswer === currentQuestion.correct_answer;
     
     if (isCorrect) {
+      playSuccessSound();
       const timeBonus = Math.round((timeLeft / currentQuestion.time_limit) * 1000);
       setScore(prev => prev + timeBonus);
       setCorrectAnswers(prev => prev + 1);

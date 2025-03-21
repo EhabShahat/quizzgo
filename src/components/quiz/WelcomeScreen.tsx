@@ -1,5 +1,7 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { playTickSound } from "@/utils/audio";
 
 const WelcomeScreen = () => {
   const [countdown, setCountdown] = useState(5);
@@ -9,6 +11,9 @@ const WelcomeScreen = () => {
   const decodedInviteCode = decodeURIComponent(inviteCode || "");
 
   useEffect(() => {
+    // Play initial tick on component mount
+    playTickSound();
+    
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
@@ -16,6 +21,8 @@ const WelcomeScreen = () => {
           navigate(`/questions/${decodedInviteCode}`);
           return 0;
         }
+        // Play tick sound for each countdown change
+        playTickSound();
         return prev - 1;
       });
     }, 1000);

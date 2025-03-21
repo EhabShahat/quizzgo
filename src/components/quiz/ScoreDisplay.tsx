@@ -1,9 +1,11 @@
+
 import { Progress } from "@/components/ui/progress";
 import { Trophy, Medal, Award, Star, Sparkles, Lock, BarChart2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
+import { playCheerSound } from "@/utils/audio";
 
 interface ScoreDisplayProps {
   score: number;
@@ -23,10 +25,17 @@ export const ScoreDisplay = ({ score, questions, correctAnswers, totalQuestions 
   const rank = percentage >= 80 ? "Amazing!" : percentage >= 60 ? "Great!" : "Good try!";
   const emoji = percentage >= 80 ? "🏆" : percentage >= 60 ? "🌟" : "👏";
 
-  // Automatically redirect to scores page after a short delay
-  setTimeout(() => {
-    navigate("/scores");
-  }, 3000);
+  // Play cheer sound on component mount
+  useEffect(() => {
+    playCheerSound();
+    
+    // Automatically redirect to scores page after a short delay
+    const timer = setTimeout(() => {
+      navigate("/scores");
+    }, 3000);
+    
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary to-purple-800 overflow-hidden">
