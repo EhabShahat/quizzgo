@@ -1,5 +1,5 @@
+
 import { useState } from "react";
-import { useParticipants } from "@/hooks/useParticipants";
 import { BulkGeneration } from "./invite-controls/BulkGeneration";
 import { ParticipantNames } from "./invite-controls/ParticipantNames";
 import { ActionButtons } from "./invite-controls/ActionButtons";
