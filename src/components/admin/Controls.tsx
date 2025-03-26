@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
@@ -8,6 +9,7 @@ import { QuizStatus } from "./controls/QuizStatus";
 import { QuizToggles } from "./controls/QuizToggles";
 import { PasswordManagement } from "./controls/PasswordManagement";
 import { MainScreenSettings } from "./controls/MainScreenSettings";
+import { SoundSettings } from "./controls/SoundSettings";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Controls = () => {
@@ -91,6 +93,7 @@ export const Controls = () => {
       </div>
 
       <PasswordManagement />
+      <SoundSettings />
       <MainScreenSettings />
     </div>
   );
