@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Volume2, VolumeX } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { setSoundEnabled, isSoundEnabled } from "@/utils/audio";
+import { setSoundEnabled, isSoundEnabled, playTickSound } from "@/utils/audio";
 
 export const SoundSettings = () => {
   const [soundEnabled, setSoundEnabledState] = useState(isSoundEnabled());
@@ -17,6 +17,7 @@ export const SoundSettings = () => {
         const { data, error } = await supabase
           .from('quiz_settings')
           .select('sound_enabled')
+          .eq('id', 1)
           .single();
         
         if (error) throw error;
@@ -25,6 +26,7 @@ export const SoundSettings = () => {
         if (data && data.sound_enabled !== null) {
           setSoundEnabledState(data.sound_enabled);
           setSoundEnabled(data.sound_enabled);
+          console.log("Loaded sound setting from DB:", data.sound_enabled);
         }
       } catch (error) {
         console.error('Error fetching sound settings:', error);
@@ -41,6 +43,11 @@ export const SoundSettings = () => {
       
       // Update localStorage
       setSoundEnabled(checked);
+      
+      // Play a test sound if enabled
+      if (checked) {
+        playTickSound();
+      }
       
       // Update database
       const { error } = await supabase
@@ -79,7 +86,7 @@ export const SoundSettings = () => {
       
       <p className="text-white/70 text-sm">
         {soundEnabled 
-          ? "Kahoot-inspired sound effects enabled at 80% volume" 
+          ? "Sound effects enabled at 80% volume" 
           : "Sound effects are currently disabled"}
       </p>
     </div>
