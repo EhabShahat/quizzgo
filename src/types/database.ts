@@ -1,3 +1,4 @@
+
 export interface InviteCode {
   code: string;
   used: boolean;
@@ -23,4 +24,18 @@ export interface Score {
   correct_answers: number;
   total_questions: number;
   created_at: string;
+}
+
+export interface QuizSettings {
+  id: number;
+  shuffle_questions: boolean;
+  is_enabled: boolean;
+  start_time: string | null;
+  end_time: string | null;
+  created_at: string;
+  updated_at: string;
+  sound_enabled: boolean;
+  admin_password: string;
+  main_title: string;
+  logo_url: string;
 }

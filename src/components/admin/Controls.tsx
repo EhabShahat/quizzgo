@@ -35,6 +35,13 @@ export const Controls = () => {
         setEndTime(selectedEndTime);
       }
 
+      // Get current sound settings before updating
+      const { data: currentSettings } = await supabase
+        .from('quiz_settings')
+        .select('sound_enabled')
+        .eq('id', 1)
+        .single();
+
       // Update quiz settings in Supabase
       const { error } = await supabase
         .from('quiz_settings')
@@ -43,6 +50,8 @@ export const Controls = () => {
           end_time: endDateTime ? new Date(endDateTime).toISOString() : null,
           is_enabled: isEnabled,
           shuffle_questions: shuffleQuestions,
+          // Preserve existing sound_enabled value
+          sound_enabled: currentSettings?.sound_enabled
         })
         .eq('id', 1);
 

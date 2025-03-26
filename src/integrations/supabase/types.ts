@@ -73,6 +73,7 @@ export type Database = {
           logo_url: string | null
           main_title: string | null
           shuffle_questions: boolean | null
+          sound_enabled: boolean | null
           start_time: string | null
           updated_at: string | null
         }
@@ -85,6 +86,7 @@ export type Database = {
           logo_url?: string | null
           main_title?: string | null
           shuffle_questions?: boolean | null
+          sound_enabled?: boolean | null
           start_time?: string | null
           updated_at?: string | null
         }
@@ -97,6 +99,7 @@ export type Database = {
           logo_url?: string | null
           main_title?: string | null
           shuffle_questions?: boolean | null
+          sound_enabled?: boolean | null
           start_time?: string | null
           updated_at?: string | null
         }
