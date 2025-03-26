@@ -18,6 +18,7 @@ function App() {
           <Route path="/" element={<Index />} />
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/questions" element={<Questions />} />
+          <Route path="/questions/:inviteCode" element={<Questions />} />
           <Route path="/scores" element={<ScorePage />} />
           <Route path="/welcome/:username/:inviteCode" element={<WelcomeScreen />} />
         </Routes>
