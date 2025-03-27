@@ -18,6 +18,11 @@ const successSound = loadAudio("/sounds/correct_answer.mp3");
 
 // Default volume
 const DEFAULT_VOLUME = 0.8;
+// Tick sound needs to be a bit softer
+const TICK_VOLUME = 0.5;
+
+// Variable to track if tick sound is currently playing
+let isTickPlaying = false;
 
 // Get sound enabled setting from localStorage and Supabase
 const getSoundEnabled = (): boolean => {
@@ -26,17 +31,29 @@ const getSoundEnabled = (): boolean => {
 };
 
 export const playTickSound = () => {
-  if (!getSoundEnabled()) return;
+  if (!getSoundEnabled() || isTickPlaying) return;
   console.log("Playing tick sound");
+  
+  // Set the flag to prevent overlapping sounds
+  isTickPlaying = true;
   
   // Stop and reset current playback before playing again
   tickSound.pause();
   tickSound.currentTime = 0;
-  tickSound.volume = DEFAULT_VOLUME;
+  tickSound.volume = TICK_VOLUME;
   
   // Play with promise handling for debugging
   tickSound.play()
-    .catch((e) => console.error("Error playing tick sound:", e));
+    .then(() => {
+      // Reset after sound finishes
+      setTimeout(() => {
+        isTickPlaying = false;
+      }, 400); // Short delay to prevent rapid repeats
+    })
+    .catch((e) => {
+      console.error("Error playing tick sound:", e);
+      isTickPlaying = false;
+    });
 };
 
 export const playCheerSound = () => {

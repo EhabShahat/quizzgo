@@ -1,11 +1,15 @@
+
 import { Timer } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { useEffect } from "react";
+import { playTickSound } from "@/utils/audio";
 
 interface QuestionCardProps {
   currentQuestion: any;
   currentQuestionIndex: number;
   questionsLength: number;
   timeLeft: number;
+  totalTime: number; // New prop for total time
   handleAnswer: (answer: string) => void;
   colors: string[];
 }
@@ -15,6 +19,7 @@ export const QuestionCard = ({
   currentQuestionIndex,
   questionsLength,
   timeLeft,
+  totalTime, // Use this to calculate percentage
   handleAnswer,
   colors
 }: QuestionCardProps) => {
@@ -24,6 +29,17 @@ export const QuestionCard = ({
     }
     return colors;
   };
+  
+  // Add sound effect logic based on timer progress
+  useEffect(() => {
+    // Calculate progress percentage
+    const progressPercentage = (timeLeft / totalTime) * 100;
+    
+    // Play ticking sound when timer reaches 75% or less
+    if (progressPercentage <= 75 && progressPercentage > 0) {
+      playTickSound();
+    }
+  }, [timeLeft, totalTime]);
 
   return (
     <div className="glass-card p-4 sm:p-6 space-y-4 sm:space-y-8 w-full max-w-[95vw] sm:max-w-2xl mx-auto">
@@ -60,7 +76,7 @@ export const QuestionCard = ({
       {/* Progress Bar */}
       <div className="mt-2 sm:mt-4">
         <Progress 
-          value={(timeLeft / currentQuestion.timeLimit) * 100} 
+          value={(timeLeft / totalTime) * 100} 
           className="h-2 bg-white/20"
         />
       </div>

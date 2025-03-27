@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { ScoreDisplay } from "@/components/quiz/ScoreDisplay";
 import { QuestionCard } from "@/components/quiz/QuestionCard";
@@ -8,7 +9,7 @@ import { useQuizStore } from "@/store/quizStore";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
-import { playSuccessSound } from "@/utils/audio";
+import { playSuccessSound, playCheerSound } from "@/utils/audio";
 
 const Questions = () => {
   const navigate = useNavigate();
@@ -45,6 +46,8 @@ const Questions = () => {
   useEffect(() => {
     if (currentQuestionIndex >= questions.length && questions.length > 0) {
       setShowScore(true);
+      // Play celebration sound when quiz is complete
+      playCheerSound();
       
       const saveScore = async () => {
         if (!inviteCode) {
@@ -157,6 +160,7 @@ const Questions = () => {
           currentQuestionIndex={currentQuestionIndex}
           questionsLength={questions.length}
           timeLeft={timeLeft}
+          totalTime={currentQuestion.time_limit} // Pass the total time
           handleAnswer={handleAnswer}
           colors={colors}
         />
